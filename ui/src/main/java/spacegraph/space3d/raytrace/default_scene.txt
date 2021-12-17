@@ -1,0 +1,47 @@
+camera:
+    position: (4, 4, 4)
+    direction: (-1, -1, -1)
+    fov: 90
+    size: 0
+cube:
+    position: (0, 0, 0)
+    sideLength: 10
+    surface: diffuse
+    texture: texture2.jpg
+sphere:
+    position: (2, 0, 0)
+    radius: 1
+    surface: specular
+sphere:
+    position: (-2, 0, 0)
+    radius: 1
+    surface: specular
+sphere:
+    position: (0, 2, 0)
+    radius: 1
+    surface: specular
+sphere:
+    position: (0, -2, 0)
+    radius: 1
+    surface: specular
+sphere:
+    position: (0, 0, -2)
+    radius: 1
+    surface: specular
+sphere:
+    position: (0, 0, 2)
+    radius: 1
+    surface: specular
+sphere:
+    position: (0, 0, 0)
+    radius: 1
+    surface: specular
+light:
+    position: (0, -2, 4)
+    color: ff0000
+light:
+    position: (0, 0, 4)
+    color: 00ff00
+light:
+    position: (0, 2, 4)
+    color: 0000ff

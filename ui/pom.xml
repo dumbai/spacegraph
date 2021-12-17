@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dumb</groupId>
+        <artifactId>spacegraph</artifactId>
+        <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <version>1.0</version>
+    <artifactId>ui</artifactId>
+
+    <properties>
+        <jogamp>2.3.2</jogamp>
+    </properties>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>dumb</groupId>
+            <artifactId>realtime</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>dumb</groupId>
+            <artifactId>io</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>dumb</groupId>
+            <artifactId>rtree</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dumb</groupId>
+            <artifactId>graph</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ejml</groupId>
+            <artifactId>ejml-core</artifactId>
+            <version>0.41</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ujmp</groupId>
+            <artifactId>ujmp-core</artifactId>
+            <version>0.3.0</version>
+        </dependency>
+        <!--    <dependency>-->
+        <!--      <groupId>org.ujmp</groupId>-->
+        <!--      <artifactId>ujmp-ejml</artifactId>-->
+        <!--      <version>0.3.0</version>-->
+        <!--      -->
+        <!--&lt;!&ndash;      <exclusions>&ndash;&gt;-->
+        <!--&lt;!&ndash;        <exclusion>&ndash;&gt;-->
+        <!--&lt;!&ndash;          <artifactId>ejml-core</artifactId>&ndash;&gt;-->
+        <!--&lt;!&ndash;          <groupId>*</groupId>&ndash;&gt;-->
+        <!--&lt;!&ndash;        </exclusion>&ndash;&gt;-->
+        <!--&lt;!&ndash;      </exclusions>&ndash;&gt;-->
+        <!--    </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.ejml</groupId>-->
+        <!--            <artifactId>ejml-core</artifactId>-->
+        <!--            <version>0.39</version>-->
+
+        <!--        </dependency>-->
+
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.55</version>
+
+        </dependency>
+        <dependency>
+            <groupId>org.jogamp.gluegen</groupId>
+            <artifactId>gluegen-rt-main</artifactId>
+            <version>${jogamp}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jogamp.jogl</groupId>
+            <artifactId>jogl-all-noawt-main</artifactId>
+            <version>${jogamp}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jogamp.joal</groupId>
+            <artifactId>joal-main</artifactId>
+            <version>${jogamp}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.boofcv</groupId>
+            <artifactId>boofcv-ip</artifactId>
+            <version>${boofcv.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.boofcv</groupId>
+            <artifactId>boofcv-types</artifactId>
+            <version>${boofcv.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.boofcv</groupId>
+            <artifactId>boofcv-sfm</artifactId>
+            <version>${boofcv.version}</version>
+
+        </dependency>
+        <dependency>
+            <groupId>org.boofcv</groupId>
+            <artifactId>boofcv-io</artifactId>
+            <version>${boofcv.version}</version>
+
+            <exclusions>
+                <exclusion>
+                    <artifactId>xstream</artifactId>
+                    <groupId>*</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>snakeyaml</artifactId>
+                    <groupId>*</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.boofcv</groupId>
+            <artifactId>boofcv-WebcamCapture</artifactId>
+            <version>${boofcv.version}</version>
+
+            <exclusions>
+                <exclusion>
+                    <artifactId>boofcv-lo</artifactId>
+                    <groupId>*</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>boofcv-swing</artifactId>
+                    <groupId>*</groupId>
+                </exclusion>
+                <!--        <exclusion>-->
+                <!--          <artifactId>boofcv-swing</artifactId>-->
+                <!--          <groupId>*</groupId>-->
+                <!--        </exclusion>-->
+                <exclusion>
+                    <artifactId>boofcv-visualize</artifactId>
+                    <groupId>*</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sarxos</groupId>
+            <artifactId>webcam-capture</artifactId>
+            <version>0.3.12</version>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.github.sarxos</groupId>-->
+<!--            <artifactId>webcam-capture-driver-v4l4j</artifactId>-->
+<!--            <version>0.3.12</version>-->
+<!--        </dependency>-->
+
+
+    </dependencies>
+
+</project>

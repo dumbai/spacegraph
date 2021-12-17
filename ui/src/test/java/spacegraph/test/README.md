@@ -1,0 +1,1 @@
+Functional/interactive tests.  Otherwise they should be in the test/ module
