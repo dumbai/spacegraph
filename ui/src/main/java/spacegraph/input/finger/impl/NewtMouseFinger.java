@@ -24,7 +24,9 @@ public class NewtMouseFinger extends MouseFinger implements MouseListener, Windo
     private final v2 posEvent = new v2();
     private final Function<Finger, Surface> root;
 
-    private final boolean synchronous = false;
+    /** async (synchronous=false) is more responsive,
+     *  allowing input events to be processed before or during the display update */
+    private static final boolean synchronous = false;
 
 
     public NewtMouseFinger(AbstractLayer s, Function<Finger, Surface> root) {
