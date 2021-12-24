@@ -13,7 +13,7 @@ public abstract class MouseFinger extends Finger {
     }
 
     /** called for each layer. returns true if continues down to next layer*/
-    public Surface finger(Function<Finger, Surface> s) {
+    protected Surface finger(Function<Finger, Surface> s) {
 
         posGlobal.set(posPixel); //HACK
 

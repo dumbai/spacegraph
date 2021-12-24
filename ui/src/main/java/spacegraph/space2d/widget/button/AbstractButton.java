@@ -14,9 +14,6 @@ import spacegraph.video.ImageTexture;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static java.awt.event.KeyEvent.VK_ENTER;
-import static java.awt.event.KeyEvent.VK_SPACE;
-
 /**
  * TODO abstract to FocusableWidget
  */
@@ -47,7 +44,7 @@ public abstract class AbstractButton extends Widget {
         Surface result = this;
         boolean finished = false;
         Surface f = super.finger(finger);
-        if (f==null || f == this) {
+        if (f == null || f == this) {
             if (enabled() && finger.test(click)) {
                 result = this;
                 finished = true;
@@ -61,9 +58,9 @@ public abstract class AbstractButton extends Widget {
 
 
         }
-        if (!finished) {
+        if (!finished)
             result = f;
-        }
+
         return result;
     }
 
@@ -114,22 +111,20 @@ public abstract class AbstractButton extends Widget {
 
     /** when clicked by key press */
     private void onClick(KeyEvent key) {
-        if (enabled()) {
-            int keyCode = key.getKeyCode();
-            if (keyCode == KeyEvent.VK_SPACE || keyCode == KeyEvent.VK_ENTER)
-                onClick();
-        }
+        if (enabled() && clickKeycode(key.getKeyCode()))
+            onClick();
+    }
+
+    private boolean clickKeycode(int keyCode) {
+        return keyCode == KeyEvent.VK_SPACE || keyCode == KeyEvent.VK_ENTER;
     }
 
     @Override
     public boolean key(KeyEvent e, boolean pressedOrReleased) {
         if (!super.key(e, pressedOrReleased)) {
-            if (pressedOrReleased) {
-                short c = e.getKeyCode();
-                if (c == VK_ENTER || c == VK_SPACE) {
-                    onClick(e);
-                    return true;
-                }
+            if (pressedOrReleased && clickKeycode(e.getKeyCode())) {
+                onClick(e);
+                return true;
             }
 
         }

@@ -146,19 +146,16 @@ public abstract class Finger extends Part<SpaceGraph> implements Predicate<Finge
      * event handler.  this could mean that there is either mouse
      * motion or button status has changed.
      */
-    protected void updateButtons(@Nullable short[] nextButtonDown) {
+    protected void updateButtons(short[] nextButtonDown) {
 
-        if (nextButtonDown != null) {
-            for (short b : nextButtonDown) {
+        for (short b : nextButtonDown) {
 
-                boolean pressed = (b > 0);
+            boolean pressed = (b > 0);
 
-                if (!pressed) b = (short) -b;
+            if (!pressed) b = (short) -b;
 
-                updateButton(b-1, pressed);
-            }
+            updateButton(b-1, pressed);
         }
-
 //        System.out.println(buttonSummary());
     }
 

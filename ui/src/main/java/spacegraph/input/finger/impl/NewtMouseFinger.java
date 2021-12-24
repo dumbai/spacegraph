@@ -3,7 +3,6 @@ package spacegraph.input.finger.impl;
 import com.jogamp.newt.event.*;
 import com.jogamp.newt.opengl.GLWindow;
 import jcog.math.v2;
-import org.jetbrains.annotations.Nullable;
 import spacegraph.SpaceGraph;
 import spacegraph.input.finger.Finger;
 import spacegraph.layer.AbstractLayer;
@@ -23,11 +22,15 @@ public class NewtMouseFinger extends MouseFinger implements MouseListener, Windo
      * raw pixel coordinates from MouseEvent
      */
     private final v2 posEvent = new v2();
+    private final Function<Finger, Surface> root;
+
+    private final boolean synchronous = false;
 
 
     public NewtMouseFinger(AbstractLayer s, Function<Finger, Surface> root) {
         super(MAX_BUTTONS);
         this.space = s;
+        this.root = root;
 
         JoglWindow w = s.window;
         GLWindow ww = w.window;
@@ -36,28 +39,30 @@ public class NewtMouseFinger extends MouseFinger implements MouseListener, Windo
         if (ww.hasFocus())
             focused.set(true);
 
-        w.onUpdate(() -> finger(root));
+        if (synchronous)
+            w.onUpdate(() -> finger());
     }
 
-    private void updatePosition() {
+    private Surface finger() {
+        return finger(root);
+    }
+
+    private void updatePosition(float px, float py) {
+        posEvent.set(px, py);
         JoglWindow win = space.window;
 
-        float pmx = posEvent.x, pmy = win.H() - posEvent.y;
+        posPixel.set(px, win.H() - py);
 
-        posPixel.set(pmx, pmy);
-
-        posScreen.set(win.getX() + posEvent.x, win.getScreenH() - (win.getY() + posEvent.y));
+        posScreen.set(win.getX() + px, win.getScreenH() - (win.getY() + py));
     }
 
     private void updateMoved(MouseEvent e) {
-        posEvent.set(e.getX(), e.getY());
-        updatePosition();
-
-        updateButtons(null);
+        updatePosition(e.getX(), e.getY());
+        fingerAsync();
     }
 
-    private void updateOther(boolean moved) {
-        updateButtons(null);
+    private void fingerAsync() {
+        if (!synchronous) finger();
     }
 
     @Override
@@ -66,20 +71,15 @@ public class NewtMouseFinger extends MouseFinger implements MouseListener, Windo
     }
 
     @Override
-    public void mouseEntered(@Nullable MouseEvent e) {
-        if (focused.compareAndSet(false, true)) {
+    public void mouseEntered(/*@Nullable */MouseEvent e) {
+        if (focused.compareAndSet(false, true))
             enter();
-            if (e != null)
-                updateOther(false);
-        }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        if (focused.compareAndSet(true, false)) {
-            updateOther(false);
+        if (focused.compareAndSet(true, false))
             exit();
-        }
     }
 
     @Override
@@ -91,11 +91,15 @@ public class NewtMouseFinger extends MouseFinger implements MouseListener, Windo
         for (int i = 0, bdLength = bd.length; i < bdLength; i++)
             bd[i] = (short) +bd[i];
 
-        updateButtons(e.getButtonsDown());
+        consumeIfTouching(e);
 
+        updateButtons(e.getButtonsDown());
+        fingerAsync();
+    }
+
+    private void consumeIfTouching(MouseEvent e) {
         if (touching() != null)
             e.setConsumed(true);
-
     }
 
     @Override
@@ -106,11 +110,11 @@ public class NewtMouseFinger extends MouseFinger implements MouseListener, Windo
         for (int i = 0, bdLength = bd.length; i < bdLength; i++)
             bd[i] = (short) -bd[i];
 
+        consumeIfTouching(e);
+
         updateButtons(bd);
 
-        if (touching() != null)
-            e.setConsumed(true);
-
+        fingerAsync();
     }
 
 
@@ -118,16 +122,14 @@ public class NewtMouseFinger extends MouseFinger implements MouseListener, Windo
     public void mouseDragged(MouseEvent e) {
         if (e.isConsumed()) return;
 
-        updateMoved(e);
+        consumeIfTouching(e);
 
-        if (touching() != null)
-            e.setConsumed(true);
+        updateMoved(e);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         //if (e.isConsumed()) return;
-
         updateMoved(e);
     }
 
@@ -153,18 +155,14 @@ public class NewtMouseFinger extends MouseFinger implements MouseListener, Windo
 
     @Override
     public void windowGainedFocus(WindowEvent e) {
-        if (focused.compareAndSet(false, true)) {
+        if (focused.compareAndSet(false, true))
             enter();
-            updateOther(false);
-        }
     }
 
     @Override
     public void windowLostFocus(WindowEvent e) {
-        if (focused.compareAndSet(true, false)) {
-            updateOther(false);
+        if (focused.compareAndSet(true, false))
             exit();
-        }
     }
 
     @Override
@@ -177,6 +175,7 @@ public class NewtMouseFinger extends MouseFinger implements MouseListener, Windo
         if (!e.isConsumed()) {
             rotationAdd(e.getRotation());
             e.setConsumed(true);
+            fingerAsync();
         }
     }
 
