@@ -7,8 +7,6 @@ import spacegraph.space2d.ReSurface;
 import spacegraph.space2d.container.unit.AspectAlign;
 import spacegraph.space2d.widget.console.BitmapTextGrid;
 
-import static spacegraph.space2d.widget.text.VectorLabel.MIN_PIXELS_TO_BE_VISIBLE;
-
 public class BitmapLabel extends AbstractLabel {
 
     private BitmapTextGrid view;
@@ -34,7 +32,7 @@ public class BitmapLabel extends AbstractLabel {
 
     @Override
     protected void starting() {
-        assert(view==null);
+        assert view==null;
         view = new MyBitmapTextGrid(mipmap, antialias);
         view.start(this);
         //text(this.text);
@@ -51,18 +49,23 @@ public class BitmapLabel extends AbstractLabel {
     @Override
     protected void textChanged() {
         BitmapTextGrid v = view;
-        if (v!=null) {
-            int rows = 1 + Str.countRows(text, '\n');
+        if (v == null)
+            return;
+
+        String text = this.textShown;
+        if (text == null)
+            text = this.text; //HACK
+
+        int rows = 1 + Str.countRows(text, '\n');
 //            boolean resized;
-            //HACK do better
-            //int cols = Arrays.stream(next.split("\n")).mapToInt(String::length).max().getAsInt();
-            if (rows == 1)
-                v.resize(text.length(), 1);
-            else
-                v.resize(Str.countCols(text), rows);
+        //HACK do better
+        //int cols = Arrays.stream(next.split("\n")).mapToInt(String::length).max().getAsInt();
+        if (rows == 1)
+            v.resize(text.length(), 1);
+        else
+            v.resize(Str.countCols(text), rows);
 
 //            v.invalidate();
-        }
     }
 
     @Override
@@ -71,28 +74,35 @@ public class BitmapLabel extends AbstractLabel {
         int r = view.rows; if (r > 0) {
             int c = view.cols; if (c > 0) {
                 b = AspectAlign.innerBounds(b,
-                (r * characterAspectRatio) / c, align);
+                r * characterAspectRatio / c, align);
             }
         }
         textBounds = b;
         view.pos(bounds);
     }
 
-    private String textShown;
+    private transient String textShown;
 
     @Override
     protected final void renderContent(ReSurface r) {
-        float p = r.visP(textBounds, MIN_PIXELS_TO_BE_VISIBLE);
-        String textShownBefore = textShown;
-        if (p <= 0) {
-            //TODO re-use existing result
-            textShown = String.valueOf(text.charAt(0));
-        } else {
+//        float p = r.visP(textBounds, MIN_PIXELS_TO_BE_VISIBLE*8);
+//        String textShownBefore = textShown;
+//        if (p <= 0) {
+//            //TODO re-use existing result
+//            char firstChar = text.charAt(0);
+//            if (textShownBefore!=null && textShownBefore.length()==1 && textShownBefore.charAt(0)==firstChar) {
+//                //same
+//            } else {
+//                textShown = String.valueOf(firstChar);
+//            }
+//        } else {
             textShown = text;
-        }
-
-        if (textShown != textShownBefore)
-            doLayout(0);
+//        }
+//
+//        if (textShown != textShownBefore) {
+//            //textChanged();
+//            doLayout(0);
+//        }
 
         this.view.renderIfVisible(r);
     }
@@ -105,21 +115,21 @@ public class BitmapLabel extends AbstractLabel {
 
 
     public AbstractLabel textColor(float rr, float gg, float bb, float aa) {
-        fgColor.set((rr), (gg), (bb), 1.0f);
+        fgColor.set(rr, gg, bb, 1);
         return this;
     }
 
     public final AbstractLabel textColor(float rr, float gg, float bb) {
-        return textColor(rr, gg, bb, 1.0f);
+        return textColor(rr, gg, bb, 1);
     }
 
     public AbstractLabel backgroundColor(float rr, float gg, float bb, float aa) {
-        bgColor.set((rr), (gg), (bb), aa);
+        bgColor.set(rr, gg, bb, aa);
         return this;
     }
 
     public final AbstractLabel backgroundColor(float rr, float gg, float bb) {
-        return backgroundColor(rr, gg, bb, 1.0f);
+        return backgroundColor(rr, gg, bb, 1);
     }
 
 
@@ -142,7 +152,7 @@ public class BitmapLabel extends AbstractLabel {
 
             String s = text(r);
             int n = s.length();
-            int row = 0, col =0;
+            int row = 0, col = 0;
             for (int i = 0; i < n; i++) {
                 char c = s.charAt(i);
                 if (c == '\n') {
