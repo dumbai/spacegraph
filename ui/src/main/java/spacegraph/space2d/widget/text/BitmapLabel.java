@@ -7,6 +7,8 @@ import spacegraph.space2d.ReSurface;
 import spacegraph.space2d.container.unit.AspectAlign;
 import spacegraph.space2d.widget.console.BitmapTextGrid;
 
+import static spacegraph.space2d.widget.text.VectorLabel.MIN_PIXELS_TO_BE_VISIBLE;
+
 public class BitmapLabel extends AbstractLabel {
 
     private BitmapTextGrid view;
@@ -68,19 +70,31 @@ public class BitmapLabel extends AbstractLabel {
         RectF b = bounds;
         int r = view.rows; if (r > 0) {
             int c = view.cols; if (c > 0) {
-                b = AspectAlign.innerBounds(b, (r * characterAspectRatio) / c, align);
+                b = AspectAlign.innerBounds(b,
+                (r * characterAspectRatio) / c, align);
             }
         }
         textBounds = b;
         view.pos(bounds);
-        //view.invalidate();
     }
+
+    private String textShown;
 
     @Override
     protected final void renderContent(ReSurface r) {
-        BitmapTextGrid v = this.view;
-//        v.pos(bounds);
-        v.renderIfVisible(r);
+        float p = r.visP(textBounds, MIN_PIXELS_TO_BE_VISIBLE);
+        String textShownBefore = textShown;
+        if (p <= 0) {
+            //TODO re-use existing result
+            textShown = String.valueOf(text.charAt(0));
+        } else {
+            textShown = text;
+        }
+
+        if (textShown != textShownBefore)
+            doLayout(0);
+
+        this.view.renderIfVisible(r);
     }
 
 
@@ -109,7 +123,7 @@ public class BitmapLabel extends AbstractLabel {
     }
 
 
-    private class MyBitmapTextGrid extends BitmapTextGrid {
+    private final class MyBitmapTextGrid extends BitmapTextGrid {
 
         MyBitmapTextGrid(boolean mipmap, boolean antialias) {
             super(mipmap, antialias);
@@ -122,11 +136,11 @@ public class BitmapLabel extends AbstractLabel {
         }
 
         @Override
-        protected boolean renderText() {
+        protected boolean renderText(ReSurface r) {
 
             clearBackground(); //may not be necessary if only one line and all characters are used but in multiline the matrix currently isnt regular so some chars will not be redrawn
 
-            String s = BitmapLabel.this.text;
+            String s = text(r);
             int n = s.length();
             int row = 0, col =0;
             for (int i = 0; i < n; i++) {
@@ -142,5 +156,9 @@ public class BitmapLabel extends AbstractLabel {
         }
 
 
+    }
+
+    protected String text(ReSurface r) {
+        return BitmapLabel.this.textShown;
     }
 }

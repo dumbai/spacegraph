@@ -10,12 +10,11 @@ public class VectorLabel extends AbstractLabel {
 
     static final float MIN_PIXELS_TO_BE_VISIBLE = 2.0f;
     static final float MIN_THICK = 0.5F;
-    static final float THICKNESSES_PER_PIXEL = 1.0f / 30.0f;
-    static final float MAX_THICK = 16.0F;
+    static final float THICKNESSES_PER_PIXEL = 1 / 30.0f;
+    static final float MAX_THICK = 16;
 
     //TODO MutableRect textBounds and only update on doLayout
-    protected float textScaleX = 1.0f;
-    protected float textScaleY = 1.0f;
+    protected float textScaleX = 1, textScaleY = 1;
     protected transient float textThickness;
 
     protected float textY;
@@ -33,8 +32,7 @@ public class VectorLabel extends AbstractLabel {
         text(s);
     }
 
-    @Override
-    protected void doLayout(float dtS) {
+    @Override protected void doLayout(float dtS) {
 
         int len = text.length();
         if (len == 0) {
@@ -54,29 +52,27 @@ public class VectorLabel extends AbstractLabel {
             this.textScaleY = textScaleX / visAspect;
 //        }
 
-        if (textScaleY > 1.0f) {
-            textScaleX = 1.0f / (len * textScaleY);
-            textScaleY = 1.0f;
+        if (textScaleY > 1) {
+            textScaleX = 1 / (len * textScaleY);
+            textScaleY = 1;
         }
 
-        textY = 0.5f - textScaleY / 2.0f;
+        textY = 0.5f - textScaleY / 2;
     }
     
-    @Override
-    protected void renderContent(ReSurface r) {
+    @Override protected void renderContent(ReSurface r) {
+        renderer(r).accept(this, r.gl);
+    }
+
+    private LabelRenderer renderer(ReSurface r) {
         float p = r.visP(bounds.scale(textScaleX, textScaleY), MIN_PIXELS_TO_BE_VISIBLE);
-
-        LabelRenderer l;
         if (p <= 0)
-            l = LabelRenderer.LineBox;
+            return LabelRenderer.LineBox;
         else {
-			textThickness = Math.round(Util.min(MAX_THICK, MIN_THICK + p * THICKNESSES_PER_PIXEL));
-            l = renderer;
+			textThickness = Util.min(p * THICKNESSES_PER_PIXEL + MIN_THICK, MAX_THICK);
             //TODO apply translation for alignment
+            return renderer;
         }
-
-        l.accept(this, r.gl);
-        //super.renderContent(r);
     }
 
 //    @Override

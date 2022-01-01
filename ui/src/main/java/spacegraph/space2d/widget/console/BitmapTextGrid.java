@@ -164,11 +164,10 @@ public abstract class BitmapTextGrid extends AbstractConsoleSurface {
             int ph = pixelHeight();
             if (ph > 0 && invalidBmp.weakCompareAndSetAcquire(true, false)){
                 allocate(pw, ph);
-                renderText();
+                renderText(r);
                 invalidTex.setRelease(true);
             }
         }
-        //super.renderContent(r);
     }
 
     @Override
@@ -241,8 +240,9 @@ public abstract class BitmapTextGrid extends AbstractConsoleSurface {
 
     /**
      * render text to texture, invokes redraw method appropriately
+     * @param r
      */
-    @Deprecated protected boolean renderText() {
+    @Deprecated protected boolean renderText(ReSurface r) {
         return false;
     }
 
