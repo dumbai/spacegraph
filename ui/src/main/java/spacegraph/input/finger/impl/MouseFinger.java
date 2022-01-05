@@ -19,7 +19,13 @@ public abstract class MouseFinger extends Finger {
 
         Fingering ff = this.fingering.get();
 
-        Surface touchNext = s.apply(this);
+        Surface touchNext;
+        try {
+            touchNext = s.apply(this);
+        } catch (Exception e) {
+            touchNext = null;
+            e.printStackTrace(); //TODO
+        }
 
         //touching.accumulateAndGet(touchNext, ff::touchNext);
         touching.set(ff.touchNext(touching.get(), touchNext));

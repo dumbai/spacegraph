@@ -46,7 +46,7 @@ public class ObjectSurface extends MutableUnitContainer<Surface> {
 
     private static final AutoBuilder.AutoBuilding<Object, Surface> DefaultObjectSurfaceBuilder = (ctx, target, obj) -> /*@Nullable*/ /*@Nullable*/ {
 
-        List<Surface> outer = new Lst(0, EmptySurfaceArray);
+        List<Surface> outer = new Lst<>(0, EmptySurfaceArray);
 
         for (Pair<Object, Iterable<Surface>> p : target) {
             Surface l = collectionSurface(Streams.stream(p.getTwo()).filter(Objects::nonNull).collect(toList()));
