@@ -16,6 +16,7 @@
 
     <properties>
         <jogamp>2.3.2</jogamp>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
 
