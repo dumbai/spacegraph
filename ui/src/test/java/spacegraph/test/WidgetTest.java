@@ -145,7 +145,7 @@ public enum WidgetTest {
 
     private static Map<String, Supplier<Surface>> wiringDemos() {
         return Map.of(
-                "Empty", () -> wiringDemo((g) -> {
+                "Empty", () -> wiringDemo(g -> {
                 }),
                 "Intro", () -> wiringDemo(g -> {
                     g.add(widgetDemo()).posRel(1, 1, 0.5f, 0.25f);
@@ -153,7 +153,7 @@ public enum WidgetTest {
                         g.add(new WizardFrame(new ProtoWidget())).posRel(0.5f, 0.5f, 0.45f / i, 0.35f / i);
                 }),
                 //"", ()-> wiringDemo((g)->{})
-                "Basic", () -> wiringDemo((g) -> {
+                "Basic", () -> wiringDemo(g -> {
                     /** switched signal */
 
                     NoiseVectorChip A = new NoiseVectorChip();
@@ -187,7 +187,6 @@ public enum WidgetTest {
     }
 
     private static Surface iconButton() {
-        //            case 6: s = "dna"; break;
         String s = switch (ThreadLocalRandom.current().nextInt(6)) {
             case 0 -> "code";
             case 1 -> "trash";
@@ -195,16 +194,10 @@ public enum WidgetTest {
             case 3 -> "fighter-jet";
             case 4 -> "exclamation-triangle";
             case 5 -> "shopping-cart";
+            //            case 6: s = "dna"; break;
             default -> null;
         };
         return PushButton.iconAwesome(s);
-
-
-        //            switch (ThreadLocalRandom.current().nextInt(6)) {
-//                case 0-> "code";
-//                default -> null;
-//            });
-
     }
 
 
