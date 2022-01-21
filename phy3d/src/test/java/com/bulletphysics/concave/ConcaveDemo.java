@@ -286,12 +286,12 @@ public class ConcaveDemo extends DemoApplication {
 			for (i = 0; i < 10; i++) {
 				//btCollisionShape* colShape = new btCapsuleShape(0.5,2.0);//boxShape = new btSphereShape(1.f);
 				startTransform.origin.set(2.0f, 10.0f + i* 2.0f, 1.0f);
-				world.localCreateRigidBody(1.0f, startTransform, colShape);
+				world.localCreateRigidBody(colShape, 1.0f, startTransform);
 			}
 		}
 
 		startTransform.setIdentity();
-		staticBody = world.localCreateRigidBody(mass, startTransform, groundShape);
+		staticBody = world.localCreateRigidBody(groundShape, mass, startTransform);
 
 		staticBody.setCollisionFlags(staticBody.getCollisionFlags() | CollisionFlags.STATIC_OBJECT);
 

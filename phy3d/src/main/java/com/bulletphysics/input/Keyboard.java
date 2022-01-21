@@ -98,14 +98,14 @@ public class Keyboard implements KeyListener {
 		}
 	}
 	
-	/**
-	 * Resets all the keys for which holdis false.
-	 */
-	public void resetUnholdKeys() {
-		synchronized (this.keys) {
-			//for(InputKey key:this.keys.values())if(key.getHoldType()==Hold.NO_HOLD)key.reset();
-		}
-	}
+//	/**
+//	 * Resets all the keys for which holdis false.
+//	 */
+//	public void resetUnholdKeys() {
+////		synchronized (this.keys) {
+////			//for(InputKey key:this.keys.values())if(key.getHoldType()==Hold.NO_HOLD)key.reset();
+////		}
+//	}
 	
 
 	/**

@@ -81,7 +81,11 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
         this(new CollisionDispatcher(collisionConfiguration), pairCache, constraintSolver, collisionConfiguration);
     }
 
-    public DiscreteDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache, ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration) {
+    public DiscreteDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache, ConstraintSolver constraintSolver) {
+        this(dispatcher, pairCache, constraintSolver, dispatcher.getCollisionConfiguration());
+    }
+
+    @Deprecated public DiscreteDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache, ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration) {
         super(dispatcher, pairCache, collisionConfiguration);
         this.constraintSolver = constraintSolver;
 

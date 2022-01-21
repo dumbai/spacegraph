@@ -754,7 +754,7 @@ public class GImpactCollisionAlgorithm extends CollisionAlgorithm {
                     _find_collision_pairs_recursive(
                             boxset0, boxset1,
                             collision_pairs, trans_cache_1to0,
-                            node0, GImpactBvh.getLeftNode(node1), false);
+                            node0, getLeftNode(node1), false);
 
                     // collide right recursive
                     _find_collision_pairs_recursive(
@@ -768,7 +768,7 @@ public class GImpactCollisionAlgorithm extends CollisionAlgorithm {
                     _find_collision_pairs_recursive(
                             boxset0, boxset1,
                             collision_pairs, trans_cache_1to0,
-                            GImpactBvh.getLeftNode(node0), node1, false);
+                            getLeftNode(node0), node1, false);
 
 
                     // collide right recursive
@@ -781,19 +781,19 @@ public class GImpactCollisionAlgorithm extends CollisionAlgorithm {
                     _find_collision_pairs_recursive(
                             boxset0, boxset1,
                             collision_pairs, trans_cache_1to0,
-                            GImpactBvh.getLeftNode(node0), GImpactBvh.getLeftNode(node1), false);
+                            getLeftNode(node0), getLeftNode(node1), false);
 
                     // collide left0 right1
                     _find_collision_pairs_recursive(
                             boxset0, boxset1,
                             collision_pairs, trans_cache_1to0,
-                            GImpactBvh.getLeftNode(node0), boxset1.getRightNode(node1), false);
+                            getLeftNode(node0), boxset1.getRightNode(node1), false);
 
                     // collide right0 left1
                     _find_collision_pairs_recursive(
                             boxset0, boxset1,
                             collision_pairs, trans_cache_1to0,
-                            boxset0.getRightNode(node0), GImpactBvh.getLeftNode(node1), false);
+                            boxset0.getRightNode(node0), getLeftNode(node1), false);
 
                     // collide right0 right1
                     _find_collision_pairs_recursive(

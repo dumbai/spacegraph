@@ -78,7 +78,7 @@ public class FontRender {
 		}
 
 		public void destroy() {
-			FontRender.gl.glDeleteTextures(1,IntBuffer.wrap(new int[] { texture }));
+			gl.glDeleteTextures(1,IntBuffer.wrap(new int[] { texture }));
 		}
 		
 		protected void save(File f) throws IOException {
@@ -316,9 +316,10 @@ public class FontRender {
 		boolean alpha = img.getColorModel().hasAlpha();
 		
 		//glTexImage2D(GL2.GL_TEXTURE_2D, 0, alpha? GL2.GL_RGBA:GL2.GL_RGB, img.getWidth(), img.getHeight(), 0, alpha? GL2.GL_RGBA:GL2.GL_RGB, GL2.GL_UNSIGNED_BYTE, buf);
-		gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, USE_COMPRESSION? (alpha? GL2.GL_COMPRESSED_RGBA:GL2.GL_COMPRESSED_RGB) : (alpha? GL2.GL_RGBA:GL2.GL_RGB), img.getWidth(), img.getHeight(), 0, alpha? GL2.GL_RGBA:GL2.GL_RGB, GL2.GL_UNSIGNED_BYTE, buf);
+		int i2 = USE_COMPRESSION ? (alpha ? GL2.GL_COMPRESSED_RGBA : GL2.GL_COMPRESSED_RGB) : (alpha ? GL2.GL_RGBA : GL2.GL_RGB);
+		gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, i2, img.getWidth(), img.getHeight(), 0, alpha? GL2.GL_RGBA:GL2.GL_RGB, GL2.GL_UNSIGNED_BYTE, buf);
 		if (mipMap) {
-			glu.gluBuild2DMipmaps(GL2.GL_TEXTURE_2D, USE_COMPRESSION? (alpha? GL2.GL_COMPRESSED_RGBA:GL2.GL_COMPRESSED_RGB) : (alpha? GL2.GL_RGBA:GL2.GL_RGB), img.getWidth(), img.getHeight(), alpha? GL2.GL_RGBA:GL2.GL_RGB, GL2.GL_UNSIGNED_BYTE, buf);
+			glu.gluBuild2DMipmaps(GL2.GL_TEXTURE_2D, i2, img.getWidth(), img.getHeight(), alpha? GL2.GL_RGBA:GL2.GL_RGB, GL2.GL_UNSIGNED_BYTE, buf);
 			//gluBuild2DMipmaps(GL2.GL_TEXTURE_2D, GL2.GL_COMPRESSED_RGB, img.getWidth(), img.getHeight(), GL2.GL_RGB, GL2.GL_UNSIGNED_BYTE, buf);
 		}
 		
@@ -326,13 +327,9 @@ public class FontRender {
 	}
 	
 	private static BufferedImage createImage(int width, int height, boolean alpha) {
-		if (alpha) {
-			WritableRaster raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, width, height, 4, null);
-			return new BufferedImage(glColorModelAlpha, raster, false, new Hashtable());
-		}
-		
-		WritableRaster raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, width, height, 3, null);
-		return new BufferedImage(glColorModel, raster, false, new Hashtable());
+		return alpha ?
+			new BufferedImage(glColorModelAlpha, Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, width, height, 4, null), false, new Hashtable()) :
+			new BufferedImage(glColorModel, Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, width, height, 3, null), false, new Hashtable());
 	}
 	
 }

@@ -31,7 +31,6 @@ import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
-import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.simple.BoxShape;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
@@ -57,15 +56,13 @@ public class GenericJointDemo extends DemoApplication {
 	}
 
 	public DynamicsWorld physics() {
-		// Setup the basic world
-		DefaultCollisionConfiguration collision_config = new DefaultCollisionConfiguration();
 
-		CollisionDispatcher dispatcher = new CollisionDispatcher(collision_config);
-
-		Vector3f worldAabbMin = new Vector3f(-10000, -10000, -10000);
-		Vector3f worldAabbMax = new Vector3f(10000, 10000, 10000);
+		//		Vector3f worldAabbMin = new Vector3f(-10000, -10000, -10000);
+//		Vector3f worldAabbMax = new Vector3f(10000, 10000, 10000);
 		//BroadphaseInterface overlappingPairCache = new AxisSweep3(worldAabbMin, worldAabbMax);
+
 		//BroadphaseInterface overlappingPairCache = new SimpleBroadphase();
+
 		BroadphaseInterface overlappingPairCache = new DbvtBroadphase();
 
 		//#ifdef USE_ODE_QUICKSTEP
@@ -74,54 +71,31 @@ public class GenericJointDemo extends DemoApplication {
 		ConstraintSolver constraintSolver = new SequentialImpulseConstraintSolver();
 		//#endif
 
-		DynamicsWorld world = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, constraintSolver, collision_config);
+		DynamicsWorld world = new DiscreteDynamicsWorld(
+				new CollisionDispatcher(
+						new DefaultCollisionConfiguration()),
+				overlappingPairCache, constraintSolver);
 
-		world.setGravity(new Vector3f(0.0f, -30.0f, 0.0f));
+		world.setGravity(new Vector3f(0, -30, 0));
 
-		// Setup a big ground box
-		{
-			CollisionShape groundShape = new BoxShape(new Vector3f(200.0f, 10.0f, 200.0f));
-			Transform groundTransform = new Transform();
-			groundTransform.setIdentity();
-			groundTransform.origin.set(0.0f, -15.0f, 0.0f);
-			world.localCreateRigidBody(0.0f, groundTransform, groundShape);
-		}
+		ground(world);
 
 		spawnRagdoll(world);
 
 		return world;
 	}
 
-	
-	private void spawnRagdoll(DynamicsWorld world) {
-		RagDoll ragDoll = new RagDoll(world, new Vector3f(0.0f, 0.0f, 10.0f), 5.0f);
-		ragdolls.add(ragDoll);
+	private void ground(DynamicsWorld world) {
+		Transform groundTransform = new Transform();
+		groundTransform.setIdentity();
+		groundTransform.origin.set(0, -15, 0);
+		world.localCreateRigidBody(new BoxShape(new Vector3f(200, 10, 200)), 0, groundTransform);
 	}
-	
-//	@Override
-//	public void display(GLAutoDrawable arg) {
-//		gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//		poll();
-//		// simple dynamics world doesn't handle fixed-time-stepping
-//		float ms = getDeltaTimeMicroseconds();
-//		float minFPS = 1000000f / 60f;
-//		if (ms > minFPS) {
-//			ms = minFPS;
-//		}
-//
-//		if (world != null) {
-//			world.stepSimulation(ms / 1000000.f);
-//			// optional but useful: debug drawing
-//			world.debugDrawWorld();
-//		}
-//
-//		renderme();
-//
-//		//glFlush();
-//		//glutSwapBuffers();
-//	}
 
 
+	private void spawnRagdoll(DynamicsWorld world) {
+		ragdolls.add(new RagDoll(world, new Vector3f(0, 0, 10), 5.0f));
+	}
 
 	@Override
 	public void keyboardCallback(char key) {
@@ -132,10 +106,10 @@ public class GenericJointDemo extends DemoApplication {
 	}
 
 	public static void main(String... args) {
-		GenericJointDemo demoApp = new GenericJointDemo();
-		demoApp.setCameraDistance(10.0f);
+		GenericJointDemo a = new GenericJointDemo();
+		a.setCameraDistance(10);
 
-		new JOGL(demoApp, 800, 600);
+		new JOGL(a, 800, 600);
 	}
 	
 }

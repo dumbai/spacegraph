@@ -158,14 +158,14 @@ public abstract class DynamicsWorld extends CollisionWorld {
         return solverInfo;
     }
 
-    public RigidBody localCreateRigidBody(float mass, Transform startTransform, CollisionShape shape) {
+    public RigidBody localCreateRigidBody(CollisionShape shape, float mass, Transform startTransform) {
         // rigidbody is dynamic if and only if mass is non zero, otherwise static
         boolean isDynamic = (mass != 0.0f);
 
         Vector3f localInertia = new Vector3f();
-        if (isDynamic) {
+        if (isDynamic)
             shape.calculateLocalInertia(mass, localInertia);
-        }
+
 
         // using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
 

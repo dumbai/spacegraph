@@ -21,6 +21,8 @@ import com.bulletphysics.util.ObjectArrayList;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
+import org.hipparchus.util.ArithmeticUtils;
+import toxi.math.MathUtils;
 
 import javax.vecmath.Color3f;
 import javax.vecmath.Matrix3f;
@@ -210,7 +212,6 @@ public abstract class SpaceGraph3D implements GLEventListener {
     }
 
     public void display(GLAutoDrawable drawable) {
-
         gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         update();
@@ -233,9 +234,6 @@ public abstract class SpaceGraph3D implements GLEventListener {
     }
 
     protected void renderVolume(GLAutoDrawable drawable) {
-
-
-
         // optional but useful: debug drawing
         world.debugDrawWorld();
 
@@ -291,8 +289,8 @@ public abstract class SpaceGraph3D implements GLEventListener {
 
     public void updateCamera() {
 
-        float rele = ele * 0.01745329251994329547f; // rads per deg
-        float razi = azi * 0.01745329251994329547f; // rads per deg
+        float rele = MathUtils.radians(ele);
+        float razi = MathUtils.radians(azi);
 
         Quat4f rot = new Quat4f(); setRotation(rot, cameraUp, razi);
 
@@ -314,12 +312,10 @@ public abstract class SpaceGraph3D implements GLEventListener {
         tmpMat1.mul(tmpMat2);
         tmpMat1.transform(cameraPosition);
 
-        Vector3f cameraTargetPosition = this.cameraTargetPosition;
-        Vector3f cameraUp = this.cameraUp;
-        updateCamera(cameraPosition, cameraTargetPosition, cameraUp);
+        updateCamera(cameraPosition, this.cameraTargetPosition, this.cameraUp);
     }
 
-    public void updateCamera(Vector3f pos, Vector3f target, Vector3f up) {
+    protected void updateCamera(Vector3f pos, Vector3f target, Vector3f up) {
         this.cameraPosition.set(pos);
         this.cameraTargetPosition.set(target);
         this.cameraUp.set(up);

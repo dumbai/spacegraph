@@ -34,7 +34,7 @@ import java.util.RandomAccess;
 /**
  * @author jezek2
  */
-public final class ObjectArrayList<T> extends AbstractList<T> implements RandomAccess, Externalizable {
+@Deprecated public final class ObjectArrayList<T> extends AbstractList<T> implements RandomAccess, Externalizable {
 
     private T[] array;
     private int size;

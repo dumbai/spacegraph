@@ -38,6 +38,7 @@ import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
 import com.bulletphysics.render.JOGL;
+import spacegraph.SpaceGraph;
 
 import javax.vecmath.Vector3f;
 
@@ -63,7 +64,6 @@ public class BasicDemo extends DemoApplication {
 	private BroadphaseInterface broadphase;
 	private CollisionDispatcher dispatcher;
 	private ConstraintSolver solver;
-	private DefaultCollisionConfiguration collisionConfiguration;
 
 	private BasicDemo() {
 		super();
@@ -71,10 +71,10 @@ public class BasicDemo extends DemoApplication {
 	
 
 	public DiscreteDynamicsWorld physics() {
-		setCameraDistance(30.0f);
+		setCameraDistance(30);
 
 		// collision configuration contains default setup for memory, collision setup
-		collisionConfiguration = new DefaultCollisionConfiguration();
+		var collisionConfiguration = new DefaultCollisionConfiguration();
 
 		// use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
 		dispatcher = new CollisionDispatcher(collisionConfiguration);
@@ -87,12 +87,12 @@ public class BasicDemo extends DemoApplication {
 		// TODO: needed for SimpleDynamicsWorld
 		//sol.setSolverMode(sol.getSolverMode() & ~SolverMode.SOLVER_CACHE_FRIENDLY.getMask());
 
-		DiscreteDynamicsWorld world = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+		DiscreteDynamicsWorld world = new DiscreteDynamicsWorld(dispatcher, broadphase, solver);
 
-		world.setGravity(new Vector3f(0.0f, -10.0f, 0.0f));
+		world.setGravity(new Vector3f(0, -10, 0));
 
 		// create a few basic rigid bodies
-		CollisionShape groundShape = new BoxShape(new Vector3f(50.0f, 50.0f, 50.0f));
+		CollisionShape groundShape = new BoxShape(new Vector3f(50, 50, 50));
 		//CollisionShape groundShape = new StaticPlaneShape(new Vector3f(0, 1, 0), 50);
 
 		collisionShapes.add(groundShape);
@@ -103,10 +103,10 @@ public class BasicDemo extends DemoApplication {
 
 		// We can also use DemoApplication::localCreateRigidBody, but for clarity it is provided here:
 		{
-			float mass = 0.0f;
+			float mass = 0;
 
 			// rigidbody is dynamic if and only if mass is non zero, otherwise static
-			boolean isDynamic = (mass != 0.0f);
+			boolean isDynamic = (mass != 0);
 
 			Vector3f localInertia = new Vector3f();
 			if (isDynamic) {
@@ -137,7 +137,7 @@ public class BasicDemo extends DemoApplication {
 			float mass = 1.0f;
 
 			// rigidbody is dynamic if and only if mass is non zero, otherwise static
-			boolean isDynamic = (mass != 0.0f);
+			boolean isDynamic = (mass != 0);
 
 			Vector3f localInertia = new Vector3f();
 			if (isDynamic) {
@@ -152,7 +152,7 @@ public class BasicDemo extends DemoApplication {
 					for (int j = 0; j < ARRAY_SIZE_Z; j++) {
 						startTransform.origin.set(
                                 2.0f * i + start_x,
-                                10.0f + 2.0f * k + START_POS_Y,
+                                10 + 2.0f * k + START_POS_Y,
                                 2.0f * j + start_z);
 
 						// using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
@@ -172,9 +172,9 @@ public class BasicDemo extends DemoApplication {
 	}
 	
 	public static void main(String... args)  {
-		BasicDemo ccdDemo = new BasicDemo();
 
-		new JOGL(ccdDemo, 800, 600);
+		new JOGL(new BasicDemo(), 800, 600);
+//		SpaceGraph.window(new WorldSurface(new BasicDemo()), 800, 600);
 	}
 	
 }

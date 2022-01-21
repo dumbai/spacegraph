@@ -545,7 +545,7 @@ public class RigidBody extends CollisionObject {
     @Override
     public boolean checkCollideWithOverride(CollisionObject co) {
         // TODO: change to cast
-        RigidBody otherRb = RigidBody.upcast(co);
+        RigidBody otherRb = upcast(co);
         if (otherRb == null) {
             return true;
         }

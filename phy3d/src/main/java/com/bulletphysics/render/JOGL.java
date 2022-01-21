@@ -36,17 +36,16 @@ import com.jogamp.opengl.util.FPSAnimator;
  * @author jezek2
  */
 
+@Deprecated
 public class JOGL {
     private static final int FPS = 60; // animator's target frames per second
 
     private final GLWindow window;
 
     public JOGL(SpaceGraph3D s, int width, int height) {
-
         GLProfile glp = GLProfile.getDefault();
         GLCapabilitiesImmutable caps = new GLCapabilities(glp);
         window = GLWindow.create(caps);
-
 
         // Create a animator that drives canvas' display() at the specified FPS.
         GLAnimatorControl animator = new FPSAnimator(window, FPS, true);
@@ -78,14 +77,8 @@ public class JOGL {
 //        ((JoglGL)s.gl).init(window.getGL().getGL2());
 
 
-
-
-
-
-
-
         s.world.setDebugDrawer(new GLDebugDrawer(
-            s.gl
+                s.gl
         ));
 
 

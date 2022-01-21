@@ -23,6 +23,7 @@
 
 package com.bulletphysics.collision.broadphase;
 
+import com.bulletphysics.collision.dispatch.CollisionConfiguration;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.util.ObjectArrayList;
@@ -40,6 +41,8 @@ public abstract class Dispatcher {
 	public final CollisionAlgorithm findAlgorithm(CollisionObject body0, CollisionObject body1) {
 		return findAlgorithm(body0, body1, null);
 	}
+
+	public abstract CollisionConfiguration getCollisionConfiguration();
 
 	public abstract CollisionAlgorithm findAlgorithm(CollisionObject body0, CollisionObject body1, PersistentManifold sharedManifold);
 

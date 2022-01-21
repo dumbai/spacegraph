@@ -61,6 +61,7 @@ public class BvhDataArray {
         int pos1 = idx1 * 6;
         int pos2 = idx2 * 6;
 
+        var bound = this.bound;
         float b0 = bound[pos1 + 0];
         float b1 = bound[pos1 + 1];
         float b2 = bound[pos1 + 2];
@@ -87,19 +88,22 @@ public class BvhDataArray {
     }
 
     public AABB getBound(int idx, AABB out) {
+        var bound = this.bound;
         int pos = idx * 6;
         out.min.set(bound[pos + 0], bound[pos + 1], bound[pos + 2]);
         out.max.set(bound[pos + 3], bound[pos + 4], bound[pos + 5]);
         return out;
     }
 
-    public Vector3f getBoundMin(int idx, Vector3f out) {
+    Vector3f boundMin(int idx, Vector3f out) {
+        var bound = this.bound;
         int pos = idx * 6;
         out.set(bound[pos + 0], bound[pos + 1], bound[pos + 2]);
         return out;
     }
 
-    public Vector3f getBoundMax(int idx, Vector3f out) {
+    Vector3f boundMax(int idx, Vector3f out) {
+        var bound = this.bound;
         int pos = idx * 6;
         out.set(bound[pos + 3], bound[pos + 4], bound[pos + 5]);
         return out;
@@ -107,6 +111,7 @@ public class BvhDataArray {
 
     public void setBound(int idx, AABB aabb) {
         int pos = idx * 6;
+        var bound = this.bound;
         bound[pos + 0] = aabb.min.x;
         bound[pos + 1] = aabb.min.y;
         bound[pos + 2] = aabb.min.z;

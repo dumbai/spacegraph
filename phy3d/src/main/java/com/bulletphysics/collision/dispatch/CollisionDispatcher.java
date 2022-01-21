@@ -50,7 +50,7 @@ public class CollisionDispatcher extends Dispatcher {
 	//private PoolAllocator*	m_collisionAlgorithmPoolAllocator;
 	//private PoolAllocator*	m_persistentManifoldPoolAllocator;
 	private final CollisionAlgorithmCreateFunc[][] doubleDispatch = new CollisionAlgorithmCreateFunc[MAX_BROADPHASE_COLLISION_TYPES][MAX_BROADPHASE_COLLISION_TYPES];
-	private CollisionConfiguration collisionConfiguration;
+	public final CollisionConfiguration collisionConfiguration;
 	//private static int gNumManifold = 0;
 	
 	private final CollisionAlgorithmConstructionInfo tmpCI = new CollisionAlgorithmConstructionInfo();
@@ -86,13 +86,13 @@ public class CollisionDispatcher extends Dispatcher {
 		this.nearCallback = nearCallback;
 	}
 
-	public CollisionConfiguration getCollisionConfiguration() {
+	@Override public CollisionConfiguration getCollisionConfiguration() {
 		return collisionConfiguration;
 	}
 
-	public void setCollisionConfiguration(CollisionConfiguration collisionConfiguration) {
-		this.collisionConfiguration = collisionConfiguration;
-	}
+//	public void setCollisionConfiguration(CollisionConfiguration collisionConfiguration) {
+//		this.collisionConfiguration = collisionConfiguration;
+//	}
 
 	@Override
 	public CollisionAlgorithm findAlgorithm(CollisionObject body0, CollisionObject body1, PersistentManifold sharedManifold) {

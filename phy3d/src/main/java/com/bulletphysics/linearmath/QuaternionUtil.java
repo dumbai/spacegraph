@@ -75,7 +75,7 @@ public class QuaternionUtil {
 	
 	public static Vector3f quatRotate(Quat4f rotation, Vector3f v, Vector3f out) {
 		Quat4f q = new Quat4f(rotation);
-		QuaternionUtil.mul(q, v);
+		mul(q, v);
 
 		Quat4f tmp = new Quat4f();
 		inverse(tmp, rotation);

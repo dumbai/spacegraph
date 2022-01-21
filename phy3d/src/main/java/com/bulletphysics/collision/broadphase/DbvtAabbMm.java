@@ -205,11 +205,10 @@ public class DbvtAabbMm {
 
 	public float ProjectMinimum(Vector3f v, int signs) {
 		Vector3f[] b = {max, min};
-		Vector3f p = new Vector3f();
-		p.set(b[(signs >> 0) & 1].x,
+		return new Vector3f(
+			 b[(signs >> 0) & 1].x,
 		      b[(signs >> 1) & 1].y,
-		      b[(signs >> 2) & 1].z);
-		return p.dot(v);
+		      b[(signs >> 2) & 1].z).dot(v);
 	}
 	 
 	public static boolean intersects(DbvtAabbMm a, DbvtAabbMm b) {
@@ -248,12 +247,13 @@ public class DbvtAabbMm {
 	}
 
 	public static boolean intersects(DbvtAabbMm a, Vector3f b) {
-		return ((b.x >= a.min.x) &&
-		        (b.y >= a.min.y) &&
-		        (b.z >= a.min.z) &&
-		        (b.x <= a.max.x) &&
-		        (b.y <= a.max.y) &&
-		        (b.z <= a.max.z));
+		Vector3f aMin = a.min, aMax = a.max;
+		return ((b.x >= aMin.x) &&
+		        (b.y >= aMin.y) &&
+		        (b.z >= aMin.z) &&
+		        (b.x <= aMax.x) &&
+		        (b.y <= aMax.y) &&
+		        (b.z <= aMax.z));
 	}
 
 	public static boolean intersects(DbvtAabbMm a, Vector3f org, Vector3f invdir, int[] signs) {
@@ -333,7 +333,7 @@ public class DbvtAabbMm {
 	}
 
 	public boolean intersects(DbvtAabbMm v) {
-		return this==v || DbvtAabbMm.intersects(this, v);
+		return this==v || intersects(this, v);
 	}
 
 	public DbvtAabbMm merge(Iterable<Vector3f> vv) {

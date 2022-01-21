@@ -131,7 +131,7 @@ public class MovingConcaveDemo extends DemoApplication {
 
 		startTransform.origin.set(0.0f, 0.0f, 0.0f);
 
-		RigidBody staticBody = world.localCreateRigidBody(mass, startTransform, staticScenario);
+		RigidBody staticBody = world.localCreateRigidBody(staticScenario, mass, startTransform);
 
 		staticBody.setCollisionFlags(staticBody.getCollisionFlags() | CollisionFlags.STATIC_OBJECT);
 
@@ -145,14 +145,14 @@ public class MovingConcaveDemo extends DemoApplication {
 
 		startTransform.origin.set(0.0f, 0.0f, 0.0f);
 
-		RigidBody staticBody2 = world.localCreateRigidBody(mass, startTransform, staticplaneShape6);
+		RigidBody staticBody2 = world.localCreateRigidBody(staticplaneShape6, mass, startTransform);
 
 		staticBody2.setCollisionFlags(staticBody2.getCollisionFlags() | CollisionFlags.STATIC_OBJECT);
 
 		for (int i=0; i<9; i++) {
 			CollisionShape boxShape = new BoxShape(new Vector3f(1.0f, 1.0f, 1.0f));
 			startTransform.origin.set(2.0f * i - 5.0f, 2.0f, -3.0f);
-			world.localCreateRigidBody(1, startTransform, boxShape);
+			world.localCreateRigidBody(boxShape, 1, startTransform);
 		}
 
 		return world;
@@ -166,7 +166,7 @@ public class MovingConcaveDemo extends DemoApplication {
 			Vector3f camPos = cameraPosition();
 			startTransform.origin.set(camPos);
 
-			RigidBody body = world.localCreateRigidBody(mass, startTransform, trimeshShape);
+			RigidBody body = world.localCreateRigidBody(trimeshShape, mass, startTransform);
 
 			Vector3f linVel = new Vector3f(destination.x - camPos.x, destination.y - camPos.y, destination.z - camPos.z);
 			linVel.normalize();

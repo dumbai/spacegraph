@@ -240,11 +240,9 @@ public abstract  class DemoApplication extends SpaceGraph3D {
 	@Override
     public void specialKeyboard(int key) {
 		switch (key) {
-			case KeyEvent.VK_F1:
-			case KeyEvent.VK_F2: {
-				break;
+			case KeyEvent.VK_F1, KeyEvent.VK_F2 -> {
 			}
-			case KeyEvent.VK_END: {
+			case KeyEvent.VK_END -> {
 				int numObj = world().getNumCollisionObjects();
 				if (numObj != 0) {
 					CollisionObject obj = world().getCollisionObjectArray().get(numObj - 1);
@@ -256,32 +254,17 @@ public abstract  class DemoApplication extends SpaceGraph3D {
 					}
 					//delete obj;
 				}
-				break;
 			}
-			case KeyEvent.VK_LEFT:
-				stepLeft();
-				break;
-			case KeyEvent.VK_RIGHT:
-				stepRight();
-				break;
-			case KeyEvent.VK_UP:
-				stepFront();
-				break;
-			case KeyEvent.VK_DOWN:
-				stepBack();
-				break;
-			case KeyEvent.VK_PAGE_UP /* TODO: check PAGE_UP */:
-				zoomIn();
-				break;
-			case KeyEvent.VK_PAGE_DOWN/* TODO: checkPAGE_DOWN */:
-				zoomOut();
-				break;
-			case KeyEvent.VK_HOME:
-				toggleIdle();
-				break;
-			default:
-				// std::cout << "unused (special) key : " << key << std::endl;
-				break;
+			case KeyEvent.VK_LEFT -> stepLeft();
+			case KeyEvent.VK_RIGHT -> stepRight();
+			case KeyEvent.VK_UP -> stepFront();
+			case KeyEvent.VK_DOWN -> stepBack();
+			case KeyEvent.VK_PAGE_UP /* TODO: check PAGE_UP */ -> zoomIn();
+			case KeyEvent.VK_PAGE_DOWN/* TODO: checkPAGE_DOWN */ -> zoomOut();
+			case KeyEvent.VK_HOME -> toggleIdle();
+			default -> {
+			}
+			// std::cout << "unused (special) key : " << key << std::endl;
 		}
 
 		//LWJGL.postRedisplay();
@@ -306,7 +289,7 @@ public abstract  class DemoApplication extends SpaceGraph3D {
 				//#endif//
 			}
 
-			RigidBody body = world.localCreateRigidBody(mass, startTransform, shootBoxShape);
+			RigidBody body = world.localCreateRigidBody(shootBoxShape, mass, startTransform);
 
 			Vector3f linVel = new Vector3f(destination.x - camPos.x, destination.y - camPos.y, destination.z - camPos.z);
 			linVel.normalize();

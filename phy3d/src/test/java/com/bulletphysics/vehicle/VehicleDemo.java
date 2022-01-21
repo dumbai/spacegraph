@@ -285,7 +285,7 @@ public class VehicleDemo extends DemoApplication {
 		collisionShapes.add(groundShape);
 
 		// create ground object
-		world.localCreateRigidBody(0, tr, groundShape);
+		world.localCreateRigidBody(groundShape, 0, tr);
 
 		//#ifdef FORCE_ZAXIS_UP
 		//	//   indexRightAxis = 0; 
@@ -313,7 +313,7 @@ public class VehicleDemo extends DemoApplication {
 
 		tr.origin.set(0, 0, 0);
 
-		carChassis = world.localCreateRigidBody(800, tr, compound); //chassisShape);
+		carChassis = world.localCreateRigidBody(compound, 800, tr); //chassisShape);
 		//m_carChassis->setDamping(0.2,0.2);
 
 

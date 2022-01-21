@@ -55,8 +55,8 @@ public class BvhTree {
         Vector3f tmp2 = new Vector3f();
 
         for (int i = startIndex; i < endIndex; i++) {
-            primitive_boxes.getBoundMax(i, tmp1);
-            primitive_boxes.getBoundMin(i, tmp2);
+            primitive_boxes.boundMax(i, tmp1);
+            primitive_boxes.boundMin(i, tmp2);
             center.add(tmp1, tmp2);
             center.scale(0.5f);
             means.add(center);
@@ -64,8 +64,8 @@ public class BvhTree {
         means.scale(1.0f / numIndices);
 
         for (int i = startIndex; i < endIndex; i++) {
-            primitive_boxes.getBoundMax(i, tmp1);
-            primitive_boxes.getBoundMin(i, tmp2);
+            primitive_boxes.boundMax(i, tmp1);
+            primitive_boxes.boundMin(i, tmp2);
             center.add(tmp1, tmp2);
             center.scale(0.5f);
             diff2.sub(center, means);
@@ -93,8 +93,8 @@ public class BvhTree {
         Vector3f tmp2 = new Vector3f();
 
         for (int i = startIndex; i < endIndex; i++) {
-            primitive_boxes.getBoundMax(i, tmp1);
-            primitive_boxes.getBoundMin(i, tmp2);
+            primitive_boxes.boundMax(i, tmp1);
+            primitive_boxes.boundMin(i, tmp2);
             center.add(tmp1, tmp2);
             center.scale(0.5f);
             means.add(center);
@@ -105,8 +105,8 @@ public class BvhTree {
 
         // sort leafNodes so all values larger then splitValue comes first, and smaller values start from 'splitIndex'.
         for (int i = startIndex; i < endIndex; i++) {
-            primitive_boxes.getBoundMax(i, tmp1);
-            primitive_boxes.getBoundMin(i, tmp2);
+            primitive_boxes.boundMax(i, tmp1);
+            primitive_boxes.boundMin(i, tmp2);
             center.add(tmp1, tmp2);
             center.scale(0.5f);
 

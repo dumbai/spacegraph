@@ -670,7 +670,7 @@ public class ForkLiftDemo extends DemoApplication {
 		collisionShapes.add(groundShape);
 
 		// create ground object
-		world.localCreateRigidBody(0,tr,groundShape);
+		world.localCreateRigidBody(groundShape, 0,tr);
 
 		//#ifdef FORCE_ZAXIS_UP
 		////   indexRightAxis = 0;
@@ -708,7 +708,7 @@ public class ForkLiftDemo extends DemoApplication {
 
 		tr.origin.set(0, 0.0f,0);
 
-		carChassis = world.localCreateRigidBody(800,tr,compound);//chassisShape);
+		carChassis = world.localCreateRigidBody(compound, 800,tr);//chassisShape);
 		//m_carChassis->setDamping(0.2,0.2);
 
 
@@ -719,7 +719,7 @@ public class ForkLiftDemo extends DemoApplication {
 			liftStartPos.set(0.0f, 2.5f, 3.05f);
 			liftTrans.setIdentity();
 			liftTrans.origin.set(liftStartPos);
-			liftBody = world.localCreateRigidBody(10,liftTrans, liftShape);
+			liftBody = world.localCreateRigidBody(liftShape, 10,liftTrans);
 
 			Transform localA = new Transform(), localB = new Transform();
 			localA.setIdentity();
@@ -756,7 +756,7 @@ public class ForkLiftDemo extends DemoApplication {
 			forkStartPos.set(0.0f, 0.6f, 3.2f);
 			forkTrans.setIdentity();
 			forkTrans.origin.set(forkStartPos);
-			forkBody = world.localCreateRigidBody(5, forkTrans, forkCompound);
+			forkBody = world.localCreateRigidBody(forkCompound, 5, forkTrans);
 
 			localA.setIdentity();
 			localB.setIdentity();
@@ -791,7 +791,7 @@ public class ForkLiftDemo extends DemoApplication {
 			loadTrans.setIdentity();
 			loadStartPos.set(0.0f, -3.5f, 7.0f);
 			loadTrans.origin.set(loadStartPos);
-			loadBody  = world.localCreateRigidBody(4, loadTrans, loadCompound);
+			loadBody  = world.localCreateRigidBody(loadCompound, 4, loadTrans);
 		}
 
 

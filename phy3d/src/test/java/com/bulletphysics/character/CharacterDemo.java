@@ -300,7 +300,7 @@ public class CharacterDemo extends DemoApplication {
 				collisionShapes.add(shape);
 
 				//btRigidBody* body = m_demoApp->localCreateRigidBody(mass, startTransform,shape);
-				world.localCreateRigidBody(mass, startTransform, shape);
+				world.localCreateRigidBody(shape, mass, startTransform);
 			}
 		}
 	}

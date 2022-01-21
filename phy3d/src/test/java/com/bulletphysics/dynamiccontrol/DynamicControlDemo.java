@@ -91,7 +91,7 @@ public class DynamicControlDemo extends DemoApplication {
 			Transform groundTransform = new Transform();
 			groundTransform.setIdentity();
 			groundTransform.origin.set(0.0f, -10.0f, 0.0f);
-			world.localCreateRigidBody(0.0f, groundTransform, groundShape);
+			world.localCreateRigidBody(groundShape, 0.0f, groundTransform);
 		}
 
 		// Spawn one TestRig

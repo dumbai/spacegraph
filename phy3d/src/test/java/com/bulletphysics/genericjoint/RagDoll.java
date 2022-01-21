@@ -46,8 +46,6 @@ import javax.vecmath.Vector3f;
  */
 public class RagDoll {
 	
-	//protected final BulletStack stack = BulletStack.get();
-
 	public enum BodyPart {
 		BODYPART_PELVIS,
 		BODYPART_SPINE,
@@ -87,17 +85,17 @@ public class RagDoll {
 		JOINT_COUNT
 	}
 
-	private final DynamicsWorld ownerWorld;
+	private final DynamicsWorld world;
 	private final CollisionShape[] shapes = new CollisionShape[BodyPart.BODYPART_COUNT.ordinal()];
 	private final RigidBody[] bodies = new RigidBody[BodyPart.BODYPART_COUNT.ordinal()];
 	private final TypedConstraint[] joints = new TypedConstraint[JointType.JOINT_COUNT.ordinal()];
 
-	public RagDoll(DynamicsWorld ownerWorld, Vector3f positionOffset) {
-		this(ownerWorld, positionOffset, 1.0f);
+	public RagDoll(DynamicsWorld world, Vector3f positionOffset) {
+		this(world, positionOffset, 1.0f);
 	}
 
-	public RagDoll(DynamicsWorld ownerWorld, Vector3f positionOffset, float scale_ragdoll) {
-		this.ownerWorld = ownerWorld;
+	public RagDoll(DynamicsWorld world, Vector3f positionOffset, float scale_ragdoll) {
+		this.world = world;
 
 		Transform tmpTrans = new Transform();
 		Vector3f tmp = new Vector3f();
@@ -213,7 +211,7 @@ public class RagDoll {
 			joint6DOF.setAngularUpperLimit(tmp);
 			//#endif
 			joints[JointType.JOINT_SPINE_HEAD.ordinal()] = joint6DOF;
-			ownerWorld.addConstraint(joints[JointType.JOINT_SPINE_HEAD.ordinal()], true);
+			world.addConstraint(joints[JointType.JOINT_SPINE_HEAD.ordinal()], true);
 		}
 		/// *************************** ///
 
@@ -239,7 +237,7 @@ public class RagDoll {
 			joint6DOF.setAngularUpperLimit(tmp);
 			//#endif
 			joints[JointType.JOINT_LEFT_SHOULDER.ordinal()] = joint6DOF;
-			ownerWorld.addConstraint(joints[JointType.JOINT_LEFT_SHOULDER.ordinal()], true);
+			world.addConstraint(joints[JointType.JOINT_LEFT_SHOULDER.ordinal()], true);
 		}
 		/// *************************** ///
 
@@ -263,7 +261,7 @@ public class RagDoll {
 			joint6DOF.setAngularUpperLimit(tmp);
 			//#endif
 			joints[JointType.JOINT_RIGHT_SHOULDER.ordinal()] = joint6DOF;
-			ownerWorld.addConstraint(joints[JointType.JOINT_RIGHT_SHOULDER.ordinal()], true);
+			world.addConstraint(joints[JointType.JOINT_RIGHT_SHOULDER.ordinal()], true);
 		}
 		/// *************************** ///
 
@@ -286,7 +284,7 @@ public class RagDoll {
 			joint6DOF.setAngularUpperLimit(tmp);
 			//#endif
 			joints[JointType.JOINT_LEFT_ELBOW.ordinal()] = joint6DOF;
-			ownerWorld.addConstraint(joints[JointType.JOINT_LEFT_ELBOW.ordinal()], true);
+			world.addConstraint(joints[JointType.JOINT_LEFT_ELBOW.ordinal()], true);
 		}
 		/// *************************** ///
 
@@ -310,7 +308,7 @@ public class RagDoll {
 			//#endif
 
 			joints[JointType.JOINT_RIGHT_ELBOW.ordinal()] = joint6DOF;
-			ownerWorld.addConstraint(joints[JointType.JOINT_RIGHT_ELBOW.ordinal()], true);
+			world.addConstraint(joints[JointType.JOINT_RIGHT_ELBOW.ordinal()], true);
 		}
 		/// *************************** ///
 
@@ -336,7 +334,7 @@ public class RagDoll {
 			joint6DOF.setAngularUpperLimit(tmp);
 			//#endif
 			joints[JointType.JOINT_PELVIS_SPINE.ordinal()] = joint6DOF;
-			ownerWorld.addConstraint(joints[JointType.JOINT_PELVIS_SPINE.ordinal()], true);
+			world.addConstraint(joints[JointType.JOINT_PELVIS_SPINE.ordinal()], true);
 		}
 		/// *************************** ///
 
@@ -361,7 +359,7 @@ public class RagDoll {
 			joint6DOF.setAngularUpperLimit(tmp);
 			//#endif
 			joints[JointType.JOINT_LEFT_HIP.ordinal()] = joint6DOF;
-			ownerWorld.addConstraint(joints[JointType.JOINT_LEFT_HIP.ordinal()], true);
+			world.addConstraint(joints[JointType.JOINT_LEFT_HIP.ordinal()], true);
 		}
 		/// *************************** ///
 
@@ -386,7 +384,7 @@ public class RagDoll {
 			joint6DOF.setAngularUpperLimit(tmp);
 			//#endif
 			joints[JointType.JOINT_RIGHT_HIP.ordinal()] = joint6DOF;
-			ownerWorld.addConstraint(joints[JointType.JOINT_RIGHT_HIP.ordinal()], true);
+			world.addConstraint(joints[JointType.JOINT_RIGHT_HIP.ordinal()], true);
 		}
 		/// *************************** ///
 
@@ -410,7 +408,7 @@ public class RagDoll {
 			joint6DOF.setAngularUpperLimit(tmp);
 			//#endif
 			joints[JointType.JOINT_LEFT_KNEE.ordinal()] = joint6DOF;
-			ownerWorld.addConstraint(joints[JointType.JOINT_LEFT_KNEE.ordinal()], true);
+			world.addConstraint(joints[JointType.JOINT_LEFT_KNEE.ordinal()], true);
 		}
 		/// *************************** ///
 
@@ -433,7 +431,7 @@ public class RagDoll {
 			joint6DOF.setAngularUpperLimit(tmp);
 			//#endif
 			joints[JointType.JOINT_RIGHT_KNEE.ordinal()] = joint6DOF;
-			ownerWorld.addConstraint(joints[JointType.JOINT_RIGHT_KNEE.ordinal()], true);
+			world.addConstraint(joints[JointType.JOINT_RIGHT_KNEE.ordinal()], true);
 		}
 		/// *************************** ///
 	}
@@ -443,14 +441,14 @@ public class RagDoll {
 
 		// Remove all constraints
 		for (i = 0; i < JointType.JOINT_COUNT.ordinal(); ++i) {
-			ownerWorld.removeConstraint(joints[i]);
+			world.removeConstraint(joints[i]);
 			//joints[i].destroy();
 			joints[i] = null;
 		}
 
 		// Remove all bodies and shapes
 		for (i = 0; i < BodyPart.BODYPART_COUNT.ordinal(); ++i) {
-			ownerWorld.removeRigidBody(bodies[i]);
+			world.removeRigidBody(bodies[i]);
 
 			//bodies[i].getMotionState().destroy();
 
@@ -466,17 +464,15 @@ public class RagDoll {
 		boolean isDynamic = (mass != 0.0f);
 
 		Vector3f localInertia = new Vector3f();
-		localInertia.set(0.0f, 0.0f, 0.0f);
-		if (isDynamic) {
+//		localInertia.set(0.0f, 0.0f, 0.0f);
+		if (isDynamic)
 			shape.calculateLocalInertia(mass, localInertia);
-		}
 
-		DefaultMotionState myMotionState = new DefaultMotionState(startTransform);
-		RigidBodyConstructionInfo rbInfo = new RigidBodyConstructionInfo(mass, myMotionState, shape, localInertia);
+		RigidBodyConstructionInfo rbInfo = new RigidBodyConstructionInfo(mass, new DefaultMotionState(startTransform), shape, localInertia);
 		rbInfo.additionalDamping = true;
 		RigidBody body = new RigidBody(rbInfo);
 
-		ownerWorld.addRigidBody(body);
+		world.addRigidBody(body);
 
 		return body;
 	}
