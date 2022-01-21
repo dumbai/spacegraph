@@ -105,7 +105,6 @@ public class JoglWindow implements GLEventListener, WindowListener {
 
             GLCapabilities c = new GLCapabilities(
 
-
                     GLProfile.getMaximum(true)
                     //GLProfile.getGL2GL3()
                     //GLProfile.getDefault()
