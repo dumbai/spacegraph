@@ -12,8 +12,8 @@ import spacegraph.util.MutableRectFloat;
 @Deprecated public class ScatterPlot2D<X> extends Graph2D<X> {
 
     /** controls camera speed */
-    private static final float extentUpdatePeriodS = 0.5f;
-    private static final float minVisPct = 0.01f;
+//    private static final float extentUpdatePeriodS = 0.5f;
+//    private static final float minVisPct = 0.01f;
 
 //    private float marginPctW = 0.01f, marginPctH = 0.1f;
 
@@ -77,7 +77,7 @@ import spacegraph.util.MutableRectFloat;
             MutableRectFloat m = new MutableRectFloat().setX0Y0WH(out[0][0], out[0][1], 0, 0);
             for (int i = 1; i < in.length; i++)
                 m.mbr(out[i][0], out[i][1]);
-            m.commitLerp(1);
+            m.commitLerp(0.1f);
             return m;
         }
     }
