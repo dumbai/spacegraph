@@ -77,7 +77,7 @@ import spacegraph.util.MutableRectFloat;
             MutableRectFloat m = new MutableRectFloat().setX0Y0WH(out[0][0], out[0][1], 0, 0);
             for (int i = 1; i < in.length; i++)
                 m.mbr(out[i][0], out[i][1]);
-            m.commitLerp(0.1f);
+            m.commitLerp(1);
             return m;
         }
     }
@@ -173,13 +173,15 @@ import spacegraph.util.MutableRectFloat;
             if (coordOut == null) return;
             float xMax = Float.NEGATIVE_INFINITY, yMax = Float.NEGATIVE_INFINITY, xMin = Float.POSITIVE_INFINITY, yMin = Float.POSITIVE_INFINITY;
             for (float[] cc : coordOut) {
-                xMin = Math.min(cc[0], xMin); xMax = Math.max(cc[0], xMax);
-                yMin = Math.min(cc[1], yMin); yMax = Math.max(cc[1], yMax);
+                float cx = cc[0], cy = cc[1];
+                xMin = Math.min(cx, xMin); xMax = Math.max(cx, xMax);
+                yMin = Math.min(cy, yMin); yMax = Math.max(cy, yMax);
             }
-            float xRange = xMax - xMin, yRange = yMax - yMin;
 
-            float yMIN = yMin;
-            float xMIN = xMin;
+            float mx = 0.25f * (xMax - xMin), my = 0.25f * (yMax - yMin); xMin -= mx; yMin -= my; xMax += mx; yMax += my;
+
+            float xRange = xMax - xMin, yRange = yMax - yMin;
+            float xMIN = xMin, yMIN = yMin;
             g.forEachValue(node->{
                 float[][] cc = coordOut;
                 int c = node.i;
@@ -192,11 +194,8 @@ import spacegraph.util.MutableRectFloat;
                     X id = node.id;
 
                     node.m.setXYWH(//e.normalizeScale(
-                            X + w * (xy[0]- xMIN)/xRange, Y + h * (xy[1]- yMIN)/yRange,
-                            w * model.width(id, n)/xRange, h * model.height(id, n)
-                            //minVis,
-                            //w,h
-                    //)
+                        X + w * (xy[0]- xMIN)/xRange, Y + h * (xy[1]- yMIN)/yRange,
+                        w * model.width(id, n)/xRange, h * model.height(id, n)
                     );
                     node.m.commitLerp(1);
 
