@@ -38,7 +38,6 @@ import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
 import com.bulletphysics.render.JOGL;
-import spacegraph.SpaceGraph;
 
 import javax.vecmath.Vector3f;
 

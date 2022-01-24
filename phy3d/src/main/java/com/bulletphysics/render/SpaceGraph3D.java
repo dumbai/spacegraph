@@ -21,7 +21,6 @@ import com.bulletphysics.util.ObjectArrayList;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
-import org.hipparchus.util.ArithmeticUtils;
 import toxi.math.MathUtils;
 
 import javax.vecmath.Color3f;
