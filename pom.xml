@@ -13,7 +13,7 @@
 <!--    </parent>-->
 
     <properties>
-        <boofcv.version>0.40</boofcv.version>
+        <boofcv.version>0.40.1</boofcv.version>
     </properties>
 
 
