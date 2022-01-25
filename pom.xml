@@ -31,7 +31,7 @@
                 <configuration>
                     <source>16</source>
                     <target>16</target>
-                    <useIncrementalCompilation>true</useIncrementalCompilation>
+                    <useIncrementalCompilation>false</useIncrementalCompilation>
                 </configuration>
             </plugin>
             <plugin>
