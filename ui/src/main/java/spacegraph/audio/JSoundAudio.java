@@ -1,5 +1,6 @@
 package spacegraph.audio;
 
+import jcog.Config;
 import jcog.Log;
 import jcog.WTF;
 import jcog.data.list.Lst;
@@ -19,7 +20,8 @@ public class JSoundAudio extends Audio {
 
 
 	public SourceDataLine out;
-	private int outID = 11;
+
+	@Deprecated private int outID = Config.INT("AUDIODEVICE", 0);
 
 	public Thread thread;
 
