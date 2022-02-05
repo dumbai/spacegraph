@@ -556,8 +556,7 @@ public class PinkTrombone extends JPanel implements SoundProducer {
 
     private void startSound() {
         started = true;
-        Audio a = Audio.the();
-        a.play(this);
+        Audio.the().play(this);
     }
 
     @Override

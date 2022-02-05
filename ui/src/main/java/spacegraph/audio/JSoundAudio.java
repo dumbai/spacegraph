@@ -15,13 +15,11 @@ import java.util.List;
 
 public class JSoundAudio extends Audio {
 
-
 	private static final Logger logger = Log.log(JSoundAudio.class);
-
 
 	public SourceDataLine out;
 
-	@Deprecated private int outID = Config.INT("AUDIODEVICE", 0);
+	@Deprecated private int outID = Config.INT("AUDIODEVICE", 9);
 
 	public Thread thread;
 
@@ -30,7 +28,7 @@ public class JSoundAudio extends Audio {
 	public JSoundAudio(int polyphony) {
 		super(polyphony);
 
-		//printMixerInfo();
+		printMixerInfo();
 		open();
 
 	}
@@ -85,7 +83,11 @@ public class JSoundAudio extends Audio {
 
 
 			List<Mixer.Info> x = new Lst<>(AudioSystem.getMixerInfo());
-			var out = AudioSystem.getSourceDataLine(format, x.get(outID));
+			Mixer.Info xo = x.get(outID);
+			//System.out.println(xo + "\t" + xo.getDescription());
+
+			var out = AudioSystem.getSourceDataLine(format, xo);
+			//var out = AudioSystem.getSourceDataLine(format);
 			start(format, out, null);
 
 			return;
@@ -137,47 +139,36 @@ public class JSoundAudio extends Audio {
 	 */
 	static void printMixerInfo() {
 
-		Mixer.Info[] mixerinfo = AudioSystem.getMixerInfo();
-		for (int i = 0; i < mixerinfo.length; i++) {
-			String name = mixerinfo[i].getName();
-			if (name.isEmpty())
-				name = "No name";
-			System.out.println((i + 1) + ") " + name + " --- " + mixerinfo[i].getDescription());
-			Mixer m = AudioSystem.getMixer(mixerinfo[i]);
+		Mixer.Info[] mi = AudioSystem.getMixerInfo();
+		for (int i = 0; i < mi.length; i++) {
 
-			Line.Info[] lineinfo = m.getSourceLineInfo();
-			for (Line.Info aLineinfo : lineinfo) {
-				System.out.println("  - " + aLineinfo);
-			}
+			String name = mi[i].getName();
+			if (name.isEmpty()) name = "Unnamed";
 
-			for (Line.Info aLineinfo : m.getTargetLineInfo()) {
-				System.out.println("  - " + aLineinfo);
-			}
+			System.out.println(i + ") " + name + " --- " + mi[i].getDescription());
+			Mixer m = AudioSystem.getMixer(mi[i]);
+
+			for (Line.Info s : m.getSourceLineInfo())
+				System.out.println("  -> " + s);
+
+			for (Line.Info t : m.getTargetLineInfo())
+				System.out.println("  <- " + t);
 
 		}
 	}
 
 
 
-	public void record(String path) throws FileNotFoundException {
-
-
+	public synchronized void record(String path) throws FileNotFoundException {
+		if (rec!=null)
+			throw new UnsupportedOperationException();
 		logger.info("recording to: {}", path);
 		rec = new FileOutputStream(path, false);
-
-
 	}
-
-
-//    public void play(SoundSample sample, SoundSource soundSource, float volume, float priority) {
-//        play(new SamplePlayer(sample, rate), soundSource, volume, priority);
-//    }
-
 
 	@Override
 	protected void push(byte[] ba) {
 		int bw = bufferSamples * 2 * 2;
-//        byte[] ba = soundBuffer.array();
 		int br = out.write(ba, 0, bw);
 		if (br != bw)
 			throw new WTF();

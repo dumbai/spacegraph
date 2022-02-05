@@ -30,10 +30,10 @@ public class Tb303 implements SoundProducer {
 	public final FloatRange vcf_envmod = new FloatRange(0.5f, 0, 2);
 	public final FloatRange vcf_reso = new FloatRange(0.5f, 0.1f, 2);
 
-
-
 	double dt;
-	double t;
+	//double t;
+	long t;
+
 	//TODO double tNoteOn, tNoteOff;
 
 
@@ -77,8 +77,8 @@ public class Tb303 implements SoundProducer {
 	}
 
 	public void reset() {
-		dt = 0.0f;
-		t = 0.0f;
+		dt = 0;
+		t = 0;
 		sp = spp = 0.9f;
 
 		vcf_b = vcf_c0 = vcf_e0 = vcf_e1 = vcf_a = 0.0f;
@@ -114,11 +114,10 @@ public class Tb303 implements SoundProducer {
 		float vca_decay = 1 - this.vca_decay.floatValue()/samplerate;
 		float vcf_decay = 1 - this.vcf_decay.floatValue()/samplerate;
 
+		double dt = this.dt;
 		int i;
 
 		int len = y.length;
-
-
 		for (i = 0; i < len; i++) {
 
 			//update filter envelope
@@ -126,12 +125,12 @@ public class Tb303 implements SoundProducer {
 			vcf_c0 *= vcf_decay;
 
 			double k = (float) exp(-w / vcf_rescoeff);
-			vcf_a = (float) (2.0 * cos(2.0 * w) * k);
+			vcf_a = (float) (2 * cos(2 * w) * k);
 			vcf_b = (float) (-k * k);
 			vcf_c = 1.0f - vcf_a - vcf_b;
 
 
-			double vco = oscillator(t + dt * i);
+			double vco = oscillator((t+i)*dt);
 
 			//amplifier envelope TODO better
 //			if (i == len / 2) vca_mode = 2;
@@ -156,7 +155,8 @@ public class Tb303 implements SoundProducer {
 
 		}
 
-		t += dt * len;
+		//t += dt * len;
+		t += len;
 
 		return true;
 	}
@@ -172,8 +172,9 @@ public class Tb303 implements SoundProducer {
 //	}
 
 	private void updateFilter() {
+		double vcf_reso = this.vcf_reso.doubleValue();
 
-		vcf_rescoeff = (float) exp(-1.20 + 3.455 * vcf_reso.floatValue());
+		vcf_rescoeff = (float) exp(-1.20 + 3.455 * vcf_reso);
 
 //		float d = vcf_decay.floatValue();
 //		d = 0.2f + (2.3f * d);
@@ -183,11 +184,10 @@ public class Tb303 implements SoundProducer {
 		double r = Math.PI / 44100.0f;
 		float vcf_envmod = this.vcf_envmod.floatValue();
 		float vcf_cutoff = this.vcf_cutoff.floatValue();
-		float vcf_reso = this.vcf_reso.floatValue();
 		vcf_e0 = (float) (exp(5.613 - 0.8 * vcf_envmod +
-				2.1553 * vcf_cutoff - 0.7696 * (1.0 - vcf_reso)) * r);
+			2.1553 * vcf_cutoff - 0.7696 * (1 - vcf_reso)) * r);
 		vcf_e1 = (float) (exp(6.109 + 1.5876 * vcf_envmod +
-			2.1553 * vcf_cutoff - 1.2 * (1.0 - vcf_reso)) * r);
+			2.1553 * vcf_cutoff - 1.2 * (1 - vcf_reso)) * r);
 
 		vcf_e1 -= vcf_e0;
 	}
@@ -196,8 +196,9 @@ public class Tb303 implements SoundProducer {
 
 	private abstract static class PianoKeys extends Widget {
 		int base =
-				//44;
-				22;
+			//44;
+			//22;
+			4;
 
 		@Override
 		public boolean key(KeyEvent e, boolean pressedOrReleased) {
@@ -205,9 +206,8 @@ public class Tb303 implements SoundProducer {
 				release();
 			} else {
 				char c = e.getKeyChar();
-				if ((c >= 'a') && (c <= 'z')) {
+				if ((c >= 'a') && (c <= 'z'))
 					play(base + (c - 'a'));
-				}
 			}
 			return super.key(e, pressedOrReleased);
 		}

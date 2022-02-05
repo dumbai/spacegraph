@@ -11,14 +11,14 @@ public abstract class Audio implements Runnable {
 
     public static final Audio the =
         new JSoundAudio(32);
-        //new AudioJOAL();
+        //new JOALAudio();
 
     static {
         the.start();
     }
 
     private final SoundMixer mixer;
-    private final ByteBuffer soundBuffer;
+    protected final ByteBuffer soundBuffer;
     private final float[] left, right;
     private Thread thread;
 
