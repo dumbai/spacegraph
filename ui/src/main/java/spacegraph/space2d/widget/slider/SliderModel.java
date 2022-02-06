@@ -96,7 +96,7 @@ public class SliderModel extends PaintSurface {
         Util.assertFinite(pNext);
 
         float pPrev = this.p;
-        if (Util.equals(pPrev, pNext, Float.MIN_NORMAL))
+        if (Util.equals(pPrev, pNext))
             return;
 
         this.p = pNext;
