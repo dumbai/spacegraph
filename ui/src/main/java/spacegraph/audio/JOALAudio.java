@@ -1,20 +1,12 @@
 package spacegraph.audio;
 
-import com.jogamp.openal.*;
+import com.jogamp.openal.AL;
 import com.jogamp.openal.sound3d.*;
-import com.jogamp.openal.util.WAVData;
 import jcog.Util;
 
-import javax.sound.sampled.AudioSystem;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static com.jogamp.openal.sound3d.AudioSystem3D.generateBuffers;
-import static com.jogamp.openal.sound3d.AudioSystem3D.generateSources;
 
 /**
  * not working yet
