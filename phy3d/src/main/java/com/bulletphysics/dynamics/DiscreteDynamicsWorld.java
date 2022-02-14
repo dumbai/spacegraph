@@ -300,7 +300,7 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
     }
 
     @Override
-    public synchronized int stepSimulation(float timeStep, int maxSubSteps, float fixedTimeStep) {
+    public synchronized int next(float timeStep, int maxSubSteps, float fixedTimeStep) {
         startProfiling(timeStep);
 
         long t0 = System.nanoTime();

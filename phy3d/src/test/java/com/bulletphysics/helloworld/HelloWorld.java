@@ -158,7 +158,7 @@ public class HelloWorld
 
 		// Do some simulation
 		for (int i=0; i<100; i++) {
-			dynamicsWorld.stepSimulation(1.0f / 60.0f, 10);
+			dynamicsWorld.next(1.0f / 60.0f, 10);
 
 			// print positions of all objects
 			for (int j=dynamicsWorld.getNumCollisionObjects()-1; j>=0; j--)

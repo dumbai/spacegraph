@@ -53,12 +53,12 @@ public abstract class DynamicsWorld extends CollisionWorld {
         super(dispatcher, broadphasePairCache, collisionConfiguration);
     }
 
-    public final int stepSimulation(float timeStep) {
-        return stepSimulation(timeStep, 1, 1.0f / 60.0f);
+    public final int next(float timeStep) {
+        return next(timeStep, 1, 1.0f / 60.0f);
     }
 
-    public final int stepSimulation(float timeStep, int maxSubSteps) {
-        return stepSimulation(timeStep, maxSubSteps, 1.0f / 60.0f);
+    public final int next(float timeStep, int maxSubSteps) {
+        return next(timeStep, maxSubSteps, 1.0f / 60.0f);
     }
 
     /**
@@ -74,7 +74,7 @@ public abstract class DynamicsWorld extends CollisionWorld {
      * as second argument to stepSimulation, but in that case you have to keep the
      * timeStep constant.
      */
-    protected abstract int stepSimulation(float timeStep, int maxSubSteps, float fixedTimeStep);
+    protected abstract int next(float timeStep, int maxSubSteps, float fixedTimeStep);
 
     public abstract void debugDrawWorld();
 

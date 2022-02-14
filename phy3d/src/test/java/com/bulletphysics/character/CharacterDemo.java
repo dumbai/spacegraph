@@ -40,7 +40,6 @@ import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
-import com.bulletphysics.render.IGL;
 import com.bulletphysics.render.JoglWindow3D;
 import com.bulletphysics.util.ObjectArrayList;
 import com.jogamp.newt.event.KeyEvent;
@@ -179,7 +178,7 @@ public class CharacterDemo extends DemoApplication {
 			walkDirection.scale(walkSpeed);
 			character.setWalkDirection(walkDirection);
 
-			int numSimSteps = world.stepSimulation(dt, maxSimSubSteps);
+			int numSimSteps = world.next(dt, maxSimSubSteps);
 
 			// optional but useful: debug drawing
 			world.debugDrawWorld();

@@ -47,7 +47,6 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
 import com.bulletphysics.render.GLShapeDrawer;
-import com.bulletphysics.render.IGL;
 import com.bulletphysics.render.JoglWindow3D;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -220,7 +219,7 @@ public class ForkLiftDemo extends DemoApplication {
 			if (idle)
 				dt = 1.0f / 420.0f;
 
-			int numSimSteps = world.stepSimulation(dt,maxSimSubSteps);
+			int numSimSteps = world.next(dt,maxSimSubSteps);
 
 			//#define VERBOSE_FEEDBACK
 			//#ifdef VERBOSE_FEEDBACK

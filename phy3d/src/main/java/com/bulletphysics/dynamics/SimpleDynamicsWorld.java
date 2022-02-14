@@ -92,7 +92,7 @@ public class SimpleDynamicsWorld extends DynamicsWorld {
      * maxSubSteps/fixedTimeStep for interpolation is currently ignored for SimpleDynamicsWorld, use DiscreteDynamicsWorld instead.
      */
     @Override
-    public synchronized int stepSimulation(float timeStep, int maxSubSteps, float fixedTimeStep) {
+    public synchronized int next(float timeStep, int maxSubSteps, float fixedTimeStep) {
         // apply gravity, predict motion
         predictUnconstraintMotion(timeStep);
 
