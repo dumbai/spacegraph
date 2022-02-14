@@ -6,7 +6,6 @@ import com.jogamp.newt.event.WindowListener;
 import com.jogamp.newt.event.WindowUpdateEvent;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.*;
-import com.jogamp.opengl.util.AnimatorBase;
 import jcog.Log;
 import jcog.Util;
 import jcog.data.list.FastCoWList;
@@ -14,8 +13,6 @@ import jcog.data.map.ConcurrentFastIteratingHashSet;
 import jcog.event.ListTopic;
 import jcog.event.Off;
 import jcog.event.Topic;
-import jcog.exe.InstrumentedLoop;
-import jcog.exe.realtime.ThreadTimer;
 import jcog.signal.meter.SafeAutoCloseable;
 import jcog.util.ArrayUtil;
 import org.slf4j.Logger;
@@ -54,7 +51,7 @@ public class JoglWindow implements GLEventListener, WindowListener {
     /**
      * render loop
      */
-    private final GameAnimatorControl animator = new GameAnimatorControl();
+    private final MyAnimator animator;
 
     private final AtomicBoolean updateWindowPos = new AtomicBoolean(false);
 
@@ -82,7 +79,7 @@ public class JoglWindow implements GLEventListener, WindowListener {
         window.addGLEventListener(this);
         window.setAutoSwapBufferMode(false);
 
-        animator.loop.fps(UI.FPS_init); //wait for startup
+        animator = new JoglWindowAnimator(UI.FPS_init);
     }
 
     public JoglWindow(int pw, int ph) {
@@ -449,109 +446,29 @@ public class JoglWindow implements GLEventListener, WindowListener {
         return layers.remove(l);
     }
 
-    /* from: Jake2's */
-    private final class GameAnimatorControl extends AnimatorBase {
+    private final class JoglWindowAnimator extends MyAnimator {
 
-        final InstrumentedLoop loop;
+        private boolean wasVisible = false;
 
-        GameAnimatorControl() {
-            super();
-
-            setIgnoreExceptions(false);
-            setPrintExceptions(true);
-
-            this.loop = new DisplayLoop();
+        JoglWindowAnimator(float FPS_init) {
+            super(FPS_init);
         }
 
-        @Override
-        protected String getBaseName(String prefix) {
-            return prefix;
-        }
+        @Override protected void run() {
+            GLWindow w = window;
+            boolean visible = w!=null && w.isVisible();
+            if (visible) {
+                visibleUpdate();
 
-        @Override
-        public final boolean start() {
-            return false;
-        }
-
-        @Override
-        public final boolean stop() {
-            pause();
-            return true;
-        }
-
-
-        @Override
-        public final boolean pause() {
-            loop.stop();
-            return true;
-        }
-
-        @Override
-        public final boolean resume() {
-            return true;
-        }
-
-        @Override
-        public final boolean isStarted() {
-            return loop.isRunning();
-        }
-
-        @Override
-        public final boolean isAnimating() {
-            return loop.isRunning();
-        }
-
-        @Override
-        public final boolean isPaused() {
-            return !loop.isRunning();
-        }
-
-        private final class DisplayLoop extends InstrumentedLoop {
-
-            /** initially true to force initial invisibility change */
-            private boolean wasVisible = true;
-
-            DisplayLoop() {
-                super(new ThreadTimer());
+                GLAutoDrawable d = drawables.isEmpty() ? null : drawables.get(0);
+                if (d != null)
+                    d.display();
+            } else {
+                if (wasVisible)
+                    JoglWindow.this.isVisible(false);
             }
-
-            @Override
-            public String toString() {
-                return JoglWindow.this + ".render";
-            }
-
-            @Override
-            public boolean next() {
-
-                try {
-
-                    GLWindow w = window;
-                    boolean visible = w!=null && w.isVisible();
-                    if (visible) {
-                        visibleUpdate();
-
-                        GLAutoDrawable d = drawables.isEmpty() ? null : drawables.get(0);
-                        if (d != null)
-                            d.display();
-                    } else {
-                        if (wasVisible)
-                            JoglWindow.this.isVisible(false);
-                    }
-                    wasVisible = visible;
-
-                    ((ThreadTimer) timer).setPeriodMS(periodMS()); //HACK
-
-                    return true;
-                } catch (GLException /*| InterruptedException*/ e) {
-                    Throwable c = e.getCause();
-                    ((c != null) ? c : e).printStackTrace();
-                    stop();
-                    return false;
-                }
-
-
-            }
+            this.wasVisible = visible;
         }
+
     }
-
 }

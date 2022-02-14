@@ -26,6 +26,8 @@ package com.bulletphysics.render;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
+import com.jogamp.newt.event.WindowListener;
+import com.jogamp.newt.event.WindowUpdateEvent;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAnimatorControl;
@@ -33,7 +35,9 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
+import com.jogamp.opengl.util.AnimatorBase;
 import com.jogamp.opengl.util.FPSAnimator;
+import spacegraph.video.MyAnimator;
 
 import java.nio.FloatBuffer;
 import java.util.HashMap;
@@ -42,46 +46,64 @@ import java.util.Map;
 /**
  * TODO inherit from Spacegraph JoglWindow
  */
-public class JoglWindow3D {
-    private static final int FPS = 60; // animator's target frames per second
+public class JoglWindow3D implements WindowListener {
+    private static final int FPS = 30; // animator's target frames per second
 
     private final GLWindow window;
+    private final AnimatorBase animator;
 
     public JoglWindow3D(SpaceGraph3D s, int width, int height) {
         window = GLWindow.create(new GLCapabilities(GLProfile.getDefault()));
 
-        // Create a animator that drives canvas' display() at the specified FPS.
-        GLAnimatorControl animator = new FPSAnimator(window, FPS, true);
-
-        window.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowDestroyNotify(WindowEvent arg0) {
-                // Use a dedicate thread to run the stop() to ensure that the
-                // animator stops before program exits.
-                new Thread(() -> {
-                    if (animator.isStarted())
-                        animator.stop();    // stop the animator loop
-                    System.exit(0);
-                }).start();
-            }
-        });
-
-        s.start();
-
-
-        window.addMouseListener(s.mouse);
-        window.addKeyListener(s.keyboard);
-
+        window.addWindowListener(this);
         window.setSize(width, height);
         window.setVisible(true);
 
-        s.gl = new JoglGL();
+
+        s.start(new JoglGL());
+
         window.addGLEventListener(s);
+        window.addMouseListener(s.mouse);
+        window.addKeyListener(s.keyboard);
 
-        s.world.setDebugDrawer(new GLDebugDrawer(s.gl));
 
-
+        animator = //new FPSAnimator(window, FPS, true);
+                new MyAnimator(FPS) {
+                    @Override
+                    protected void run() {
+                        window.display();
+                    }
+                };
         animator.start();  // start the animator loop
+    }
+    @Override
+    public void windowDestroyNotify(WindowEvent arg0) {
+        // Use a dedicate thread to run the stop() to ensure that the
+        // animator stops before program exits.
+        new Thread(() -> {
+            if (animator.isStarted())
+                animator.stop();    // stop the animator loop
+            System.exit(0);
+        }).start();
+    }
+
+    @Override
+    public void windowDestroyed(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowGainedFocus(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowLostFocus(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowRepaint(WindowUpdateEvent windowUpdateEvent) {
 
     }
 
@@ -91,19 +113,15 @@ public class JoglWindow3D {
     public void windowMoved(WindowEvent e) {
     }
 
-    /**
-     *
-     * @author jezek2
-     */
     protected static class JoglGL implements IGL {
 
-        private static final FloatBuffer floatBuf = Buffers.newDirectFloatBuffer(16);
-        private static final GLU glu=new GLU();
+        private final FloatBuffer floatBuf = Buffers.newDirectFloatBuffer(16);
+        private static final GLU glu = new GLU();
         private FontRender.GLFont font;
         public GL2 gl;
 
         public void init(GL2 gl) {
-            this.gl=gl;
+            this.gl = gl;
             FontRender.init(gl, glu);
             font = FontRender.createFont(null, 16, false, true);
         }
@@ -216,12 +234,36 @@ public class JoglWindow3D {
             extent = extent * 0.5f;
 
             gl.glBegin(GL2.GL_QUADS);
-            gl.glNormal3f(1.0f, 0.0f, 0.0f); gl.glVertex3f(+extent,-extent,+extent); gl.glVertex3f(+extent,-extent,-extent); gl.glVertex3f(+extent,+extent,-extent); gl.glVertex3f(+extent,+extent,+extent);
-            gl.glNormal3f(0.0f, 1.0f, 0.0f); gl.glVertex3f(+extent,+extent,+extent); gl.glVertex3f(+extent,+extent,-extent); gl.glVertex3f(-extent,+extent,-extent); gl.glVertex3f(-extent,+extent,+extent);
-            gl.glNormal3f(0.0f, 0.0f, 1.0f); gl.glVertex3f(+extent,+extent,+extent); gl.glVertex3f(-extent,+extent,+extent); gl.glVertex3f(-extent,-extent,+extent); gl.glVertex3f(+extent,-extent,+extent);
-            gl.glNormal3f(-1.0f, 0.0f, 0.0f); gl.glVertex3f(-extent,-extent,+extent); gl.glVertex3f(-extent,+extent,+extent); gl.glVertex3f(-extent,+extent,-extent); gl.glVertex3f(-extent,-extent,-extent);
-            gl.glNormal3f(0.0f,-1.0f, 0.0f); gl.glVertex3f(-extent,-extent,+extent); gl.glVertex3f(-extent,-extent,-extent); gl.glVertex3f(+extent,-extent,-extent); gl.glVertex3f(+extent,-extent,+extent);
-            gl.glNormal3f(0.0f, 0.0f,-1.0f); gl.glVertex3f(-extent,-extent,-extent); gl.glVertex3f(-extent,+extent,-extent); gl.glVertex3f(+extent,+extent,-extent); gl.glVertex3f(+extent,-extent,-extent);
+            gl.glNormal3f(1.0f, 0.0f, 0.0f);
+            gl.glVertex3f(+extent, -extent, +extent);
+            gl.glVertex3f(+extent, -extent, -extent);
+            gl.glVertex3f(+extent, +extent, -extent);
+            gl.glVertex3f(+extent, +extent, +extent);
+            gl.glNormal3f(0.0f, 1.0f, 0.0f);
+            gl.glVertex3f(+extent, +extent, +extent);
+            gl.glVertex3f(+extent, +extent, -extent);
+            gl.glVertex3f(-extent, +extent, -extent);
+            gl.glVertex3f(-extent, +extent, +extent);
+            gl.glNormal3f(0.0f, 0.0f, 1.0f);
+            gl.glVertex3f(+extent, +extent, +extent);
+            gl.glVertex3f(-extent, +extent, +extent);
+            gl.glVertex3f(-extent, -extent, +extent);
+            gl.glVertex3f(+extent, -extent, +extent);
+            gl.glNormal3f(-1.0f, 0.0f, 0.0f);
+            gl.glVertex3f(-extent, -extent, +extent);
+            gl.glVertex3f(-extent, +extent, +extent);
+            gl.glVertex3f(-extent, +extent, -extent);
+            gl.glVertex3f(-extent, -extent, -extent);
+            gl.glNormal3f(0.0f, -1.0f, 0.0f);
+            gl.glVertex3f(-extent, -extent, +extent);
+            gl.glVertex3f(-extent, -extent, -extent);
+            gl.glVertex3f(+extent, -extent, -extent);
+            gl.glVertex3f(+extent, -extent, +extent);
+            gl.glNormal3f(0.0f, 0.0f, -1.0f);
+            gl.glVertex3f(-extent, -extent, -extent);
+            gl.glVertex3f(-extent, +extent, -extent);
+            gl.glVertex3f(+extent, +extent, -extent);
+            gl.glVertex3f(+extent, -extent, -extent);
             gl.glEnd();
 
         }
@@ -230,16 +272,15 @@ public class JoglWindow3D {
 
 
         private static GLUquadric cylinder;
-        private static  GLUquadric disk;
-        private static  GLUquadric sphere;
+        private static GLUquadric disk;
+        private static GLUquadric sphere;
 
 
-
-        private static final Map<Float,Integer> sphereDisplayLists = new HashMap<>();
+        private static final Map<Float, Integer> sphereDisplayLists = new HashMap<>();
 
 
         public void drawSphere(float radius, int slices, int stacks) {
-            if(sphere==null) {
+            if (sphere == null) {
                 sphere = glu.gluNewQuadric();
                 sphere.setImmMode(true);
             }
@@ -260,8 +301,11 @@ public class JoglWindow3D {
 
         ////////////////////////////////////////////////////////////////////////////
 
-        /** TODO use Pair<Float> */
-        @Deprecated private static class CylinderKey {
+        /**
+         * TODO use Pair<Float>
+         */
+        @Deprecated
+        private static class CylinderKey {
             float radius;
             float halfHeight;
 
@@ -294,19 +338,19 @@ public class JoglWindow3D {
             }
         }
 
-        private static final Map<CylinderKey,Integer> cylinderDisplayLists = new HashMap<>();
+        private static final Map<CylinderKey, Integer> cylinderDisplayLists = new HashMap<>();
         private static final CylinderKey cylinderKey = new CylinderKey();
 
         public void drawCylinder(float radius, float halfHeight, int upAxis) {
-               if(cylinder==null) {
-                    cylinder = glu.gluNewQuadric();
-                    cylinder.setImmMode(true);
-                }
+            if (cylinder == null) {
+                cylinder = glu.gluNewQuadric();
+                cylinder.setImmMode(true);
+            }
 
-               if(disk==null) {
-                    disk = glu.gluNewQuadric();
-                    disk.setImmMode(true);
-                }
+            if (disk == null) {
+                disk = glu.gluNewQuadric();
+                disk.setImmMode(true);
+            }
             glPushMatrix();
             switch (upAxis) {
                 case 0 -> {
@@ -335,7 +379,7 @@ public class JoglWindow3D {
                 glu.gluQuadricDrawStyle(disk, GLU.GLU_FILL);
                 glu.gluQuadricNormals(disk, GLU.GLU_SMOOTH);
                 //disk.draw(0, radius, 15, 10);
-                glu.gluDisk(disk,0, radius, 15, 10);
+                glu.gluDisk(disk, 0, radius, 15, 10);
 
                 glu.gluQuadricDrawStyle(cylinder, GLU.GLU_FILL);
                 glu.gluQuadricNormals(cylinder, GLU.GLU_SMOOTH);
@@ -344,7 +388,7 @@ public class JoglWindow3D {
 
                 gl.glTranslatef(0.0f, 0.0f, 2.0f * halfHeight);
                 gl.glRotatef(-180.0f, 0.0f, 1.0f, 0.0f);
-                glu.gluDisk(disk,0, radius, 15, 10);
+                glu.gluDisk(disk, 0, radius, 15, 10);
 
 
                 gl.glEndList();

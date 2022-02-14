@@ -44,10 +44,10 @@ import java.util.Hashtable;
  * @author jezek2
  */
 public class FontRender {
-	
-	//private static final File cacheDir = new File("/path/to/font/cache/dir/");
+
+	/** TODO non-static */
 	private static GL2 gl;
-	private static GLU glu;
+	@Deprecated private static GLU glu;
 	
 	public static void init(GL2 gl,GLU glu){
 		FontRender.gl=gl;

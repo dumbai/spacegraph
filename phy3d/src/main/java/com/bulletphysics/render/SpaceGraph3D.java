@@ -81,10 +81,12 @@ public abstract class SpaceGraph3D implements GLEventListener {
         throw new RuntimeException("TODO");
     }
 
-    public void start() {
+    public void start(final JoglWindow3D.JoglGL j) {
         synchronized (this) {
+            gl = j;
             this.world = physics();
             reset();
+            world.setDebugDrawer(new GLDebugDrawer(j));
         }
     }
 
