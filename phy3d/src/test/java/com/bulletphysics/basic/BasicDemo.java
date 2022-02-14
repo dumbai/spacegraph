@@ -133,7 +133,7 @@ public class BasicDemo extends DemoApplication {
 			Transform startTransform = new Transform();
 			startTransform.setIdentity();
 
-			float mass = 1.0f;
+			float mass = 1;
 
 			// rigidbody is dynamic if and only if mass is non zero, otherwise static
 			boolean isDynamic = (mass != 0);

@@ -195,7 +195,7 @@ public class ForkLiftDemo extends DemoApplication {
 	}
 
 	@Override
-	public void display(GLAutoDrawable arg) {
+	public void display(GLAutoDrawable d) {
 		if (gl == null) return;
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT); 
 		poll();
@@ -246,7 +246,8 @@ public class ForkLiftDemo extends DemoApplication {
 		//btProfiler::beginBlock("render"); 
 		//#endif //USE_QUICKPROF 
 
-		renderme(); 
+		super.display(d);
+		//renderme();
 		
 		// optional but useful: debug drawing
 		if (world != null) {
@@ -490,11 +491,11 @@ public class ForkLiftDemo extends DemoApplication {
 		}
 	}
 
-	@Override
-	public void renderme() {
 
-		//float[] m = new float[16];
-		//int i;
+	@Override
+	protected void renderVolume(GLAutoDrawable drawable) {
+		super.renderVolume(drawable);
+
 
 		CylinderShapeX wheelShape = new CylinderShapeX(new Vector3f(wheelWidth,wheelRadius,wheelRadius));
 		Vector3f wheelColor = new Vector3f(1,0,0);
@@ -510,20 +511,15 @@ public class ForkLiftDemo extends DemoApplication {
 			Transform trans = vehicle.getWheelInfo(i).worldTransform;
 			GLShapeDrawer.drawOpenGL(gl,trans,wheelShape,wheelColor,getDebugMode()/*,worldBoundsMin,worldBoundsMax*/);
 		}
-		
-		super.renderme();
+	}
 
+	@Override
+	protected void renderHUD() {
 		if ((getDebugMode() & DebugDrawModes.NO_HELP_TEXT) == 0) {
-			setOrthographicProjection();
-			gl.glDisable(GL_LIGHTING);
 			gl.glColor3f(0, 0, 0);
-
 			drawString("keys a/d - rotate lift", 350, 20, TEXT_COLOR);
 			drawString("keys w/s - move fork up/down", 350, 40, TEXT_COLOR);
 			drawString("F5 - toggle camera mode", 350, 60, TEXT_COLOR);
-
-			resetPerspectiveProjection();
-			gl.glEnable(GL_LIGHTING);
 		}
 	}
 

@@ -75,7 +75,13 @@ public interface IGL {
 	void glNormal3f(float nx, float ny, float nz);
 	void glMultMatrix(float[] m);
 	
-	void drawCube(float extent);
+	@Deprecated void drawCube(float extent);
+
+	default void drawCube(float sx, float sy, float sz) {
+		glScalef(sx, sy, sz);
+		drawCube(1);
+	}
+
 	void drawSphere(float radius, int slices, int stacks);
 	void drawCylinder(float radius, float halfHeight, int upAxis);
 

@@ -367,10 +367,10 @@ public class GImpactCollisionAlgorithm extends CollisionAlgorithm {
         Transform childtrans1 = new Transform();
         Transform tmpTrans = new Transform();
 
-        int i = shape1.getNumChildShapes();
+        int i = shape1.childShapeCount();
         while ((i--) != 0) {
-            CollisionShape colshape1 = shape1.getChildShape(i);
-            childtrans1.mul(orgtrans1, shape1.getChildTransform(i, tmpTrans));
+            CollisionShape colshape1 = shape1.childShape(i);
+            childtrans1.mul(orgtrans1, shape1.childTransform(i, tmpTrans));
 
             body1.setWorldTransform(childtrans1);
 

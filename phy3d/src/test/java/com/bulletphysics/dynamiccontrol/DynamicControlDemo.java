@@ -40,6 +40,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
 import com.bulletphysics.render.JoglWindow3D;
 import com.bulletphysics.util.ObjectArrayList;
+import com.jogamp.opengl.GLAutoDrawable;
 
 import javax.vecmath.Vector3f;
 
@@ -108,7 +109,9 @@ public class DynamicControlDemo extends DemoApplication {
 	}
 
 	@Override
-	public void renderme() {
+	protected void renderVolume(GLAutoDrawable drawable) {
+		super.renderVolume(drawable);
+
 		// simple dynamics world doesn't handle fixed-time-stepping
 		float ms = getDeltaTimeMicroseconds();
 		float minFPS = 1000000.0f / fps;

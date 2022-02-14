@@ -132,10 +132,10 @@ public class CharacterDemo extends DemoApplication {
 		setCameraDistance(56.0f);
 		return world;
 	}
-	
 	@Override
-	public void display(GLAutoDrawable drawable) {
-		gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+	protected void renderVolume(GLAutoDrawable drawable) {
+		super.renderVolume(drawable);
+		//gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		float dt = getDeltaTimeMicroseconds() * 0.000001f;
 		poll();
 		if (world != null) {
@@ -188,14 +188,10 @@ public class CharacterDemo extends DemoApplication {
 			world.debugDrawWorld();
 		}
 
-		renderme();
 
 		//glFlush();
 		//glutSwapBuffers();
 	}
-
-
-
 
 	@Override
 	public void reset() {

@@ -57,8 +57,6 @@ public class JoglWindow3D implements WindowListener {
 
         window.addWindowListener(this);
         window.setSize(width, height);
-        window.setVisible(true);
-
 
         s.start(new JoglGL());
 
@@ -74,7 +72,9 @@ public class JoglWindow3D implements WindowListener {
                         window.display();
                     }
                 };
-        animator.start();  // start the animator loop
+        animator.start();
+
+        window.setVisible(true);
     }
     @Override
     public void windowDestroyNotify(WindowEvent arg0) {
@@ -231,35 +231,35 @@ public class JoglWindow3D implements WindowListener {
         ////////////////////////////////////////////////////////////////////////////
 
         public void drawCube(float extent) {
-            extent = extent * 0.5f;
+            extent = extent / 2; //now: half-extnet
 
             gl.glBegin(GL2.GL_QUADS);
-            gl.glNormal3f(1.0f, 0.0f, 0.0f);
+            gl.glNormal3f(1, 0, 0);
             gl.glVertex3f(+extent, -extent, +extent);
             gl.glVertex3f(+extent, -extent, -extent);
             gl.glVertex3f(+extent, +extent, -extent);
             gl.glVertex3f(+extent, +extent, +extent);
-            gl.glNormal3f(0.0f, 1.0f, 0.0f);
+            gl.glNormal3f(0, 1, 0);
             gl.glVertex3f(+extent, +extent, +extent);
             gl.glVertex3f(+extent, +extent, -extent);
             gl.glVertex3f(-extent, +extent, -extent);
             gl.glVertex3f(-extent, +extent, +extent);
-            gl.glNormal3f(0.0f, 0.0f, 1.0f);
+            gl.glNormal3f(0, 0, 1);
             gl.glVertex3f(+extent, +extent, +extent);
             gl.glVertex3f(-extent, +extent, +extent);
             gl.glVertex3f(-extent, -extent, +extent);
             gl.glVertex3f(+extent, -extent, +extent);
-            gl.glNormal3f(-1.0f, 0.0f, 0.0f);
+            gl.glNormal3f(-1, 0, 0);
             gl.glVertex3f(-extent, -extent, +extent);
             gl.glVertex3f(-extent, +extent, +extent);
             gl.glVertex3f(-extent, +extent, -extent);
             gl.glVertex3f(-extent, -extent, -extent);
-            gl.glNormal3f(0.0f, -1.0f, 0.0f);
+            gl.glNormal3f(0, -1, 0);
             gl.glVertex3f(-extent, -extent, +extent);
             gl.glVertex3f(-extent, -extent, -extent);
             gl.glVertex3f(+extent, -extent, -extent);
             gl.glVertex3f(+extent, -extent, +extent);
-            gl.glNormal3f(0.0f, 0.0f, -1.0f);
+            gl.glNormal3f(0, 0, -1);
             gl.glVertex3f(-extent, -extent, -extent);
             gl.glVertex3f(-extent, +extent, -extent);
             gl.glVertex3f(+extent, +extent, -extent);

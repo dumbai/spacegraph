@@ -225,6 +225,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
         {
             setOrthographicProjection();
             renderHUD();
+            resetPerspectiveProjection();
         }
     }
 
@@ -255,16 +256,16 @@ public abstract class SpaceGraph3D implements GLEventListener {
 
 
             if ((i & 1) != 0)
-                wireColor.set(0.0f, 0.0f, 1.0f);
+                wireColor.set(0, 0, 1);
             else
-                wireColor.set(1.0f, 1.0f, 0.5f); // wants deactivation
+                wireColor.set(1, 1, 0.5f); // wants deactivation
 
             // color differently for active, sleeping, wantsdeactivation states
             int state = x.getActivationState();
             if (state == 1) { //active
-                wireColor.x += (i & 1) != 0 ? 1.0f : 0.5f;
+                wireColor.x += (i & 1) != 0 ? 1 : 0.5f;
             } else if (state == 2) { // ISLAND_SLEEPING
-                wireColor.y += (i & 1) != 0 ? 1.0f : 0.5f;
+                wireColor.y += (i & 1) != 0 ? 1 : 0.5f;
             }
 
             wireColor.clamp(0, 1);
@@ -629,13 +630,6 @@ public abstract class SpaceGraph3D implements GLEventListener {
     }
 
 
-    protected void resetPerspectiveProjection() {
-        gl.glMatrixMode(GL_PROJECTION);
-        gl.glPopMatrix();
-        gl.glMatrixMode(GL_MODELVIEW);
-        //updateCamera();
-    }
-
 
     protected DynamicsWorld world() {
         return world;
@@ -684,6 +678,8 @@ public abstract class SpaceGraph3D implements GLEventListener {
         // switch to projection mode
         gl.glMatrixMode(GL_PROJECTION);
 
+        gl.glDisable(GL_LIGHTING);
+
         // save previous matrix which contains the
         //settings for the perspective projection
         gl.glPushMatrix();
@@ -699,6 +695,16 @@ public abstract class SpaceGraph3D implements GLEventListener {
         // mover the origin from the bottom left corner
         // to the upper left corner
         gl.glTranslatef(0.0f, -glutScreenHeight, 0.0f);
+        gl.glPopMatrix();
+
     }
 
+
+    protected void resetPerspectiveProjection() {
+        gl.glMatrixMode(GL_PROJECTION);
+        gl.glPopMatrix();
+        gl.glMatrixMode(GL_MODELVIEW);
+        gl.glEnable(GL_LIGHTING);
+        //updateCamera();
+    }
 }

@@ -60,13 +60,6 @@ public abstract  class DemoApplication extends SpaceGraph3D {
 		profileIterator = CProfileManager.getIterator();
 	}
 
-	@Override
-	public void display(GLAutoDrawable drawable) {
-		super.display(drawable);
-
-		renderme();
-	}
-
 
 	@Override
     public void keyboardCallback(char key) {
@@ -393,8 +386,6 @@ public abstract  class DemoApplication extends SpaceGraph3D {
 	private final StringBuilder buf = new StringBuilder();
 
 
-    @Deprecated public void renderme() {
-	}
 
 	@Override protected void renderHUD() {
 
@@ -559,7 +550,6 @@ public abstract  class DemoApplication extends SpaceGraph3D {
 			buf.append(" MB");
 			drawString(buf, Math.round(xOffset), Math.round(yStart), TEXT_COLOR);
 
-			resetPerspectiveProjection();
 		}
 	}
 

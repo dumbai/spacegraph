@@ -30,9 +30,12 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.bvh.optimized.OptimizedBvh;
+import jcog.data.list.Lst;
 
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Vector3f;
+
+import java.util.List;
 
 import static com.bulletphysics.linearmath.VectorUtil.coord;
 
@@ -47,7 +50,7 @@ import static com.bulletphysics.linearmath.VectorUtil.coord;
 public class CompoundShape extends CollisionShape {
 
     private final Vector3f localScaling = new Vector3f(1.0f, 1.0f, 1.0f);
-    private final ObjectArrayList<CompoundShapeChild> children = new ObjectArrayList<>();
+    private final Lst<CompoundShapeChild> children = new Lst<>();
     private final Vector3f localAabbMin = new Vector3f(1.0e30f, 1.0e30f, 1.0e30f);
     private final Vector3f localAabbMax = new Vector3f(-1.0e30f, -1.0e30f, -1.0e30f);
     private final OptimizedBvh aabbTree = null;
@@ -97,7 +100,7 @@ public class CompoundShape extends CollisionShape {
             int n = children.size();
             for (int i = 0; i < n; i++) {
                 if (children.get(i).childShape == shape) {
-                    children.removeQuick(i);
+                    children.removeFast(i);
                     done_removing = false;  // Do another iteration pass after removing from the vector
                     break;
                 }
@@ -108,15 +111,15 @@ public class CompoundShape extends CollisionShape {
         recalculateLocalAabb();
     }
 
-    public int getNumChildShapes() {
+    public int childShapeCount() {
         return children.size();
     }
 
-    public CollisionShape getChildShape(int index) {
+    public CollisionShape childShape(int index) {
         return children.get(index).childShape;
     }
 
-    public Transform getChildTransform(int index, Transform out) {
+    public Transform childTransform(int index, Transform out) {
         out.set(children.get(index).transform);
         return out;
     }

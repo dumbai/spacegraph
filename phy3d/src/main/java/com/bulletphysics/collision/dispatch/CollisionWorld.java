@@ -332,10 +332,10 @@ public class CollisionWorld {
 					CompoundShape compoundShape = (CompoundShape) collisionShape;
 					int i;
 					Transform childTrans = new Transform();
-					int n = compoundShape.getNumChildShapes();
+					int n = compoundShape.childShapeCount();
 					for (i = 0; i < n; i++) {
-						compoundShape.getChildTransform(i, childTrans);
-						CollisionShape childCollisionShape = compoundShape.getChildShape(i);
+						compoundShape.childTransform(i, childTrans);
+						CollisionShape childCollisionShape = compoundShape.childShape(i);
 						Transform childWorldTrans = new Transform(colObjWorldTransform);
 						childWorldTrans.mul(childTrans);
 						// replace collision shape so that callback can determine the triangle
@@ -478,9 +478,9 @@ public class CollisionWorld {
 				// todo: use AABB tree or other BVH acceleration structure!
 				if (collisionShape.isCompound()) {
 					CompoundShape compoundShape = (CompoundShape) collisionShape;
-					for (int i = 0; i < compoundShape.getNumChildShapes(); i++) {
-						Transform childTrans = compoundShape.getChildTransform(i, new Transform());
-						CollisionShape childCollisionShape = compoundShape.getChildShape(i);
+					for (int i = 0; i < compoundShape.childShapeCount(); i++) {
+						Transform childTrans = compoundShape.childTransform(i, new Transform());
+						CollisionShape childCollisionShape = compoundShape.childShape(i);
 						Transform childWorldTrans = new Transform();
 						childWorldTrans.mul(colObjWorldTransform, childTrans);
 						// replace collision shape so that callback can determine the triangle

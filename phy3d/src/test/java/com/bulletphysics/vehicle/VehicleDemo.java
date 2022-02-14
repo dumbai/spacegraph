@@ -47,6 +47,7 @@ import com.bulletphysics.render.IGL;
 import com.bulletphysics.render.JoglWindow3D;
 import com.bulletphysics.util.ObjectArrayList;
 import com.jogamp.newt.event.KeyEvent;
+import com.jogamp.opengl.GLAutoDrawable;
 
 import javax.vecmath.Vector3f;
 import java.nio.ByteBuffer;
@@ -376,10 +377,9 @@ public class VehicleDemo extends DemoApplication {
 
 		return world;
 	}
-	
-	// to be implemented by the demo
+
 	@Override
-	public void renderme() {
+	protected void renderVolume(GLAutoDrawable drawable) {
 
 		CylinderShapeX wheelShape = new CylinderShapeX(new Vector3f(wheelWidth, wheelRadius, wheelRadius));
 		Vector3f wheelColor = new Vector3f(1, 0, 0);
@@ -406,6 +406,8 @@ public class VehicleDemo extends DemoApplication {
 			wheelIndex = 1;
 			vehicle.setSteeringValue(gVehicleSteering,wheelIndex);
 		}
+
+		super.renderVolume(drawable);
 
 	}
 	

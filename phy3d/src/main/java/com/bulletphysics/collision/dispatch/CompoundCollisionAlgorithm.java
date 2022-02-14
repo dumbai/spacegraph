@@ -54,13 +54,13 @@ public class CompoundCollisionAlgorithm extends CollisionAlgorithm {
 		assert (colObj.getCollisionShape().isCompound());
 
 		CompoundShape compoundShape = (CompoundShape) colObj.getCollisionShape();
-		int numChildren = compoundShape.getNumChildShapes();
+		int numChildren = compoundShape.childShapeCount();
 		int i;
 
 		//childCollisionAlgorithms.resize(numChildren);
 		for (i = 0; i < numChildren; i++) {
 			CollisionShape tmpShape = colObj.getCollisionShape();
-			CollisionShape childShape = compoundShape.getChildShape(i);
+			CollisionShape childShape = compoundShape.childShape(i);
 			colObj.internalSetTemporaryCollisionShape(childShape);
 			childCollisionAlgorithms.add(ci.dispatcher1.findAlgorithm(colObj, otherObj));
 			colObj.internalSetTemporaryCollisionShape(tmpShape);
@@ -102,13 +102,13 @@ public class CompoundCollisionAlgorithm extends CollisionAlgorithm {
 		int i;
 		for (i = 0; i < numChildren; i++) {
 			// temporarily exchange parent btCollisionShape with childShape, and recurse
-			CollisionShape childShape = compoundShape.getChildShape(i);
+			CollisionShape childShape = compoundShape.childShape(i);
 
 			// backup
 			colObj.getWorldTransform(orgTrans);
 			colObj.getInterpolationWorldTransform(orgInterpolationTrans);
 
-			compoundShape.getChildTransform(i, childTrans);
+			compoundShape.childTransform(i, childTrans);
 			newChildWorldTrans.mul(orgTrans, childTrans);
 			colObj.setWorldTransform(newChildWorldTrans);
 			colObj.setInterpolationWorldTransform(newChildWorldTrans);
@@ -149,12 +149,12 @@ public class CompoundCollisionAlgorithm extends CollisionAlgorithm {
 		int i;
 		for (i = 0; i < numChildren; i++) {
 			// temporarily exchange parent btCollisionShape with childShape, and recurse
-			CollisionShape childShape = compoundShape.getChildShape(i);
+			CollisionShape childShape = compoundShape.childShape(i);
 
 			// backup
 			colObj.getWorldTransform(orgTrans);
 
-			compoundShape.getChildTransform(i, childTrans);
+			compoundShape.childTransform(i, childTrans);
 			//btTransform	newChildWorldTrans = orgTrans*childTrans ;
 			tmpTrans.set(orgTrans);
 			tmpTrans.mul(childTrans);
