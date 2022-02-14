@@ -64,8 +64,8 @@ public class BspDemo extends DemoApplication {
 	}
 	
 	public DynamicsWorld physics() {
-		cameraUp.set(0.0f, 0.0f, 1.0f);
-		forwardAxis = 1;
+		//cameraUp.set(0.0f, 0.0f, 1.0f);
+//		forwardAxis = 1;
 
 		setCameraDistance(22.0f);
 
@@ -85,7 +85,7 @@ public class BspDemo extends DemoApplication {
 		DiscreteDynamicsWorld world = new DiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
 
 		Vector3f gravity = new Vector3f();
-		gravity.negate(cameraUp);
+		//gravity.negate(cameraUp);
 		gravity.scale(10.0f);
 		world.setGravity(gravity);
 

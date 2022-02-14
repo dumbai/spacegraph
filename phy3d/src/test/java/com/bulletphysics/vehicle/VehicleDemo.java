@@ -135,7 +135,7 @@ public class VehicleDemo extends DemoApplication {
 		indexVertexArrays = null;
 		vertices = null;
 		vehicle = null;
-		cameraPosition.set(30, 30, 30);
+//		cameraPosition.set(30, 30, 30);
 	}
 
 	public DynamicsWorld physics() {
@@ -389,7 +389,7 @@ public class VehicleDemo extends DemoApplication {
 			vehicle.updateWheelTransform(i, true);
 			// draw wheels (cylinders)
 			Transform trans = vehicle.getWheelInfo(i).worldTransform;
-			GLShapeDrawer.drawOpenGL(gl, trans, wheelShape, wheelColor, getDebugMode());
+			GLShapeDrawer.drawOpenGL(wheelShape, trans, wheelColor, getDebugMode(), gl);
 		}
 
 
@@ -519,60 +519,62 @@ public class VehicleDemo extends DemoApplication {
 		//glutPostRedisplay();
 	}
 
-	@Override
-	public void updateCamera()
-	{
+//	@Override
+//	public void updateCamera(long dtNS)
+//	{
+//
+//		// //#define DISABLE_CAMERA 1
+//		//#ifdef DISABLE_CAMERA
+//		//DemoApplication::updateCamera();
+//		//return;
+//		//#endif //DISABLE_CAMERA
+//
+//		gl.glMatrixMode(gl.GL_PROJECTION);
+//		gl.glLoadIdentity();
+//
+//		Transform chassisWorldTrans = new Transform();
+//
+//		// look at the vehicle
+//		carChassis.getMotionState().getWorldTransform(chassisWorldTrans);
+//
 
-		// //#define DISABLE_CAMERA 1
-		//#ifdef DISABLE_CAMERA
-		//DemoApplication::updateCamera();
-		//return;
-		//#endif //DISABLE_CAMERA
-
-		gl.glMatrixMode(gl.GL_PROJECTION);
-		gl.glLoadIdentity();
-
-		Transform chassisWorldTrans = new Transform();
-
-		// look at the vehicle
-		carChassis.getMotionState().getWorldTransform(chassisWorldTrans);
-		cameraTargetPosition.set(chassisWorldTrans.origin);
-
-		// interpolate the camera height
-		//#ifdef FORCE_ZAXIS_UP
-		//m_cameraPosition[2] = (15.0*m_cameraPosition[2] + m_cameraTargetPosition[2] + m_cameraHeight)/16.0;
-		//#else
-		cameraPosition.y = (15.0f*cameraPosition.y + cameraTargetPosition.y + cameraHeight) / 16.0f;
-		//#endif
-
-		Vector3f camToObject = new Vector3f();
-		camToObject.sub(cameraTargetPosition, cameraPosition);
-
-		// keep distance between min and max distance
-		float cameraDistance = camToObject.length();
-		float correctionFactor = 0.0f;
-		if (cameraDistance < minCameraDistance)
-		{
-			correctionFactor = 0.15f*(minCameraDistance-cameraDistance)/cameraDistance;
-		}
-		if (cameraDistance > maxCameraDistance)
-		{
-			correctionFactor = 0.15f*(maxCameraDistance-cameraDistance)/cameraDistance;
-		}
-		Vector3f tmp = new Vector3f();
-		tmp.scale(correctionFactor, camToObject);
-		cameraPosition.sub(tmp);
-
-		// update OpenGL camera settings
-		gl.glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 10000.0);
-
-		gl.glMatrixMode(IGL.GL_MODELVIEW);
-		gl.glLoadIdentity();
-		
-		gl.gluLookAt(cameraPosition.x,cameraPosition.y,cameraPosition.z,
-				  cameraTargetPosition.x,cameraTargetPosition.y, cameraTargetPosition.z,
-				  cameraUp.x,cameraUp.y,cameraUp.z);
-	}
+//		cameraTargetPosition.set(chassisWorldTrans.origin);
+//
+//		// interpolate the camera height
+//		//#ifdef FORCE_ZAXIS_UP
+//		//m_cameraPosition[2] = (15.0*m_cameraPosition[2] + m_cameraTargetPosition[2] + m_cameraHeight)/16.0;
+//		//#else
+//		cameraPosition.y = (15.0f*cameraPosition.y + cameraTargetPosition.y + cameraHeight) / 16.0f;
+//		//#endif
+//
+//		Vector3f camToObject = new Vector3f();
+//		camToObject.sub(cameraTargetPosition, cameraPosition);
+//
+//		// keep distance between min and max distance
+//		float cameraDistance = camToObject.length();
+//		float correctionFactor = 0.0f;
+//		if (cameraDistance < minCameraDistance)
+//		{
+//			correctionFactor = 0.15f*(minCameraDistance-cameraDistance)/cameraDistance;
+//		}
+//		if (cameraDistance > maxCameraDistance)
+//		{
+//			correctionFactor = 0.15f*(maxCameraDistance-cameraDistance)/cameraDistance;
+//		}
+//		Vector3f tmp = new Vector3f();
+//		tmp.scale(correctionFactor, camToObject);
+//		cameraPosition.sub(tmp);
+//
+//		// update OpenGL camera settings
+//		gl.glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 10000.0);
+//
+//		gl.glMatrixMode(IGL.GL_MODELVIEW);
+//		gl.glLoadIdentity();
+//
+//		gl.gluLookAt(cameraPosition.x,cameraPosition.y,cameraPosition.z,
+//				  cameraTargetPosition.x,cameraTargetPosition.y, cameraTargetPosition.z,
+//				  cameraUp.x,cameraUp.y,cameraUp.z);
+//	}
 	
 	public static void main(String... args) {
 		VehicleDemo vehicleDemo = new VehicleDemo();

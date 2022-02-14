@@ -7,11 +7,11 @@
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
  * the use of this software.
- * 
- * Permission is granted to anyone to use this software for any purpose, 
+ *
+ * Permission is granted to anyone to use this software for any purpose,
  * including commercial applications, and to alter it and redistribute it
  * freely, subject to the following restrictions:
- * 
+ *
  * 1. The origin of this software must not be misrepresented; you must not
  *    claim that you wrote the original software. If you use this software
  *    in a product, an acknowledgment in the product documentation would be
@@ -56,8 +56,6 @@ import javax.vecmath.Vector3f;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import static com.bulletphysics.render.IGL.GL_LIGHTING;
-
 /**
  *
  * @author jezek2
@@ -74,8 +72,8 @@ public class ForkLiftDemo extends DemoApplication {
 	////#define FORCE_ZAXIS_UP 1
 
 	//#ifdef FORCE_ZAXIS_UP
-	//private int rightIndex = 0; 
-	//private int upIndex = 2; 
+	//private int rightIndex = 0;
+	//private int upIndex = 2;
 	//private int forwardIndex = 1;
 	//private btVector3 wheelDirectionCS0(0,0,-1);
 	//private btVector3 wheelAxleCS(1,0,0);
@@ -115,14 +113,14 @@ public class ForkLiftDemo extends DemoApplication {
 	private final float suspensionRestLength = 0.6f;
 
 	private static final float CUBE_HALF_EXTENTS = 1.0f;
-	
+
 	////////////////////////////////////////////////////////////////////////////
-	
-	
+
+
 	private RigidBody carChassis;
 
 	//----------------------------
-	
+
 	private RigidBody liftBody;
 	private final Vector3f liftStartPos = new Vector3f();
 	private HingeConstraint liftHinge;
@@ -155,8 +153,8 @@ public class ForkLiftDemo extends DemoApplication {
 
 	private ForkLiftDemo() {
 		super();
-		cameraPosition.set(30, 30, 30);
 		useDefaultCamera = false;
+//		cameraPosition.set(30, 30, 30);
 	}
 
 	private void lockLiftHinge() {
@@ -197,9 +195,9 @@ public class ForkLiftDemo extends DemoApplication {
 	@Override
 	public void display(GLAutoDrawable d) {
 		if (gl == null) return;
-		gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT); 
-		poll();
-		{			
+		gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT);
+//		poll();
+		{
 			int wheelIndex = 2;
 			vehicle.applyEngineForce(gEngineForce,wheelIndex);
 			vehicle.setBrake(gBreakingForce,wheelIndex);
@@ -214,7 +212,7 @@ public class ForkLiftDemo extends DemoApplication {
 		}
 
 		float dt = getDeltaTimeMicroseconds() * 0.000001f;
-		
+
 		if (world != null)
 		{
 			// during idle mode, just run 1 simulation step maximum
@@ -242,21 +240,21 @@ public class ForkLiftDemo extends DemoApplication {
 			//#endif //VERBOSE_FEEDBACK
 		}
 
-		//#ifdef USE_QUICKPROF 
-		//btProfiler::beginBlock("render"); 
-		//#endif //USE_QUICKPROF 
+		//#ifdef USE_QUICKPROF
+		//btProfiler::beginBlock("render");
+		//#endif //USE_QUICKPROF
 
 		super.display(d);
 		//renderme();
-		
+
 		// optional but useful: debug drawing
 		if (world != null) {
 			world.debugDrawWorld();
 		}
 
-		//#ifdef USE_QUICKPROF 
-		//btProfiler::endBlock("render"); 
-		//#endif 
+		//#ifdef USE_QUICKPROF
+		//btProfiler::endBlock("render");
+		//#endif
 	}
 
 	@Override
@@ -311,62 +309,62 @@ public class ForkLiftDemo extends DemoApplication {
 
 
 
-	///a very basic camera following the vehicle
-	@Override
-	public void updateCamera() {
-		if (gl == null) return;
-		if(useDefaultCamera) {
-			super.updateCamera();
-			return;
-		}
-		
-		// //#define DISABLE_CAMERA 1
-		//#ifdef DISABLE_CAMERA
-		//DemoApplication::updateCamera();
-		//return;
-		//#endif //DISABLE_CAMERA
-
-		Transform chassisWorldTrans = new Transform();
-
-		// look at the vehicle
-		carChassis.getMotionState().getWorldTransform(chassisWorldTrans);
-		cameraTargetPosition.set(chassisWorldTrans.origin);
-
-		// interpolate the camera height
-		//#ifdef FORCE_ZAXIS_UP
-		//m_cameraPosition[2] = (15.0*m_cameraPosition[2] + m_cameraTargetPosition[2] + m_cameraHeight)/16.0;
-		//#else
-		cameraPosition.y = (15.0f*cameraPosition.y + cameraTargetPosition.y + cameraHeight) / 16.0f;
-		//#endif
-
-		Vector3f camToObject = new Vector3f();
-		camToObject.sub(cameraTargetPosition, cameraPosition);
-
-		// keep distance between min and max distance
-		float cameraDistance = camToObject.length();
-		float correctionFactor = 0.0f;
-		if (cameraDistance < minCameraDistance)
-		{
-			correctionFactor = 0.15f*(minCameraDistance-cameraDistance)/cameraDistance;
-		}
-		if (cameraDistance > maxCameraDistance)
-		{
-			correctionFactor = 0.15f*(maxCameraDistance-cameraDistance)/cameraDistance;
-		}
-		Vector3f tmp = new Vector3f();
-		tmp.scale(correctionFactor, camToObject);
-		cameraPosition.sub(tmp);
-
-		// update OpenGL camera settings
-		gl.glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 10000.0);
-
-		gl.glMatrixMode(IGL.GL_MODELVIEW);
-		gl.glLoadIdentity();
-		
-		gl.gluLookAt(cameraPosition.x,cameraPosition.y,cameraPosition.z,
-				  cameraTargetPosition.x,cameraTargetPosition.y, cameraTargetPosition.z,
-				  cameraUp.x,cameraUp.y,cameraUp.z);
-	}
+//	///a very basic camera following the vehicle
+//	@Override
+//	public void updateCamera(long dtNS) {
+//		if (gl == null) return;
+//		if(useDefaultCamera) {
+//			super.updateCamera(dtNS);
+//			return;
+//		}
+//
+//		// //#define DISABLE_CAMERA 1
+//		//#ifdef DISABLE_CAMERA
+//		//DemoApplication::updateCamera();
+//		//return;
+//		//#endif //DISABLE_CAMERA
+//
+//		Transform chassisWorldTrans = new Transform();
+//
+//		// look at the vehicle
+//		carChassis.getMotionState().getWorldTransform(chassisWorldTrans);
+//		cameraTargetPosition.set(chassisWorldTrans.origin);
+//
+//		// interpolate the camera height
+//		//#ifdef FORCE_ZAXIS_UP
+//		//m_cameraPosition[2] = (15.0*m_cameraPosition[2] + m_cameraTargetPosition[2] + m_cameraHeight)/16.0;
+//		//#else
+//		cameraPosition.y = (15.0f*cameraPosition.y + cameraTargetPosition.y + cameraHeight) / 16.0f;
+//		//#endif
+//
+//		Vector3f camToObject = new Vector3f();
+//		camToObject.sub(cameraTargetPosition, cameraPosition);
+//
+//		// keep distance between min and max distance
+//		float cameraDistance = camToObject.length();
+//		float correctionFactor = 0.0f;
+//		if (cameraDistance < minCameraDistance)
+//		{
+//			correctionFactor = 0.15f*(minCameraDistance-cameraDistance)/cameraDistance;
+//		}
+//		if (cameraDistance > maxCameraDistance)
+//		{
+//			correctionFactor = 0.15f*(maxCameraDistance-cameraDistance)/cameraDistance;
+//		}
+//		Vector3f tmp = new Vector3f();
+//		tmp.scale(correctionFactor, camToObject);
+//		cameraPosition.sub(tmp);
+//
+//		// update OpenGL camera settings
+//		gl.glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 10000.0);
+//
+//		gl.glMatrixMode(IGL.GL_MODELVIEW);
+//		gl.glLoadIdentity();
+//
+//		gl.gluLookAt(cameraPosition.x,cameraPosition.y,cameraPosition.z,
+//				  cameraTargetPosition.x,cameraTargetPosition.y, cameraTargetPosition.z,
+//				  cameraUp.x,cameraUp.y,cameraUp.z);
+//	}
 
 	@Override
 	public void keyboardCallback(char key) {
@@ -397,7 +395,7 @@ public class ForkLiftDemo extends DemoApplication {
 			default -> super.keyboardCallback(key);
 		}
 	}
-		
+
 
 	@Override
 	public void keyboardCallbackUp(char key) {
@@ -474,7 +472,7 @@ public class ForkLiftDemo extends DemoApplication {
 			default -> super.specialKeyboard(key);
 		}
 
-		
+
 		//glutPostRedisplay();
 	}
 
@@ -509,7 +507,7 @@ public class ForkLiftDemo extends DemoApplication {
 			vehicle.updateWheelTransform(i,true);
 			// draw wheels (cylinders)
 			Transform trans = vehicle.getWheelInfo(i).worldTransform;
-			GLShapeDrawer.drawOpenGL(gl,trans,wheelShape,wheelColor,getDebugMode()/*,worldBoundsMin,worldBoundsMax*/);
+			GLShapeDrawer.drawOpenGL(wheelShape, trans, wheelColor, getDebugMode(), gl  /*,worldBoundsMin,worldBoundsMax*/);
 		}
 	}
 
@@ -542,7 +540,7 @@ public class ForkLiftDemo extends DemoApplication {
 		DynamicsWorld world = new DiscreteDynamicsWorld(dispatcher,overlappingPairCache,constraintSolver,collisionConfiguration);
 		//#ifdef FORCE_ZAXIS_UP
 		//m_dynamicsWorld->setGravity(btVector3(0,0,-10));
-		//#endif 
+		//#endif
 
 		//m_dynamicsWorld->setGravity(btVector3(0,0,0));
 		Transform tr = new Transform();
@@ -765,7 +763,7 @@ public class ForkLiftDemo extends DemoApplication {
 			forkSlider.setLowerAngLimit(-LIFT_EPS);
 			forkSlider.setUpperAngLimit(LIFT_EPS);
 			world.addConstraint(forkSlider, true);
-			
+
 			CompoundShape loadCompound = new CompoundShape();
 			collisionShapes.add(loadCompound);
 			CollisionShape loadShapeA = new BoxShape(new Vector3f(2.0f,0.5f,0.5f));
@@ -851,7 +849,7 @@ public class ForkLiftDemo extends DemoApplication {
 		setCameraDistance(26.0f);
 		return world;
 	}
-	
+
 	public static void main(String... args) {
 		ForkLiftDemo forkLiftDemo = new ForkLiftDemo();
 

@@ -147,9 +147,8 @@ public class SimpleDynamicsWorld extends DynamicsWorld {
         for (int i = 0; i < collisionObjects.size(); i++) {
             CollisionObject colObj = collisionObjects.get(i);
             RigidBody body = RigidBody.upcast(colObj);
-            if (body != null) {
+            if (body != null)
                 body.setGravity(gravity);
-            }
         }
     }
 
@@ -163,9 +162,8 @@ public class SimpleDynamicsWorld extends DynamicsWorld {
     public void addRigidBody(RigidBody body) {
         body.setGravity(gravity);
 
-        if (body.getCollisionShape() != null) {
+        if (body.getCollisionShape() != null)
             addCollisionObject(body);
-        }
     }
 
     @Override

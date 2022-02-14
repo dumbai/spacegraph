@@ -39,10 +39,7 @@ public abstract class AbstractLayer extends SpaceGraph implements Layer {
      */
     public JoglWindow window;
 
-    public final v3Anim camPos;
-    public final v3Anim camFwd;
-    public final v3Anim camUp;
-
+    public final v3Anim camPos, camFwd, camUp;
 
     public float zNear = 0.5f;
     public float zFar = 1000;

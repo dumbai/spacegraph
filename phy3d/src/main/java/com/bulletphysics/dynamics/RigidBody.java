@@ -79,7 +79,7 @@ public class RigidBody extends CollisionObject {
     // for experimental overriding of friction/contact solver func
     public int contactSolverType;
     public int frictionSolverType;
-    private final int debugBodyId;
+    public final int ID;
     private float inverseMass;
     private float angularFactor;
     private float linearDamping;
@@ -95,7 +95,7 @@ public class RigidBody extends CollisionObject {
     private MotionState optionalMotionState;
 
     public RigidBody(RigidBodyConstructionInfo c) {
-        debugBodyId = uniqueId.getAndIncrement();
+        ID = uniqueId.getAndIncrement();
 
         internalType = CollisionObjectType.RIGID_BODY;
         angularFactor = 1.0f;

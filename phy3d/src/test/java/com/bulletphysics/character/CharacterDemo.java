@@ -49,9 +49,6 @@ import com.jogamp.opengl.GLAutoDrawable;
 import javax.vecmath.Vector3f;
 import java.io.IOException;
 
-import static com.bulletphysics.render.IGL.GL_COLOR_BUFFER_BIT;
-import static com.bulletphysics.render.IGL.GL_DEPTH_BUFFER_BIT;
-
 /**
  * 
  * @author tomrbryn
@@ -137,7 +134,7 @@ public class CharacterDemo extends DemoApplication {
 		super.renderVolume(drawable);
 		//gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		float dt = getDeltaTimeMicroseconds() * 0.000001f;
-		poll();
+//		poll();
 		if (world != null) {
 			// during idle mode, just run 1 simulation step maximum
 			int maxSimSubSteps = idle ? 1 : 2;
@@ -230,45 +227,45 @@ public class CharacterDemo extends DemoApplication {
 		}
 	}
 
-	@Override
-	public void updateCamera() {
-		//if (useDefaultCamera) {
-//		if (false) {
-//			super.updateCamera();
-//			return;
-//		}
-
-		gl.glMatrixMode(gl.GL_PROJECTION);
-		gl.glLoadIdentity();
-
-		// look at the vehicle
-		Transform characterWorldTrans = ghostObject.getWorldTransform(new Transform());
-		Vector3f up = new Vector3f();
-		characterWorldTrans.basis.getRow(1, up);
-		Vector3f backward = new Vector3f();
-		characterWorldTrans.basis.getRow(2, backward);
-		backward.scale(-1);
-		up.normalize ();
-		backward.normalize ();
-
-		cameraTargetPosition.set(characterWorldTrans.origin);
-
-		Vector3f cameraPosition = new Vector3f();
-		cameraPosition.scale(2, up);
-		cameraPosition.add(cameraTargetPosition);
-		backward.scale(12);
-		cameraPosition.add(backward);
-
-		// update OpenGL camera settings
-		gl.glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 10000.0);
-
-		gl.glMatrixMode(IGL.GL_MODELVIEW);
-		gl.glLoadIdentity();
-
-		gl.gluLookAt(cameraPosition.x, cameraPosition.y, cameraPosition.z,
-		             cameraTargetPosition.x, cameraTargetPosition.y, cameraTargetPosition.z,
-		             cameraUp.x, cameraUp.y, cameraUp.z);
-	}
+//	@Override
+//	public void updateCamera(long dtNS) {
+//		//if (useDefaultCamera) {
+////		if (false) {
+////			super.updateCamera();
+////			return;
+////		}
+//
+//		gl.glMatrixMode(gl.GL_PROJECTION);
+//		gl.glLoadIdentity();
+//
+//		// look at the vehicle
+//		Transform characterWorldTrans = ghostObject.getWorldTransform(new Transform());
+//		Vector3f up = new Vector3f();
+//		characterWorldTrans.basis.getRow(1, up);
+//		Vector3f backward = new Vector3f();
+//		characterWorldTrans.basis.getRow(2, backward);
+//		backward.scale(-1);
+//		up.normalize ();
+//		backward.normalize ();
+//
+//		cameraTargetPosition.set(characterWorldTrans.origin);
+//
+//		Vector3f cameraPosition = new Vector3f();
+//		cameraPosition.scale(2, up);
+//		cameraPosition.add(cameraTargetPosition);
+//		backward.scale(12);
+//		cameraPosition.add(backward);
+//
+//		// update OpenGL camera settings
+//		gl.glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 10000.0);
+//
+//		gl.glMatrixMode(IGL.GL_MODELVIEW);
+//		gl.glLoadIdentity();
+//
+//		gl.gluLookAt(cameraPosition.x, cameraPosition.y, cameraPosition.z,
+//		             cameraTargetPosition.x, cameraTargetPosition.y, cameraTargetPosition.z,
+//		             cameraUp.x, cameraUp.y, cameraUp.z);
+//	}
 
 	public static void main(String... args) {
 		CharacterDemo demo = new CharacterDemo();

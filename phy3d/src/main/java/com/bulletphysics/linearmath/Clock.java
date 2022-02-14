@@ -46,7 +46,7 @@ public class Clock {
 		startTime = System.nanoTime();
 	}
 
-	private long getTimeNanoseconds() {
+	public long getTimeNanoseconds() {
 		return System.nanoTime() - startTime;
 	}
 

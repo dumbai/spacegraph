@@ -93,7 +93,7 @@ public class GLShapeDrawer {
 
     private static final float[] glMat = new float[16];
 
-    public static void drawOpenGL(IGL gl, Transform trans, CollisionShape shape, Vector3f color, int debugMode) {
+    public static void drawOpenGL(CollisionShape shape, Transform trans, Vector3f color, int debugMode, IGL gl) {
         @Deprecated ObjectPool<Vector3f> vectorsPool = ObjectPool.get(Vector3f.class);
 
         //System.out.println("shape="+shape+" type="+BroadphaseNativeTypes.forValue(shape.getShapeType()));
@@ -123,7 +123,7 @@ public class GLShapeDrawer {
             Transform childTrans = new Transform();
             for (int i = compoundShape.childShapeCount() - 1; i >= 0; i--) {
                 compoundShape.childTransform(i, childTrans);
-                drawOpenGL(gl, childTrans, compoundShape.childShape(i), color, debugMode);
+                drawOpenGL(compoundShape.childShape(i), childTrans, color, debugMode, gl);
             }
 
         } else {
