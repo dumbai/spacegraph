@@ -44,7 +44,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
 import com.bulletphysics.render.GLShapeDrawer;
 import com.bulletphysics.render.IGL;
-import com.bulletphysics.render.JOGL;
+import com.bulletphysics.render.JoglWindow3D;
 import com.bulletphysics.util.ObjectArrayList;
 import com.jogamp.newt.event.KeyEvent;
 
@@ -575,7 +575,7 @@ public class VehicleDemo extends DemoApplication {
 	public static void main(String... args) {
 		VehicleDemo vehicleDemo = new VehicleDemo();
 
-		new JOGL(vehicleDemo, 800, 600);
+		new JoglWindow3D(vehicleDemo, 800, 600);
 	}
 	
 }

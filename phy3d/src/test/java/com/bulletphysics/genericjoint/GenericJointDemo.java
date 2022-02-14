@@ -38,7 +38,7 @@ import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
-import com.bulletphysics.render.JOGL;
+import com.bulletphysics.render.JoglWindow3D;
 import com.bulletphysics.util.ObjectArrayList;
 
 import javax.vecmath.Vector3f;
@@ -50,10 +50,6 @@ import javax.vecmath.Vector3f;
 public class GenericJointDemo extends DemoApplication {
 
 	private final ObjectArrayList<RagDoll> ragdolls = new ObjectArrayList<>();
-
-	private GenericJointDemo() {
-		super();
-	}
 
 	public DynamicsWorld physics() {
 
@@ -109,7 +105,7 @@ public class GenericJointDemo extends DemoApplication {
 		GenericJointDemo a = new GenericJointDemo();
 		a.setCameraDistance(10);
 
-		new JOGL(a, 800, 600);
+		new JoglWindow3D(a, 800, 600);
 	}
 	
 }

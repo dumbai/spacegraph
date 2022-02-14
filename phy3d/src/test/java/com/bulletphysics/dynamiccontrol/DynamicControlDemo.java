@@ -38,7 +38,7 @@ import com.bulletphysics.dynamics.constraintsolver.HingeConstraint;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
-import com.bulletphysics.render.JOGL;
+import com.bulletphysics.render.JoglWindow3D;
 import com.bulletphysics.util.ObjectArrayList;
 
 import javax.vecmath.Vector3f;
@@ -191,7 +191,7 @@ public class DynamicControlDemo extends DemoApplication {
 	public static void main(String... args) {
 		DynamicControlDemo demoApp = new DynamicControlDemo();
 
-		new JOGL(demoApp, 800, 600);
+		new JoglWindow3D(demoApp, 800, 600);
 	}
 	
 }

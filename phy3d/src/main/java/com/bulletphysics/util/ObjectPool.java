@@ -90,11 +90,7 @@ public class ObjectPool<T> {
      * @return instance
      */
     public T get() {
-        if (!list.isEmpty()) {
-            return list.remove(list.size() - 1);
-        } else {
-            return create();
-        }
+        return !list.isEmpty() ? list.remove(list.size() - 1) : create();
     }
 
     /**

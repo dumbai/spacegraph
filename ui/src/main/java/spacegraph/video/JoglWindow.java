@@ -48,50 +48,41 @@ public class JoglWindow implements GLEventListener, WindowListener {
     }
 
     public final Topic<JoglWindow> eventClosed = new ListTopic<>();
+
     public final Topic<JoglWindow> onUpdate = new ListTopic<>();
+
     /**
      * render loop
      */
     private final GameAnimatorControl animator = new GameAnimatorControl();
-    //        synchronized (JoglWindow.class) {
-//            if (JoglWindow.config == null) {
-//                //lazy instantiate
-//                JoglWindow.config = config();
-//            }
-//        }
+
     private final AtomicBoolean updateWindowPos = new AtomicBoolean(false);
-//    public float renderFPSInvisibleRate = 0;
+
     private final AtomicBoolean updateWindowSize = new AtomicBoolean(false);
+
     public GLWindow window;
     public GL2 gl;
+
     /**
      * update time since last cycle (S)
      */
     public float dtS = 0;
     public float renderFPS = UI.FPS_default;
     private long lastRenderNS = System.nanoTime();
-    private int nx = -1;
-    private int ny = -1;
-    private int nw = -1;
-    private int nh = -1;
 
-    final AtomicBoolean changed = new AtomicBoolean(true);
+    private int nx = -1, ny = -1, nw = -1, nh = -1;
+
+    private final AtomicBoolean changed = new AtomicBoolean(true);
 
     private final FastCoWList<Layer> layers = new FastCoWList<>(Layer.class);
 
     public JoglWindow() {
-//		Threading.invokeOnOpenGLThread(false, () -> {
-
-        //Util.time(logger, "GLWindow.create", () -> {
-        this.window = GLWindow.create(config);
-        //});
+        window = GLWindow.create(config);
         window.addWindowListener(this);
         window.addGLEventListener(this);
         window.setAutoSwapBufferMode(false);
-//		});
 
         animator.loop.fps(UI.FPS_init); //wait for startup
-
     }
 
     public JoglWindow(int pw, int ph) {
@@ -229,11 +220,7 @@ public class JoglWindow implements GLEventListener, WindowListener {
 
     @Override
     public void windowRepaint(WindowUpdateEvent windowUpdateEvent) {
-//        if (!window.isVisible())
-//            Util.nop();
-        //if (!updater.isRunning()) {
-//        updater.setFPS(updateFPS /* window.hasFocus() ? updateFPS : updateFPS * updateFPSUnfocusedMultiplier */);
-        //}
+
     }
 
     private static void clear(GL2 gl) {
@@ -254,7 +241,7 @@ public class JoglWindow implements GLEventListener, WindowListener {
 
 
         gl.glAccum(GL2.GL_RETURN, rate);
-        gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
 
 
     }
@@ -354,7 +341,7 @@ public class JoglWindow implements GLEventListener, WindowListener {
     }
 
     @Override
-    public final void init(GLAutoDrawable drawable) {
+    public void init(GLAutoDrawable drawable) {
 
         GL2 gl = drawable.getGL().getGL2();
         this.gl = gl;
@@ -547,7 +534,7 @@ public class JoglWindow implements GLEventListener, WindowListener {
                         if (d != null)
                             d.display();
                     } else {
-                        if (wasVisible && !visible)
+                        if (wasVisible)
                             JoglWindow.this.isVisible(false);
                     }
                     wasVisible = visible;

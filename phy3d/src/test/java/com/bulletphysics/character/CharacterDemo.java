@@ -41,7 +41,7 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
 import com.bulletphysics.render.IGL;
-import com.bulletphysics.render.JOGL;
+import com.bulletphysics.render.JoglWindow3D;
 import com.bulletphysics.util.ObjectArrayList;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -119,7 +119,7 @@ public class CharacterDemo extends DemoApplication {
 		character = new KinematicCharacterController(ghostObject, capsule, stepHeight);
 
 		try {
-			new BspToBulletConverter().convertBsp(getClass().getResourceAsStream("/exported.bsp.txt"));
+			new BspToBulletConverter(world).convertBsp(getClass().getResourceAsStream("/exported.bsp.txt"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -277,16 +277,22 @@ public class CharacterDemo extends DemoApplication {
 	public static void main(String... args) {
 		CharacterDemo demo = new CharacterDemo();
 
-		new JOGL(demo, 800, 600);
+		new JoglWindow3D(demo, 800, 600);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
 	
 	private class BspToBulletConverter extends BspConverter {
+		private final DynamicsWorld world;
+
+		public BspToBulletConverter(DynamicsWorld world) {
+			this.world = world;
+		}
+
 		@Override
 		public void addConvexVerticesCollider(ObjectArrayList<Vector3f> vertices) {
 			if (!vertices.isEmpty()) {
-				float mass = 0.0f;
+				float mass = 0;
 				Transform startTransform = new Transform();
 				// can use a shift
 				startTransform.setIdentity();

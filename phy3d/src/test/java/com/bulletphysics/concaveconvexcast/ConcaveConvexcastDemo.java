@@ -40,7 +40,7 @@ import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
-import com.bulletphysics.render.JOGL;
+import com.bulletphysics.render.JoglWindow3D;
 import com.bulletphysics.util.ObjectArrayList;
 
 import javax.vecmath.Vector3f;
@@ -248,7 +248,7 @@ public class ConcaveConvexcastDemo extends DemoApplication {
 		ConcaveConvexcastDemo concaveConvexcastDemo = new ConcaveConvexcastDemo();
 		concaveConvexcastDemo.setCameraDistance(30.0f);
 
-		new JOGL(concaveConvexcastDemo, 800, 600);
+		new JoglWindow3D(concaveConvexcastDemo, 800, 600);
 	}
 	
 }

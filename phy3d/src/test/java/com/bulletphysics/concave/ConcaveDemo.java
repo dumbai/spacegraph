@@ -46,7 +46,7 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
-import com.bulletphysics.render.JOGL;
+import com.bulletphysics.render.JoglWindow3D;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.bvh.optimized.OptimizedBvh;
 
@@ -391,7 +391,7 @@ public class ConcaveDemo extends DemoApplication {
 		ConcaveDemo concaveDemo = new ConcaveDemo();
 		concaveDemo.setCameraDistance(30.0f);
 
-		new JOGL(concaveDemo, 800, 600);
+		new JoglWindow3D(concaveDemo, 800, 600);
 	}
 	
 }

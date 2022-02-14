@@ -45,14 +45,10 @@ public abstract class SpaceGraph3D implements GLEventListener {
     private static final float mousePickClamping = 3.0f;
     private static RigidBody pickedBody; // for deactivation state
 
-    protected final Vector3f cameraPosition = new Vector3f();
-    protected final Vector3f cameraTargetPosition = new Vector3f(); // look at
-    protected final Vector3f cameraUp = new Vector3f(0.0f, 1.0f, 0.0f);
 
-    float farPlane = 10000.0f;
     // keep the collision shapes, for deletion/cleanup
     protected final ObjectArrayList<CollisionShape> collisionShapes = new ObjectArrayList<>();
-    protected final float fps = 60.0f;
+    protected final float fps = 30.0f;
     final Mouse mouse;
     final Keyboard keyboard;
     private final Clock clock = new Clock();
@@ -65,13 +61,16 @@ public abstract class SpaceGraph3D implements GLEventListener {
     int debugMode = 0;
     boolean stepping = true;
     private TypedConstraint pickConstraint;
-    @Deprecated private float cameraDistance = 15.0f;
-    @Deprecated private float ele = 20.0f;
-    @Deprecated private float azi = 0.0f;
+    @Deprecated private float cameraDistance = 15;
+    @Deprecated private float ele = 20;
+    @Deprecated private float azi = 0;
     private int glutScreenWidth = 0;
     private int glutScreenHeight = 0;
-    protected float zNear = 1.0f;
+    protected float zNear = 1;
     protected float zFar = 10000;
+    protected final Vector3f cameraPosition = new Vector3f();
+    protected final Vector3f cameraTargetPosition = new Vector3f(); // look at
+    protected final Vector3f cameraUp = new Vector3f(0.0f, 1.0f, 0.0f);
 
     public SpaceGraph3D() {
         mouse = new Mouse();
@@ -84,7 +83,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
 
     public void start() {
         synchronized (this) {
-            world = physics();
+            this.world = physics();
             reset();
         }
     }
@@ -101,19 +100,19 @@ public abstract class SpaceGraph3D implements GLEventListener {
             numObjects = world.getNumCollisionObjects();
         }
 
+        var aa = world.getCollisionObjectArray();
         for (int i = 0; i < numObjects; i++) {
-            CollisionObject o = world.getCollisionObjectArray().get(i);
-            RigidBody b = RigidBody.upcast(o);
+            RigidBody b = RigidBody.upcast(aa.get(i));
             if (b != null) {
                 if (b.getMotionState() != null) {
                     DefaultMotionState myMotionState = (DefaultMotionState) b.getMotionState();
                     myMotionState.graphicsWorldTrans.set(myMotionState.startWorldTrans);
-                    o.setWorldTransform(myMotionState.graphicsWorldTrans);
-                    o.setInterpolationWorldTransform(myMotionState.startWorldTrans);
-                    o.activate();
+                    b.setWorldTransform(myMotionState.graphicsWorldTrans);
+                    b.setInterpolationWorldTransform(myMotionState.startWorldTrans);
+                    b.activate();
                 }
                 // removed cached contact points
-                world.broadphase().getOverlappingPairCache().cleanProxyFromPairs(o.getBroadphaseHandle(), world().dispatcher());
+                world.broadphase().getOverlappingPairCache().cleanProxyFromPairs(b.getBroadphaseHandle(), world().dispatcher());
 
                 if (!b.isStaticObject()) {
                     b.setLinearVelocity(new Vector3f());
@@ -136,9 +135,8 @@ public abstract class SpaceGraph3D implements GLEventListener {
 
     @Override
     public void init(GLAutoDrawable g) {
-        if (((JoglGL) gl).gl == null) {
-            ((JoglGL) gl).init(g.getGL().getGL2()); //HACK
-        }
+        if (((JoglWindow3D.JoglGL) gl).gl == null)
+            ((JoglWindow3D.JoglGL) gl).init(g.getGL().getGL2()); //HACK
 
         float[] light_ambient = {0.2f, 0.2f, 0.2f, 1.0f};
         float[] light_diffuse = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -190,7 +188,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
         glutScreenHeight = height;
 
         gl.glViewport(x, y, width, height);
-        updateCamera();
+        //updateCamera();
     }
 
     private void update() {
@@ -286,7 +284,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
         idle = !idle;
     }
 
-    public void updateCamera() {
+    protected void updateCamera() {
 
         float rele = MathUtils.radians(ele);
         float razi = MathUtils.radians(azi);
@@ -460,7 +458,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
         Vector3f rayForward = new Vector3f();
         rayForward.sub(cameraTarget(), cameraPosition());
         rayForward.normalize();
-        rayForward.scale(farPlane);
+        rayForward.scale(zFar);
 
 //        Vector3f rightOffset = new Vector3f();
         Vector3f vertical = new Vector3f(cameraUp);
@@ -477,8 +475,9 @@ public abstract class SpaceGraph3D implements GLEventListener {
 
         double aspect = glutScreenHeight / (float) glutScreenWidth;
 
-        hor.scale((float)(2 * farPlane * tanfov));
-        vertical.scale((float)(2 * farPlane * tanfov));
+        float s = (float) (2 * zFar * tanfov);
+        hor.scale(s);
+        vertical.scale(s);
 
         if (aspect < 1) {
             hor.scale((float)(1 / aspect));
@@ -632,7 +631,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
         gl.glMatrixMode(GL_PROJECTION);
         gl.glPopMatrix();
         gl.glMatrixMode(GL_MODELVIEW);
-        updateCamera();
+        //updateCamera();
     }
 
 

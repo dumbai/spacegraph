@@ -147,7 +147,8 @@ public class RigidBody extends CollisionObject {
      * but a rigidbody is derived from CollisionObject, so we can safely perform an upcast.
      */
     public static RigidBody upcast(CollisionObject colObj) {
-        return colObj.getInternalType() == CollisionObjectType.RIGID_BODY ? (RigidBody) colObj : null;
+        return colObj.getInternalType() ==
+                CollisionObjectType.RIGID_BODY ? (RigidBody) colObj : null;
     }
 
     public void destroy() {

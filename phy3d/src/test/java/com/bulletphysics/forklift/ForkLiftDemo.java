@@ -48,7 +48,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
 import com.bulletphysics.render.GLShapeDrawer;
 import com.bulletphysics.render.IGL;
-import com.bulletphysics.render.JOGL;
+import com.bulletphysics.render.JoglWindow3D;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.opengl.GLAutoDrawable;
 
@@ -314,8 +314,7 @@ public class ForkLiftDemo extends DemoApplication {
 	@Override
 	public void updateCamera() {
 		if (gl == null) return;
-		if(useDefaultCamera)
-		{
+		if(useDefaultCamera) {
 			super.updateCamera();
 			return;
 		}
@@ -860,7 +859,7 @@ public class ForkLiftDemo extends DemoApplication {
 	public static void main(String... args) {
 		ForkLiftDemo forkLiftDemo = new ForkLiftDemo();
 
-		new JOGL(forkLiftDemo, 800, 600);
+		new JoglWindow3D(forkLiftDemo, 800, 600);
 	}
 
 }

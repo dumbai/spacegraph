@@ -92,8 +92,7 @@ public class GLShapeDrawer {
 	private static final float[] glMat = new float[16];
 	
 	public static void drawOpenGL(IGL gl, Transform trans, CollisionShape shape, Vector3f color, int debugMode) {
-		ObjectPool<Transform> transformsPool = ObjectPool.get(Transform.class);
-		ObjectPool<Vector3f> vectorsPool = ObjectPool.get(Vector3f.class);
+		@Deprecated ObjectPool<Vector3f> vectorsPool = ObjectPool.get(Vector3f.class);
 
 		//System.out.println("shape="+shape+" type="+BroadphaseNativeTypes.forValue(shape.getShapeType()));
 
@@ -119,13 +118,13 @@ public class GLShapeDrawer {
 
 		if (shape.getShapeType() == BroadphaseNativeType.COMPOUND_SHAPE_PROXYTYPE) {
 			CompoundShape compoundShape = (CompoundShape) shape;
-			Transform childTrans = transformsPool.get();
+			Transform childTrans = new Transform();
 			for (int i = compoundShape.getNumChildShapes() - 1; i >= 0; i--) {
 				compoundShape.getChildTransform(i, childTrans);
 				CollisionShape colShape = compoundShape.getChildShape(i);
 				drawOpenGL(gl, childTrans, colShape, color, debugMode);
 			}
-			transformsPool.release(childTrans);
+
 		}
 		else {
 			//drawCoordSystem();

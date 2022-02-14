@@ -42,7 +42,7 @@ import com.bulletphysics.extras.gimpact.GImpactCollisionAlgorithm;
 import com.bulletphysics.extras.gimpact.GImpactMeshShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
-import com.bulletphysics.render.JOGL;
+import com.bulletphysics.render.JoglWindow3D;
 
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
@@ -193,7 +193,7 @@ public class MovingConcaveDemo extends DemoApplication {
 	public static void main(String... args) {
 		MovingConcaveDemo concaveDemo = new MovingConcaveDemo();
 
-		new JOGL(concaveDemo, 800, 600);
+		new JoglWindow3D(concaveDemo, 800, 600);
 	}
 	
 }

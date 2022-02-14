@@ -37,7 +37,7 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
-import com.bulletphysics.render.JOGL;
+import com.bulletphysics.render.JoglWindow3D;
 
 import javax.vecmath.Vector3f;
 
@@ -172,7 +172,7 @@ public class BasicDemo extends DemoApplication {
 	
 	public static void main(String... args)  {
 
-		new JOGL(new BasicDemo(), 800, 600);
+		new JoglWindow3D(new BasicDemo(), 800, 600);
 //		SpaceGraph.window(new WorldSurface(new BasicDemo()), 800, 600);
 	}
 	
