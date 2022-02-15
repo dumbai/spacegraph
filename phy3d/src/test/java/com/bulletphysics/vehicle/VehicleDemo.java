@@ -43,7 +43,6 @@ import com.bulletphysics.dynamics.vehicle.*;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
 import com.bulletphysics.render.GLShapeDrawer;
-import com.bulletphysics.render.IGL;
 import com.bulletphysics.render.JoglWindow3D;
 import com.bulletphysics.util.ObjectArrayList;
 import com.jogamp.newt.event.KeyEvent;
@@ -389,7 +388,7 @@ public class VehicleDemo extends DemoApplication {
 			vehicle.updateWheelTransform(i, true);
 			// draw wheels (cylinders)
 			Transform trans = vehicle.getWheelInfo(i).worldTransform;
-			GLShapeDrawer.drawOpenGL(wheelShape, trans, wheelColor, getDebugMode(), gl);
+			GLShapeDrawer.draw(wheelShape, trans, wheelColor, getDebugMode(), gl);
 		}
 
 

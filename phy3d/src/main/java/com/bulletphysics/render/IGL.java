@@ -82,7 +82,7 @@ public interface IGL {
 		drawCube(1);
 	}
 
-	void drawSphere(float radius, int slices, int stacks);
+	void drawSphere(float radius, int slices);
 	void drawCylinder(float radius, float halfHeight, int upAxis);
 
 	void drawString(CharSequence s, int x, int y, float red, float green, float blue);

@@ -279,7 +279,7 @@ public class JoglWindow3D implements WindowListener {
         private static final Map<Float, Integer> sphereDisplayLists = new HashMap<>();
 
 
-        public void drawSphere(float radius, int slices, int stacks) {
+        public void drawSphere(float radius, int slices) {
             if (sphere == null) {
                 sphere = glu.gluNewQuadric();
                 sphere.setImmMode(true);

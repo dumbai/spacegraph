@@ -54,29 +54,6 @@ public class GLShapeDrawer {
 
     private static final Logger logger = Log.log(GLShapeDrawer.class);
 
-	/*
-	private static Map<CollisionShape,TriMeshKey> g_display_lists = new HashMap<CollisionShape,TriMeshKey>();
-	
-	private static int OGL_get_displaylist_for_shape(CollisionShape shape) {
-		// JAVA NOTE: rewritten
-		TriMeshKey trimesh = g_display_lists.get(shape);
-		if (trimesh != null) {
-			return trimesh.dlist;
-		}
-
-		return 0;
-	}
-
-	private static void OGL_displaylist_clean() {
-		// JAVA NOTE: rewritten
-		for (TriMeshKey trimesh : g_display_lists.values()) {
-			glDeleteLists(trimesh.dlist, 1);
-		}
-
-		g_display_lists.clear();
-	}
-	*/
-
     public static void drawCoordSystem(IGL gl) {
         gl.glBegin(IGL.GL_LINES);
         gl.glColor3f(1, 0, 0);
@@ -91,10 +68,9 @@ public class GLShapeDrawer {
         gl.glEnd();
     }
 
-    private static final float[] glMat = new float[16];
 
-    public static void drawOpenGL(CollisionShape shape, Transform trans, Vector3f color, int debugMode, IGL gl) {
-        @Deprecated ObjectPool<Vector3f> vectorsPool = ObjectPool.get(Vector3f.class);
+    public static void draw(CollisionShape shape, Transform trans, Vector3f color, int debugMode, IGL gl) {
+        final float[] glMat = new float[16];
 
         //System.out.println("shape="+shape+" type="+BroadphaseNativeTypes.forValue(shape.getShapeType()));
 
@@ -119,17 +95,14 @@ public class GLShapeDrawer {
 //		}
 
         if (shape.getShapeType() == BroadphaseNativeType.COMPOUND_SHAPE_PROXYTYPE) {
-            CompoundShape compoundShape = (CompoundShape) shape;
+            CompoundShape c = (CompoundShape) shape;
             Transform childTrans = new Transform();
-            for (int i = compoundShape.childShapeCount() - 1; i >= 0; i--) {
-                compoundShape.childTransform(i, childTrans);
-                drawOpenGL(compoundShape.childShape(i), childTrans, color, debugMode, gl);
+            for (int i = c.childShapeCount() - 1; i >= 0; i--) {
+                c.childTransform(i, childTrans);
+                draw(c.childShape(i), childTrans, color, debugMode, gl);
             }
 
         } else {
-            //drawCoordSystem();
-
-            //glPushMatrix();
 
             gl.glEnable(IGL.GL_COLOR_MATERIAL);
             gl.glColor3f(color.x, color.y, color.z);
@@ -148,7 +121,7 @@ public class GLShapeDrawer {
                         useWireframeFallback = false;
                     }
                     case SPHERE_SHAPE_PROXYTYPE -> {
-                        gl.drawSphere(shape.getMargin(), 10, 10);
+                        gl.drawSphere(shape.getMargin(), 10);
                         useWireframeFallback = false;
                     }
                     case STATIC_PLANE_PROXYTYPE -> {
@@ -222,7 +195,7 @@ public class GLShapeDrawer {
 
                     gl.glBegin(IGL.GL_LINES);
 
-                    Vector3f a = vectorsPool.get(), b = vectorsPool.get();
+                    Vector3f a = new Vector3f(), b = new Vector3f();
                     int i;
                     for (i = 0; i < polyshape.getNumEdges(); i++) {
                         polyshape.getEdge(i, a, b);
@@ -232,8 +205,6 @@ public class GLShapeDrawer {
                     }
                     gl.glEnd();
 
-                    vectorsPool.release(a);
-                    vectorsPool.release(b);
 
 //					if (debugMode==btIDebugDraw::DBG_DrawFeaturesText)
 //					{
@@ -290,9 +261,9 @@ public class GLShapeDrawer {
                 //btVector3 aabbMax(100,100,100);//btScalar(1e30),btScalar(1e30),btScalar(1e30));
 
                 //todo pass camera, for some culling
-                Vector3f aabbMax = vectorsPool.get();
+                Vector3f aabbMax = new Vector3f();
                 aabbMax.set(1.0e30f, 1.0e30f, 1.0e30f);
-                Vector3f aabbMin = vectorsPool.get();
+                Vector3f aabbMin = new Vector3f();
                 aabbMin.set(-1.0e30f, -1.0e30f, -1.0e30f);
 
                 GlDrawcallback drawCallback = new GlDrawcallback(gl);
@@ -300,8 +271,6 @@ public class GLShapeDrawer {
 
                 concaveMesh.processAllTriangles(drawCallback, aabbMin, aabbMax);
 
-                vectorsPool.release(aabbMax);
-                vectorsPool.release(aabbMin);
             }
             //#endif
 
@@ -378,27 +347,31 @@ public class GLShapeDrawer {
         Vector3f tmp1 = new Vector3f();
         Vector3f tmp2 = new Vector3f();
 
-        if (hull.numTriangles() > 0) {
+        final int t = hull.numTriangles();
+        if (t > 0) {
             int index = 0;
             IntArrayList idx = hull.getIndexPointer();
             ObjectArrayList<Vector3f> vtx = hull.getVertexPointer();
 
             gl.glBegin(gl.GL_TRIANGLES);
+            
+            int n = hull.numIndices();
+            int v = hull.numVertices();
 
-            for (int i = 0; i < hull.numTriangles(); i++) {
+            for (int i = 0; i < t; i++) {
                 int i1 = index++;
                 int i2 = index++;
                 int i3 = index++;
-                assert (i1 < hull.numIndices() &&
-                        i2 < hull.numIndices() &&
-                        i3 < hull.numIndices());
+                assert (i1 < n &&
+                        i2 < n &&
+                        i3 < n);
 
                 int index1 = idx.get(i1);
                 int index2 = idx.get(i2);
                 int index3 = idx.get(i3);
-                assert (index1 < hull.numVertices() &&
-                        index2 < hull.numVertices() &&
-                        index3 < hull.numVertices());
+                assert (index1 < v &&
+                        index2 < v &&
+                        index3 < v);
 
                 Vector3f v1 = vtx.get(index1);
                 Vector3f v2 = vtx.get(index2);
@@ -532,5 +505,28 @@ public class GLShapeDrawer {
             gl.glEnd();
         }
     }
+
+	/*
+	private static Map<CollisionShape,TriMeshKey> g_display_lists = new HashMap<CollisionShape,TriMeshKey>();
+
+	private static int OGL_get_displaylist_for_shape(CollisionShape shape) {
+		// JAVA NOTE: rewritten
+		TriMeshKey trimesh = g_display_lists.get(shape);
+		if (trimesh != null) {
+			return trimesh.dlist;
+		}
+
+		return 0;
+	}
+
+	private static void OGL_displaylist_clean() {
+		// JAVA NOTE: rewritten
+		for (TriMeshKey trimesh : g_display_lists.values()) {
+			glDeleteLists(trimesh.dlist, 1);
+		}
+
+		g_display_lists.clear();
+	}
+	*/
 
 }

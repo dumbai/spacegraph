@@ -10,7 +10,7 @@ public class AnimFloat extends MutableFloat implements Animated {
     private final Number speed;
     private boolean running = true;
 
-    AnimFloat(float current, float speed) {
+    public AnimFloat(float current, float speed) {
         super();
         set(current);
         target = current;
@@ -41,11 +41,19 @@ public class AnimFloat extends MutableFloat implements Animated {
     }
 
     private void interpLERP(float dt) {
-        float rate = speed.floatValue() * dt;
+        float rate =
+            speed.floatValue() * dt; //HACK?
+            //TODO: Math.exp(...) //??
         
         super.set(
                 Util.lerp(rate, floatValue(), target)
         );
+    }
+    @Override
+    public float add(float value) {
+        float next = target + value;
+        set(next);
+        return next;
     }
 
     @Override

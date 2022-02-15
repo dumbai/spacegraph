@@ -94,6 +94,9 @@ public class RigidBody extends CollisionObject {
     // optionalMotionState allows to automatic synchronize the world transform for active objects
     private MotionState optionalMotionState;
 
+    /** base color */
+    public final Vector3f color = new Vector3f(0.5f, 0.5f, 0.5f);
+
     public RigidBody(RigidBodyConstructionInfo c) {
         ID = uniqueId.getAndIncrement();
 

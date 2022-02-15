@@ -21,6 +21,7 @@ import com.bulletphysics.util.ObjectArrayList;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
+import spacegraph.util.animate.AnimFloat;
 import spacegraph.util.animate.v3Anim;
 import toxi.math.MathUtils;
 
@@ -115,15 +116,18 @@ public abstract class SpaceGraph3D implements GLEventListener {
     public static class PolarCamera extends Camera3D {
         protected int forwardAxis = 2;
 
+        final AnimFloat camEle = new AnimFloat(20, 0.9f), camAzi = new AnimFloat(0, 0.9f);
         private float camDist = 15;
-        private float camEle = 20;
-        private float camAzi = 0;
+
 
         @Override
         public void update(long dtNS) {
 
-            float rele = MathUtils.radians(camEle);
-            float razi = MathUtils.radians(camAzi);
+            final int dtMS = (int) (dtNS / 1E6);
+            camEle.animate(dtMS);
+            camAzi.animate(dtMS);
+            float rele = MathUtils.radians(camEle.floatValue());
+            float razi = MathUtils.radians(camAzi.floatValue());
 
             Quat4f rot = new Quat4f();
             setRotation(rot, up, razi);
@@ -158,8 +162,8 @@ public abstract class SpaceGraph3D implements GLEventListener {
     }
 
     private Camera3D camera =
-        //new PolarCamera();
-        new FirstPersonCamera();
+        new PolarCamera();
+        //new FirstPersonCamera();
 
     private int glutScreenWidth = 0, glutScreenHeight = 0;
 
@@ -343,7 +347,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
             transform(x, t);
             color(x, color);
 
-            GLShapeDrawer.drawOpenGL(x.getCollisionShape(), t, color, debugMode, gl);
+            GLShapeDrawer.draw(x.getCollisionShape(), t, color, debugMode, gl);
         }
 
     }
@@ -360,7 +364,15 @@ public abstract class SpaceGraph3D implements GLEventListener {
         }
     }
 
+    /** color function */
     private void color(CollisionObject x, Vector3f color) {
+        if (x instanceof RigidBody B) {
+            color.set(B.color);
+        } else
+            color.set(0.5f, 0.5f, 0.5f); //HACK
+    }
+
+    private void colorDebug(CollisionObject x, Vector3f color) {
         int i = (x instanceof RigidBody B) ? B.ID : System.identityHashCode(x);
         if ((i & 1) != 0)
             color.set(0, 0, 1);
@@ -476,8 +488,12 @@ public abstract class SpaceGraph3D implements GLEventListener {
         keyboard.reset();
     }
 
+    private int x, y;
+
     private void updateMouse(long dtNS) {
+        int px = this.x, py = this.y;
         int x = mouse.getLocation().x, y = mouse.getLocation().y;
+        this.x = x; this.y = y;
 
         for (MouseButton btn : mouse.getActiveButtons().values()) {
             int event = btn.getAWTEventId();
@@ -487,7 +503,8 @@ public abstract class SpaceGraph3D implements GLEventListener {
             } else if (event == MouseEvent.MOUSE_RELEASED) {
                 mouseFunc(btn.getCode() - 1, 0, x, y);
             } else if (event == MouseEvent.MOUSE_DRAGGED) {
-                mouseMotionFunc(x, y);
+                int dx = x - px, dy = y - py;
+                mouseMotionFunc(btn.getCode(), x, y, dx, dy);
             }
         }
 
@@ -683,23 +700,33 @@ public abstract class SpaceGraph3D implements GLEventListener {
         }
     }
 
-    private void mouseMotionFunc(int x, int y) {
+    private void mouseMotionFunc(int button, int x, int y, int dx, int dy) {
         if (pickConstraint != null) {
-            // move the constraint pivot
-            Point2PointConstraint p2p = (Point2PointConstraint) pickConstraint;
-            // keep it at the same picking distance
-
-            Vector3f newRayTo = new Vector3f(rayTo(x, y));
-            Vector3f eyePos = new Vector3f(cameraPosition());
-            Vector3f dir = new Vector3f();
-            dir.sub(newRayTo, eyePos);
-            dir.normalize();
-            dir.scale(BulletStats.gOldPickingDist);
-
-            Vector3f newPos = new Vector3f();
-            newPos.add(eyePos, dir);
-            p2p.setPivotB(newPos);
+            mouseMotionFuncPicked(x, y);
+        } else {
+            if (button == 3) {
+                final float rotSpeed = 1/10f, eleSpeed = rotSpeed;
+                ((PolarCamera)camera).camAzi.add(dx * rotSpeed);
+                ((PolarCamera)camera).camEle.add(dy * eleSpeed);
+            }
         }
+    }
+
+    private void mouseMotionFuncPicked(int x, int y) {
+        // move the constraint pivot
+        Point2PointConstraint p2p = (Point2PointConstraint) pickConstraint;
+        // keep it at the same picking distance
+
+        Vector3f newRayTo = new Vector3f(rayTo(x, y));
+        Vector3f eyePos = new Vector3f(cameraPosition());
+        Vector3f dir = new Vector3f();
+        dir.sub(newRayTo, eyePos);
+        dir.normalize();
+        dir.scale(BulletStats.gOldPickingDist);
+
+        Vector3f newPos = new Vector3f();
+        newPos.add(eyePos, dir);
+        p2p.setPivotB(newPos);
     }
 
 

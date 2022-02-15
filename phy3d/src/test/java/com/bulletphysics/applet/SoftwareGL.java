@@ -247,8 +247,8 @@ public class SoftwareGL implements IGL {
 	private final Cylinder cylinder = new Cylinder();
 	private final Disk disk = new Disk();
 	
-	public void drawSphere(float radius, int slices, int stacks) {
-		sphere.draw(gl, radius, 6, 6);
+	public void drawSphere(float radius, int slices) {
+		sphere.draw(gl, radius, slices, 6);
 	}
 
 	public void drawCylinder(float radius, float halfHeight, int upAxis) {
