@@ -41,6 +41,10 @@ import static com.jogamp.opengl.GL.*;
 import static com.jogamp.opengl.GL2GL3.GL_POLYGON_SMOOTH;
 import static com.jogamp.opengl.GL2GL3.GL_POLYGON_SMOOTH_HINT;
 
+/**
+ * see: https://github.com/automenta/spacegraphc2/tree/master/bullet-gl
+ * see: https://github.com/automenta/spacegraphc2/blob/master/src/Spacegraph.cpp
+ */
 public abstract class SpaceGraph3D implements GLEventListener {
     private static final float STEPSIZE = 5;
     private static final float mousePickClamping = 3.0f;
@@ -92,6 +96,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
 
         @Override
         public void update(long dtNS) {
+//            camPos.set(5+Math.sin(System.currentTimeMillis()/1000.0)*10, 0, 40);
             final int dtMS = (int) (dtNS / 1E6 /* ns -> ms */);
             camPos.animate(dtMS);
             camTgt.animate(dtMS);
