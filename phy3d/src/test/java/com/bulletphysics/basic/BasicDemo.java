@@ -40,8 +40,10 @@ import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
 import com.bulletphysics.render.JoglWindow3D;
+import jcog.random.XoRoShiRo128PlusRandom;
 
 import javax.vecmath.Vector3f;
+import java.util.Random;
 
 /**
  * BasicDemo is good starting point for learning the code base and porting.
@@ -55,19 +57,16 @@ public class BasicDemo extends DemoApplication {
 	private static final int ARRAY_SIZE_Y = 9;
 	private static final int ARRAY_SIZE_Z = 9;
 
-	// maximum number of objects (and allow user to shoot additional boxes)
-//	private static final int MAX_PROXIES = (ARRAY_SIZE_X*ARRAY_SIZE_Y*ARRAY_SIZE_Z + 1024);
-
 	private static final int START_POS_X = -5;
 	private static final int START_POS_Y = -5;
 	private static final int START_POS_Z = -3;
 
 	public DynamicsWorld physics() {
 
-		DynamicsWorld w = new DiscreteDynamicsWorld();
+		var w = new DiscreteDynamicsWorld();
 		w.setGravity(
-				//new Vector3f(0, 0, 0)
-				new Vector3f(0, -10, 0)
+			new Vector3f(0, -10, 0)
+			//new Vector3f(0, 0, 0) //zero-gravity
 		);
 
 		ground(w);
@@ -77,20 +76,21 @@ public class BasicDemo extends DemoApplication {
 		return w;
 	}
 
-	private void objects(DynamicsWorld world) {
+	private void objects(DynamicsWorld w) {
 		// Re-using the same CollisionShape is better for memory usage and performance
 
-		CollisionShape s =
-				new BoxShape(new Vector3f(1, 1, 1));
-		//new SphereShape(1f);
+		var s =
+			new BoxShape(new Vector3f(1, 1, 1));
+			//new SphereShape(1f);
 
 		Transform t = Transform.identity();
 
 		float mass = 1;
 
-
 		float x = START_POS_X - ARRAY_SIZE_X / 2.0f;
 		float y = START_POS_Z - ARRAY_SIZE_Z / 2.0f;
+
+		var rng = new XoRoShiRo128PlusRandom(1);
 
 		for (int k = 0; k < ARRAY_SIZE_Y; k++) {
 			for (int i = 0; i < ARRAY_SIZE_X; i++) {
@@ -100,25 +100,23 @@ public class BasicDemo extends DemoApplication {
 							10 + 2 * k + START_POS_Y,
 							2 * j + y);
 
-					world.addBody(new RigidBody(s, t, mass
-					));
+					var b = new RigidBody(s, t, mass);
+					b.color.set(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
+					w.addBody(b);
 				}
 			}
 		}
 	}
 
 	private void ground(DynamicsWorld world) {
-		// create a few basic rigid bodies
-		//new StaticPlaneShape(new Vector3f(0, 1, 0), 50);
-
-		world.addBody(new RigidBody(new BoxShape(new Vector3f(50, 50, 50)), Transform.identity().pos(0, -56, 0), 0
-		));
+		world.addBody(new RigidBody(
+				new BoxShape(new Vector3f(50, 50, 50))
+				//new StaticPlaneShape(new Vector3f(0, 1, 0), 50)
+		, Transform.identity().pos(0, -56, 0), 0));
 	}
 
 	public static void main(String... args)  {
-
 		new JoglWindow3D(new BasicDemo(), 800, 600);
-//		SpaceGraph.window(new WorldSurface(new BasicDemo()), 800, 600);
 	}
 
 
