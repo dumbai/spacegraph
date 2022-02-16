@@ -34,7 +34,6 @@ import com.bulletphysics.linearmath.CProfileManager;
 import com.bulletphysics.linearmath.DebugDrawModes;
 import com.bulletphysics.linearmath.Transform;
 import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.opengl.GLAutoDrawable;
 
 import javax.vecmath.Color3f;
 import javax.vecmath.Quat4f;

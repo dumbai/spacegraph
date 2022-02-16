@@ -28,14 +28,11 @@ import com.bulletphysics.collision.shapes.mesh.BvhTriangleMeshShape;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.bvh.optimized.OptimizedBvh;
 import jcog.data.list.Lst;
 
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Vector3f;
-
-import java.util.List;
 
 import static com.bulletphysics.linearmath.VectorUtil.coord;
 
