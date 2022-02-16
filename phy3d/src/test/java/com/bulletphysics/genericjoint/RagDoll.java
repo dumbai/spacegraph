@@ -448,7 +448,7 @@ public class RagDoll {
 
 		// Remove all bodies and shapes
 		for (i = 0; i < BodyPart.BODYPART_COUNT.ordinal(); ++i) {
-			world.removeRigidBody(bodies[i]);
+			world.removeBody(bodies[i]);
 
 			//bodies[i].getMotionState().destroy();
 
@@ -472,7 +472,7 @@ public class RagDoll {
 		rbInfo.additionalDamping = true;
 		RigidBody body = new RigidBody(rbInfo);
 
-		world.addRigidBody(body);
+		world.addBody(body);
 
 		return body;
 	}

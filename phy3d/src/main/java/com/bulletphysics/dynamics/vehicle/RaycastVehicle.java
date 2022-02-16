@@ -28,10 +28,7 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.constraintsolver.ContactConstraint;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraintType;
-import com.bulletphysics.linearmath.MatrixUtil;
-import com.bulletphysics.linearmath.MiscUtil;
-import com.bulletphysics.linearmath.QuaternionUtil;
-import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.linearmath.*;
 import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.FloatArrayList;
 import com.bulletphysics.util.ObjectArrayList;
@@ -48,7 +45,7 @@ import javax.vecmath.Vector3f;
 public class RaycastVehicle extends TypedConstraint {
 
 
-    private static final RigidBody s_fixedObject = new RigidBody(0, null, null);
+    private static final RigidBody s_fixedObject = new RigidBody(0, (MotionState)null, null);
     private static final float sideFrictionStiffness2 = 1.0f;
     private final ObjectArrayList<WheelInfo> wheelInfo = new ObjectArrayList<>();
     private final ObjectArrayList<Vector3f> forwardWS = new ObjectArrayList<>();

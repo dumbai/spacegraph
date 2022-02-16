@@ -159,7 +159,7 @@ public class SimpleDynamicsWorld extends DynamicsWorld {
     }
 
     @Override
-    public void addRigidBody(RigidBody body) {
+    public void addBody(RigidBody body) {
         body.setGravity(gravity);
 
         if (body.getCollisionShape() != null)
@@ -167,7 +167,7 @@ public class SimpleDynamicsWorld extends DynamicsWorld {
     }
 
     @Override
-    public void removeRigidBody(RigidBody body) {
+    public void removeBody(RigidBody body) {
         removeCollisionObject(body);
     }
 

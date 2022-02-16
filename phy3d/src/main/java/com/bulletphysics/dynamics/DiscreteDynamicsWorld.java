@@ -103,6 +103,18 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
         ownsIslandManager = true;
     }
 
+    /**
+     * use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
+     *
+     * the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
+     */
+    public DiscreteDynamicsWorld() {
+        this(
+                new CollisionDispatcher(new DefaultCollisionConfiguration()),
+                new DbvtBroadphase(),
+                new SequentialImpulseConstraintSolver());
+    }
+
     private static int getConstraintIslandId(TypedConstraint lhs) {
         int islandId;
 
@@ -424,12 +436,12 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
     }
 
     @Override
-    public void removeRigidBody(RigidBody body) {
+    public void removeBody(RigidBody body) {
         removeCollisionObject(body);
     }
 
     @Override
-    public void addRigidBody(RigidBody body) {
+    public void addBody(RigidBody body) {
         if (!body.isStaticOrKinematicObject()) {
             body.setGravity(gravity);
         }

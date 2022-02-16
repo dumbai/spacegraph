@@ -200,7 +200,7 @@ class TestRig {
 
 		// Remove all bodies and shapes
 		for (i = 0; i < RagDoll.BodyPart.BODYPART_COUNT.ordinal(); ++i) {
-			ownerWorld.removeRigidBody(bodies[i]);
+			ownerWorld.removeBody(bodies[i]);
 
 			//bodies[i].getMotionState().destroy();
 
@@ -225,7 +225,7 @@ class TestRig {
 		RigidBodyConstructionInfo rbInfo = new RigidBodyConstructionInfo(mass, myMotionState, shape, localInertia);
 		RigidBody body = new RigidBody(rbInfo);
 
-		ownerWorld.addRigidBody(body);
+		ownerWorld.addBody(body);
 
 		return body;
 	}

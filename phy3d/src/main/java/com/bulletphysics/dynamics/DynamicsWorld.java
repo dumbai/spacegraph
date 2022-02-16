@@ -108,9 +108,9 @@ public abstract class DynamicsWorld extends CollisionWorld {
 
     public abstract Vector3f getGravity(Vector3f out);
 
-    public abstract void addRigidBody(RigidBody body);
+    public abstract void addBody(RigidBody body);
 
-    public abstract void removeRigidBody(RigidBody body);
+    public abstract void removeBody(RigidBody body);
 
     public abstract ConstraintSolver getConstraintSolver();
 
@@ -180,7 +180,7 @@ public abstract class DynamicsWorld extends CollisionWorld {
         //body->setWorldTransform(startTransform);
         //#endif//
 
-        addRigidBody(body);
+        addBody(body);
 
         return body;
     }

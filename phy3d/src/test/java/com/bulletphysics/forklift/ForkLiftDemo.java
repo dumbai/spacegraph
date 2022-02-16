@@ -528,7 +528,7 @@ public class ForkLiftDemo extends DemoApplication {
 		//#endif
 
 		CollisionShape groundShape = new BoxShape(new Vector3f(50,3,50));
-		collisionShapes.add(groundShape);
+		//collisionShapes.add(groundShape);
 		collisionConfiguration = new DefaultCollisionConfiguration();
 		dispatcher = new CollisionDispatcher(collisionConfiguration);
 		Vector3f worldMin = new Vector3f(-1000,-1000,-1000);
@@ -659,7 +659,7 @@ public class ForkLiftDemo extends DemoApplication {
 		//
 		//#endif //
 
-		collisionShapes.add(groundShape);
+		//collisionShapes.add(groundShape);
 
 		// create ground object
 		world.localCreateRigidBody(groundShape, 0,tr);
@@ -676,10 +676,10 @@ public class ForkLiftDemo extends DemoApplication {
 		//localTrans.setOrigin(btVector3(0,0,1));
 		//#else
 		CollisionShape chassisShape = new BoxShape(new Vector3f(1.0f,0.5f, 2.0f));
-		collisionShapes.add(chassisShape);
+		//collisionShapes.add(chassisShape);
 
 		CompoundShape compound = new CompoundShape();
-		collisionShapes.add(compound);
+		//collisionShapes.add(compound);
 		Transform localTrans = new Transform();
 		localTrans.setIdentity();
 		// localTrans effectively shifts the center of mass with respect to the chassis
@@ -690,7 +690,7 @@ public class ForkLiftDemo extends DemoApplication {
 
 		{
 			CollisionShape suppShape = new BoxShape(new Vector3f(0.5f,0.1f,0.5f));
-			collisionShapes.add(chassisShape);
+			//collisionShapes.add(chassisShape);
 			Transform suppLocalTrans = new Transform();
 			suppLocalTrans.setIdentity();
 			// localTrans effectively shifts the center of mass with respect to the chassis
@@ -706,7 +706,7 @@ public class ForkLiftDemo extends DemoApplication {
 
 		{
 			CollisionShape liftShape = new BoxShape(new Vector3f(0.5f,2.0f,0.05f));
-			collisionShapes.add(liftShape);
+			//collisionShapes.add(liftShape);
 			Transform liftTrans = new Transform();
 			liftStartPos.set(0.0f, 2.5f, 3.05f);
 			liftTrans.setIdentity();
@@ -725,21 +725,21 @@ public class ForkLiftDemo extends DemoApplication {
 			world.addConstraint(liftHinge, true);
 
 			CollisionShape forkShapeA = new BoxShape(new Vector3f(1.0f,0.1f,0.1f));
-			collisionShapes.add(forkShapeA);
+			//collisionShapes.add(forkShapeA);
 			CompoundShape forkCompound = new CompoundShape();
-			collisionShapes.add(forkCompound);
+			//collisionShapes.add(forkCompound);
 			Transform forkLocalTrans = new Transform();
 			forkLocalTrans.setIdentity();
 			forkCompound.addChildShape(forkLocalTrans, forkShapeA);
 
 			CollisionShape forkShapeB = new BoxShape(new Vector3f(0.1f,0.02f,0.6f));
-			collisionShapes.add(forkShapeB);
+			//collisionShapes.add(forkShapeB);
 			forkLocalTrans.setIdentity();
 			forkLocalTrans.origin.set(-0.9f, -0.08f, 0.7f);
 			forkCompound.addChildShape(forkLocalTrans, forkShapeB);
 
 			CollisionShape forkShapeC = new BoxShape(new Vector3f(0.1f,0.02f,0.6f));
-			collisionShapes.add(forkShapeC);
+			//collisionShapes.add(forkShapeC);
 			forkLocalTrans.setIdentity();
 			forkLocalTrans.origin.set(0.9f, -0.08f, 0.7f);
 			forkCompound.addChildShape(forkLocalTrans, forkShapeC);
@@ -764,19 +764,19 @@ public class ForkLiftDemo extends DemoApplication {
 			world.addConstraint(forkSlider, true);
 
 			CompoundShape loadCompound = new CompoundShape();
-			collisionShapes.add(loadCompound);
+			//collisionShapes.add(loadCompound);
 			CollisionShape loadShapeA = new BoxShape(new Vector3f(2.0f,0.5f,0.5f));
-			collisionShapes.add(loadShapeA);
+			//collisionShapes.add(loadShapeA);
 			Transform loadTrans = new Transform();
 			loadTrans.setIdentity();
 			loadCompound.addChildShape(loadTrans, loadShapeA);
 			CollisionShape loadShapeB = new BoxShape(new Vector3f(0.1f,1.0f,1.0f));
-			collisionShapes.add(loadShapeB);
+			//collisionShapes.add(loadShapeB);
 			loadTrans.setIdentity();
 			loadTrans.origin.set(2.1f, 0.0f, 0.0f);
 			loadCompound.addChildShape(loadTrans, loadShapeB);
 			CollisionShape loadShapeC = new BoxShape(new Vector3f(0.1f,1.0f,1.0f));
-			collisionShapes.add(loadShapeC);
+			//collisionShapes.add(loadShapeC);
 			loadTrans.setIdentity();
 			loadTrans.origin.set(-2.1f, 0.0f, 0.0f);
 			loadCompound.addChildShape(loadTrans, loadShapeC);

@@ -24,6 +24,7 @@
 package com.bulletphysics.dynamics.constraintsolver;
 
 import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.linearmath.MotionState;
 
 import javax.vecmath.Vector3f;
 
@@ -61,7 +62,7 @@ public abstract class TypedConstraint {
 
     private static synchronized RigidBody getFixed() {
         if (s_fixed == null) {
-            s_fixed = new RigidBody(0, null, null);
+            s_fixed = new RigidBody(0, (MotionState)null, null);
         }
         return s_fixed;
     }

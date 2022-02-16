@@ -53,7 +53,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
 
 
     // keep the collision shapes, for deletion/cleanup
-    protected final ObjectArrayList<CollisionShape> collisionShapes = new ObjectArrayList<>();
+//    protected final ObjectArrayList<CollisionShape> collisionShapes = new ObjectArrayList<>();
     protected final float fps = 30.0f;
     final Mouse mouse = new Mouse();
     final Keyboard keyboard = new Keyboard();

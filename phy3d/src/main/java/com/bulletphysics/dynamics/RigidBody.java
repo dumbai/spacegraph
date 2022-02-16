@@ -38,6 +38,8 @@ import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.bulletphysics.collision.shapes.CollisionShape.localInertia;
+
 /**
  * RigidBody is the main class for rigid body objects. It is derived from
  * {@link CollisionObject}, so it keeps reference to {@link CollisionShape}.<p>
@@ -101,8 +103,8 @@ public class RigidBody extends CollisionObject {
         ID = uniqueId.getAndIncrement();
 
         internalType = CollisionObjectType.RIGID_BODY;
-        angularFactor = 1.0f;
-        linearDamping = 0.0f;
+        angularFactor = 1;
+        linearDamping = 0;
         angularDamping = 0.5f;
         linearSleepingThreshold = c.linearSleepingThreshold;
         angularSleepingThreshold = c.angularSleepingThreshold;
@@ -141,8 +143,15 @@ public class RigidBody extends CollisionObject {
         this(mass, motionState, collisionShape, new Vector3f());
     }
 
-    private RigidBody(float mass, MotionState motionState, CollisionShape collisionShape, Vector3f localInertia) {
+    public RigidBody(float mass, MotionState motionState, CollisionShape collisionShape, Vector3f localInertia) {
         this(new RigidBodyConstructionInfo(mass, motionState, collisionShape, localInertia));
+    }
+
+    public RigidBody(CollisionShape collisionShape, Transform startTransform, float mass, Vector3f localInertia) {
+        this(mass, new DefaultMotionState(startTransform), collisionShape, localInertia);
+    }
+    public RigidBody(CollisionShape collisionShape, Transform startTransform, float mass) {
+        this(collisionShape, startTransform, mass, localInertia(collisionShape, mass));
     }
 
     /**

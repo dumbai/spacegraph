@@ -67,7 +67,13 @@ public class Transform {
 	public Transform(Transform tr) {
 		set(tr);
 	}
-	
+
+	public static Transform identity() {
+		var t = new Transform();
+		t.setIdentity();
+		return t;
+	}
+
 	public void set(Transform tr) {
 		basis.set(tr.basis);
 		origin.set(tr.origin);
@@ -171,5 +177,9 @@ public class Transform {
 		hash = 41 * hash + origin.hashCode();
 		return hash;
 	}
-	
+
+	public final Transform pos(float x, float y, float z) {
+		origin.set(x,y,z);
+		return this;
+	}
 }

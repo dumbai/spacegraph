@@ -116,7 +116,7 @@ public class HelloWorld
 			RigidBody body = new RigidBody(rbInfo);
 
 			// add the body to the dynamics world
-			dynamicsWorld.addRigidBody(body);
+			dynamicsWorld.addBody(body);
 		}
 
 		{
@@ -153,7 +153,7 @@ public class HelloWorld
 					mass, myMotionState, colShape, localInertia);
 			RigidBody body = new RigidBody(rbInfo);
 
-			dynamicsWorld.addRigidBody(body);
+			dynamicsWorld.addBody(body);
 		}
 
 		// Do some simulation

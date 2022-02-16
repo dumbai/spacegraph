@@ -145,6 +145,13 @@ public abstract class CollisionShape {
 
     public abstract void calculateLocalInertia(float mass, Vector3f inertia);
 
+    @Deprecated
+    public static Vector3f localInertia(CollisionShape c, float mass) {
+        Vector3f v = new Vector3f();
+        if (mass > 0)
+            c.calculateLocalInertia(mass, v);
+        return v;
+    }
 
     //debugging support
     public abstract String getName();

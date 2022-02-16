@@ -1,8 +1,26 @@
 package com.bulletphysics;
 
 
+import com.bulletphysics.collision.shapes.CollisionShape;
+import com.bulletphysics.collision.shapes.simple.BoxShape;
+import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
+import com.bulletphysics.dynamics.DynamicsWorld;
+import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.render.JoglWindow3D;
+import com.bulletphysics.render.SpaceGraph3D;
+
+import javax.vecmath.Vector3f;
+
 /** https://github.com/automenta/crittergod1.5/ */
-public class SpaceGraphCDemo {
+public class SpaceGraphCDemo extends SpaceGraph3D {
+    @Override
+    protected DynamicsWorld physics() {
+        return null;
+    }
+
+
+
     /*
     GL_DialogWindow*	GL_DialogDynamicsWorld::createDialog(int horPos,int vertPos,int dialogWidth,int dialogHeight, const char* dialogTitle )
 {
