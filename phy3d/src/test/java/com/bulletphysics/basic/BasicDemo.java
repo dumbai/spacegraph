@@ -95,9 +95,9 @@ public class BasicDemo extends DemoApplication {
 		for (int k = 0; k < ARRAY_SIZE_Y; k++) {
 			for (int i = 0; i < ARRAY_SIZE_X; i++) {
 				for (int j = 0; j < ARRAY_SIZE_Z; j++) {
-					t.origin.set(
+					t.pos(
 							2 * i + x,
-							10 + 2 * k + START_POS_Y,
+							2 * k + START_POS_Y + 10,
 							2 * j + y);
 
 					var b = new RigidBody(s, t, mass);
