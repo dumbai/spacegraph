@@ -33,6 +33,7 @@ import com.bulletphysics.util.ObjectArrayList;
 
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
+import java.util.List;
 
 /**
  * GhostObject can keep track of all objects that are overlapping. By default, this
@@ -159,7 +160,7 @@ public class GhostObject extends CollisionObject {
 		return overlappingObjects.get(index);
 	}
 
-	public ObjectArrayList<CollisionObject> getOverlappingPairs() {
+	public List<CollisionObject> getOverlappingPairs() {
 		return overlappingObjects;
 	}
 

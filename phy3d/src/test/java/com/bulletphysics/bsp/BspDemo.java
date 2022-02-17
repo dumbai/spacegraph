@@ -40,6 +40,7 @@ import com.bulletphysics.util.ObjectArrayList;
 
 import javax.vecmath.Vector3f;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * BspDemo shows the convex collision detection, by converting a Quake BSP file
@@ -117,7 +118,7 @@ public class BspDemo extends DemoApplication {
 		}
 
 		@Override
-		public void addConvexVerticesCollider(ObjectArrayList<Vector3f> vertices) {
+		public void addConvexVerticesCollider(List<Vector3f> vertices) {
 			if (!vertices.isEmpty()) {
 				float mass = 0.0f;
 				Transform startTransform = new Transform();

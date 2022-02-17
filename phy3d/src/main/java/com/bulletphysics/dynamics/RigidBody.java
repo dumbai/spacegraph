@@ -31,11 +31,15 @@ import com.bulletphysics.collision.dispatch.CollisionObjectType;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.linearmath.*;
+import com.bulletphysics.render.IGL;
 import com.bulletphysics.util.ObjectArrayList;
+import jcog.data.list.Lst;
 
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Quat4f;
+import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.bulletphysics.collision.shapes.CollisionShape.localInertia;
@@ -152,6 +156,15 @@ public class RigidBody extends CollisionObject {
     }
     public RigidBody(CollisionShape collisionShape, Transform startTransform, float mass) {
         this(collisionShape, startTransform, mass, localInertia(collisionShape, mass));
+    }
+
+    public final List<BodySurface> surfaces = //new FastCoWList<>(BodySurface[]::new);
+        new Lst<>();
+
+    abstract public static class BodySurface {
+        protected Transform t = null;
+        protected Vector2f size = new Vector2f();
+        abstract public void render(RigidBody b, IGL gl);
     }
 
     /**

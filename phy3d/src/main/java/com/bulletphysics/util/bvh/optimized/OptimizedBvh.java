@@ -35,6 +35,7 @@ import com.bulletphysics.util.bvh.NodeOverlapCallback;
 
 import javax.vecmath.Vector3f;
 import java.io.Serializable;
+import java.util.List;
 
 // JAVA NOTE: OptimizedBvh still from 2.66, update it for 2.70b1
 
@@ -60,8 +61,8 @@ public class OptimizedBvh implements Serializable {
 
     ////////////////////////////////////////////////////////////////////////////
     private final TraversalMode traversalMode = TraversalMode.STACKLESS;
-    private final ObjectArrayList<BvhSubtreeInfo> SubtreeHeaders = new ObjectArrayList<>();
-    private final ObjectArrayList<OptimizedBvhNode> leafNodes = new ObjectArrayList<>();
+    private final List<BvhSubtreeInfo> SubtreeHeaders = new ObjectArrayList<>();
+    private final List<OptimizedBvhNode> leafNodes = new ObjectArrayList<>();
     private final ObjectArrayList<OptimizedBvhNode> contiguousNodes = new ObjectArrayList<>();
     private final QuantizedBvhNodes quantizedLeafNodes = new QuantizedBvhNodes();
     private final QuantizedBvhNodes quantizedContiguousNodes = new QuantizedBvhNodes();
@@ -229,8 +230,8 @@ public class OptimizedBvh implements Serializable {
         } else {
             // JAVA NOTE: changing reference instead of copy
             OptimizedBvhNode tmp = leafNodes.get(i);
-            leafNodes.setQuick(i, leafNodes.get(splitIndex));
-            leafNodes.setQuick(splitIndex, tmp);
+            leafNodes.set(i, leafNodes.get(splitIndex));
+            leafNodes.set(splitIndex, tmp);
         }
     }
 
@@ -929,16 +930,15 @@ public class OptimizedBvh implements Serializable {
     }
 
     private static class NodeTriangleCallback extends InternalTriangleIndexCallback {
-        final ObjectArrayList<OptimizedBvhNode> nodes;
+        final List<OptimizedBvhNode> nodes;
 //        private final Vector3f aabbMin = new Vector3f(), aabbMax = new Vector3f();
 
-        NodeTriangleCallback(ObjectArrayList<OptimizedBvhNode> nodes) {
+        NodeTriangleCallback(List<OptimizedBvhNode> nodes) {
             this.nodes = nodes;
         }
 
         public void internalProcessTriangleIndex(Vector3f[] points, int partId, int triangleIndex) {
-            OptimizedBvhNode node = new OptimizedBvhNode(points, partId, triangleIndex);
-            nodes.add(node);
+            nodes.add(new OptimizedBvhNode(points, partId, triangleIndex));
         }
     }
 

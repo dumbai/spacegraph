@@ -31,6 +31,7 @@ import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.util.ObjectArrayList;
 
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * SimulationIslandManager creates and handles simulation islands, using {@link UnionFind}.
@@ -53,7 +54,7 @@ public class SimulationIslandManager {
 	}
 	
 	private void findUnions(Dispatcher dispatcher, CollisionWorld colWorld) {
-		ObjectArrayList<BroadphasePair> pairPtr = colWorld.getPairCache().getOverlappingPairArray();
+		List<BroadphasePair> pairPtr = colWorld.getPairCache().getOverlappingPairArray();
 		for (int i=0; i<pairPtr.size(); i++) {
 			BroadphasePair collisionPair = pairPtr.get(i);
 			
@@ -115,7 +116,7 @@ public class SimulationIslandManager {
 		return islandId;
 	}
 
-	private void buildIslands(Dispatcher dispatcher, ObjectArrayList<CollisionObject> collisionObjects) {
+	private void buildIslands(Dispatcher dispatcher, List<CollisionObject> collisionObjects) {
 		BulletStats.pushProfile("islandUnionFindAndQuickSort");
 		try {
 			islandmanifold.clear();
@@ -237,7 +238,7 @@ public class SimulationIslandManager {
 		}
 	}
 
-	public void buildAndProcessIslands(Dispatcher dispatcher, ObjectArrayList<CollisionObject> collisionObjects, IslandCallback callback) {
+	public void buildAndProcessIslands(Dispatcher dispatcher, List<CollisionObject> collisionObjects, IslandCallback callback) {
 		buildIslands(dispatcher, collisionObjects);
 
 		int endIslandIndex;
@@ -330,7 +331,7 @@ public class SimulationIslandManager {
 	////////////////////////////////////////////////////////////////////////////
 	
 	public abstract static class IslandCallback {
-		public abstract void processIsland(ObjectArrayList<CollisionObject> bodies, int numBodies, ObjectArrayList<PersistentManifold> manifolds, int manifolds_offset, int numManifolds, int islandId);
+		public abstract void processIsland(List<CollisionObject> bodies, int numBodies, List<PersistentManifold> manifolds, int manifolds_offset, int numManifolds, int islandId);
 	}
 	
 	private static final Comparator<PersistentManifold> persistentManifoldComparator = (lhs, rhs) -> getIslandId(lhs) < getIslandId(rhs) ? -1 : +1;

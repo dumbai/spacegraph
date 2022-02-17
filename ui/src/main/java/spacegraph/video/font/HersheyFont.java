@@ -183,7 +183,9 @@ public final class HersheyFont {
     void draw(GL2 gl, float x) {
 
 
-        boolean xShifted = Math.abs(x) > Float.MIN_NORMAL;
+        boolean xShifted =
+            x!=0;
+            //Math.abs(x) > Float.MIN_NORMAL;
 
         if (xShifted)
             gl.glTranslatef(x, 0, 0);

@@ -33,6 +33,7 @@ import com.bulletphysics.util.ObjectArrayList;
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author jezek2
@@ -125,9 +126,9 @@ class PrimitiveTriangle {
      * @param clipped_points must have MAX_TRI_CLIPPING size, and this triangle must have its plane calculated.
      * @return the number of clipped points
      */
-    private int clip_triangle(PrimitiveTriangle other, ObjectArrayList<Vector3f> clipped_points) {
+    private int clip_triangle(PrimitiveTriangle other, List<Vector3f> clipped_points) {
         // edge 0
-        ObjectArrayList<Vector3f> temp_points = tmpVecList1;
+        List<Vector3f> temp_points = tmpVecList1;
 
         Vector4f edgeplane = new Vector4f();
 
@@ -138,7 +139,7 @@ class PrimitiveTriangle {
         if (clipped_count == 0) {
             return 0;
         }
-        ObjectArrayList<Vector3f> temp_points1 = tmpVecList2;
+        List<Vector3f> temp_points1 = tmpVecList2;
 
         // edge 1
         get_edge_plane(1, edgeplane);
@@ -162,7 +163,7 @@ class PrimitiveTriangle {
     public boolean find_triangle_collision_clip_method(PrimitiveTriangle other, TriangleContact contacts) {
         float margin = this.margin + other.margin;
 
-        ObjectArrayList<Vector3f> clipped_points = tmpVecList3;
+        List<Vector3f> clipped_points = tmpVecList3;
 
         int clipped_count;
         //create planes

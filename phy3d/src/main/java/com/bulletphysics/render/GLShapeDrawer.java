@@ -24,6 +24,7 @@
 package com.bulletphysics.render;
 
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
+import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.CompoundShape;
 import com.bulletphysics.collision.shapes.convex.ConcaveShape;
@@ -35,16 +36,19 @@ import com.bulletphysics.collision.shapes.simple.CylinderShape;
 import com.bulletphysics.collision.shapes.simple.StaticPlaneShape;
 import com.bulletphysics.collision.shapes.util.InternalTriangleIndexCallback;
 import com.bulletphysics.collision.shapes.util.TriangleCallback;
+import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.DebugDrawModes;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.IntArrayList;
-import com.bulletphysics.util.ObjectArrayList;
 import jcog.Log;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import javax.vecmath.Vector3f;
+
+import java.util.List;
 
 /**
  * @author jezek2
@@ -68,13 +72,15 @@ public class GLShapeDrawer {
     }
 
 
-    public static void draw(CollisionShape shape, Transform trans, Vector3f color, int debugMode, IGL gl) {
+    public static void draw(@Nullable CollisionObject o, CollisionShape s, Transform t, Vector3f color, int debugMode, IGL gl) {
+        if (s == null) s = o.getCollisionShape();
+
         final float[] glMat = new float[16];
 
         //System.out.println("shape="+shape+" type="+BroadphaseNativeTypes.forValue(shape.getShapeType()));
 
         gl.glPushMatrix();
-        trans.getOpenGLMatrix(glMat);
+        t.getOpenGLMatrix(glMat);
         gl.glMultMatrix(glMat);
 //		if (shape.getShapeType() == BroadphaseNativeTypes.UNIFORM_SCALING_SHAPE_PROXYTYPE.getValue())
 //		{
@@ -93,12 +99,12 @@ public class GLShapeDrawer {
 //			return;
 //		}
 
-        if (shape.getShapeType() == BroadphaseNativeType.COMPOUND_SHAPE_PROXYTYPE) {
-            CompoundShape c = (CompoundShape) shape;
+        if (s.getShapeType() == BroadphaseNativeType.COMPOUND_SHAPE_PROXYTYPE) {
+            CompoundShape c = (CompoundShape) s;
             Transform childTrans = new Transform();
             for (int i = c.childShapeCount() - 1; i >= 0; i--) {
                 c.childTransform(i, childTrans);
-                draw(c.childShape(i), childTrans, color, debugMode, gl);
+                draw(null, c.childShape(i), childTrans, color, debugMode, gl);
             }
 
         } else {
@@ -113,21 +119,20 @@ public class GLShapeDrawer {
                 // you can comment out any of the specific cases, and use the default
                 // the benefit of 'default' is that it approximates the actual collision shape including collision margin
 
-                switch (shape.getShapeType()) {
+                switch (s.getShapeType()) {
                     case BOX_SHAPE_PROXYTYPE -> {
-                        Vector3f halfExtent = ((BoxShape) shape).getHalfExtentsWithMargin(new Vector3f());
-                        gl.drawCube(2 * halfExtent.x, 2 * halfExtent.y, 2 * halfExtent.z);
+                        drawBox((BoxShape) s, gl);
                         useWireframeFallback = false;
                     }
                     case SPHERE_SHAPE_PROXYTYPE -> {
-                        gl.drawSphere(shape.getMargin(), 10);
+                        gl.drawSphere(s.getMargin(), 10);
                         useWireframeFallback = false;
                     }
                     case STATIC_PLANE_PROXYTYPE -> {
-                        drawPlane((StaticPlaneShape) shape, gl);
+                        drawPlane((StaticPlaneShape) s, gl);
                     }
                     case CYLINDER_SHAPE_PROXYTYPE -> {
-                        CylinderShape cylinder = (CylinderShape) shape;
+                        CylinderShape cylinder = (CylinderShape) s;
                         int upAxis = cylinder.getUpAxis();
                         float halfHeight = VectorUtil.coord(cylinder.getHalfExtentsWithMargin(new Vector3f()), upAxis);
                         gl.drawCylinder(cylinder.getRadius(), halfHeight, upAxis);
@@ -163,13 +168,13 @@ public class GLShapeDrawer {
                         //
                     }
                     default -> {
-                        if (shape.isConvex()) {
-                            ConvexShape convexShape = (ConvexShape) shape;
-                            ShapeHull hull = (ShapeHull) shape.getUserPointer();
+                        if (s.isConvex()) {
+                            ConvexShape convexShape = (ConvexShape) s;
+                            ShapeHull hull = (ShapeHull) s.getUserPointer();
                             if (hull == null) {
                                 // create and cache a hull approximation
                                 hull = new ShapeHull(convexShape);
-                                hull.buildHull(shape.getMargin());
+                                hull.buildHull(s.getMargin());
                                 convexShape.setUserPointer(hull);
                                 //printf("numTriangles = %d\n", hull->numTriangles ());
                                 //printf("numIndices = %d\n", hull->numIndices ());
@@ -189,8 +194,8 @@ public class GLShapeDrawer {
 
             if (useWireframeFallback || undrawable) {
                 // for polyhedral shapes
-                if (shape.isPolyhedral()) {
-                    PolyhedralConvexShape polyshape = (PolyhedralConvexShape) shape;
+                if (s.isPolyhedral()) {
+                    PolyhedralConvexShape polyshape = (PolyhedralConvexShape) s;
 
                     gl.glBegin(IGL.GL_LINES);
 
@@ -252,10 +257,10 @@ public class GLShapeDrawer {
 //				else
 //				{
 //		#else		
-            if (shape.isConcave())//>getShapeType() == TRIANGLE_MESH_SHAPE_PROXYTYPE||shape->getShapeType() == GIMPACT_SHAPE_PROXYTYPE)
+            if (s.isConcave())//>getShapeType() == TRIANGLE_MESH_SHAPE_PROXYTYPE||shape->getShapeType() == GIMPACT_SHAPE_PROXYTYPE)
             //		if (shape->getShapeType() == TRIANGLE_MESH_SHAPE_PROXYTYPE)
             {
-                ConcaveShape concaveMesh = (ConcaveShape) shape;
+                ConcaveShape concaveMesh = (ConcaveShape) s;
                 //btVector3 aabbMax(btScalar(1e30),btScalar(1e30),btScalar(1e30));
                 //btVector3 aabbMax(100,100,100);//btScalar(1e30),btScalar(1e30),btScalar(1e30));
 
@@ -304,7 +309,19 @@ public class GLShapeDrawer {
 
             //glPopMatrix();
         }
+
+        if (o instanceof RigidBody B) {
+            for (RigidBody.BodySurface b : B.surfaces)
+                b.render(B, gl);
+        }
+        // }
+
         gl.glPopMatrix();
+    }
+
+    private static void drawBox(BoxShape shape, IGL gl) {
+        Vector3f halfExtent = shape.getHalfExtentsWithMargin(new Vector3f());
+        gl.drawCube(2 * halfExtent.x, 2 * halfExtent.y, 2 * halfExtent.z);
     }
 
     private static void drawPlane(StaticPlaneShape staticPlaneShape, IGL gl) {
@@ -350,7 +367,7 @@ public class GLShapeDrawer {
         if (t > 0) {
             int index = 0;
             IntArrayList idx = hull.getIndexPointer();
-            ObjectArrayList<Vector3f> vtx = hull.getVertexPointer();
+            List<Vector3f> vtx = hull.getVertexPointer();
 
             gl.glBegin(gl.GL_TRIANGLES);
             

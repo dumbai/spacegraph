@@ -49,7 +49,7 @@ public class ReSurface extends SurfaceCamera {
     public transient float psh;
 
     /** ortho restart */
-    public ReSurface start(@Deprecated long startNS, float pw, float ph, float dtS, float fps, GL2 gl) {
+    public ReSurface start(float pw, float ph, @Deprecated long startNS, float dtS, float fps, GL2 gl) {
         assert(pw >= 1 && ph >= 1);
 
         this.frameNS = startNS;
@@ -111,7 +111,8 @@ public class ReSurface extends SurfaceCamera {
     }
 
     private boolean isVis(RectF bounds, float minPixelsToBeVisible) {
-        return bounds.w >= minPixelsToBeVisible / psw && bounds.h >= minPixelsToBeVisible / psh;
+        return bounds.w >= minPixelsToBeVisible / psw &&
+               bounds.h >= minPixelsToBeVisible / psh;
     }
 
 //    public float load() {
@@ -172,7 +173,7 @@ public class ReSurface extends SurfaceCamera {
         g.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
         g.glLoadIdentity();
 
-        start(startNS, w, h, dtS, fps, g);
+        start(w, h, startNS, dtS, fps, g);
 
         root.renderIfVisible(this);
 

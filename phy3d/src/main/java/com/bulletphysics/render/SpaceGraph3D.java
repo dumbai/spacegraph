@@ -5,7 +5,6 @@ import com.bulletphysics.BulletStats;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.RayResultCallback;
-import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
@@ -17,7 +16,6 @@ import com.bulletphysics.input.MouseButton;
 import com.bulletphysics.linearmath.Clock;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.util.ObjectArrayList;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
@@ -30,17 +28,14 @@ import javax.vecmath.Matrix3f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import static com.bulletphysics.linearmath.QuaternionUtil.setRotation;
 import static com.bulletphysics.linearmath.VectorUtil.coord;
 import static com.bulletphysics.render.IGL.*;
-import static com.jogamp.opengl.GL.GL_COLOR_BUFFER_BIT;
-import static com.jogamp.opengl.GL.GL_DEPTH_BUFFER_BIT;
-import static com.jogamp.opengl.GL.GL_DEPTH_TEST;
-import static com.jogamp.opengl.GL.GL_LESS;
 import static com.jogamp.opengl.GL.*;
-import static com.jogamp.opengl.GL2GL3.GL_POLYGON_SMOOTH;
-import static com.jogamp.opengl.GL2GL3.GL_POLYGON_SMOOTH_HINT;
+import static com.jogamp.opengl.GL2ES3.GL_STENCIL;
+import static com.jogamp.opengl.fixedfunc.GLLightingFunc.*;
 
 /**
  * see: https://github.com/automenta/spacegraphc2/tree/master/bullet-gl
@@ -59,8 +54,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
     final Keyboard keyboard = new Keyboard();
     private final Clock clock = new Clock();
     public DynamicsWorld world;
-    @Deprecated
-    public transient IGL gl;
+    @Deprecated public transient IGL gl;
     protected boolean idle = false;
     int debugMode = 0;
     boolean stepping = true;
@@ -92,7 +86,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
             float cameraRotateSpeed = cameraSpeed;
             camPos = new v3Anim(0, 0, 5, cameraSpeed);
             camTgt = new v3Anim(0, 0, -1, cameraRotateSpeed);
-            camUp = new v3Anim(0, 1, 0, cameraRotateSpeed);
+            camUp =  new v3Anim(0, 1, 0, cameraRotateSpeed);
         }
 
         @Override
@@ -116,18 +110,18 @@ public abstract class SpaceGraph3D implements GLEventListener {
     public static class PolarCamera extends Camera3D {
         protected int forwardAxis = 2;
 
-        final AnimFloat camEle = new AnimFloat(20, 0.9f), camAzi = new AnimFloat(0, 0.9f);
+        final AnimFloat camEle = new AnimFloat(20, 0.95f),
+                camAzi = new AnimFloat(0, 0.95f);
         private float camDist = 15;
-
 
         @Override
         public void update(long dtNS) {
 
-            final int dtMS = (int) (dtNS / 1E6);
+            int dtMS = (int) (dtNS / 1E6);
             camEle.animate(dtMS);
             camAzi.animate(dtMS);
             float rele = MathUtils.radians(camEle.floatValue());
-            float razi = MathUtils.radians(camAzi.floatValue());
+            float razi = (float) (Math.PI + /* HACK */ MathUtils.radians(camAzi.floatValue()));
 
             Quat4f rot = new Quat4f();
             setRotation(rot, up, razi);
@@ -137,7 +131,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
 
             Vector3f forward = new Vector3f(position.x, position.y, position.z);
             if (forward.lengthSquared() < BulletGlobals.FLT_EPSILON)
-                forward.set(1.0f, 0.0f, 0.0f);
+                forward.set(1,0,0);
 
             Vector3f right = new Vector3f();
             right.cross(up, forward);
@@ -167,8 +161,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
 
     private int glutScreenWidth = 0, glutScreenHeight = 0;
 
-    protected float zNear = 1;
-    protected float zFar = 10000;
+    protected float zNear = 1, zFar = 10000;
 
     public SpaceGraph3D() {
     }
@@ -219,9 +212,10 @@ public abstract class SpaceGraph3D implements GLEventListener {
     protected abstract DynamicsWorld physics();
 
     @Override
-    public void init(GLAutoDrawable g) {
+    public void init(GLAutoDrawable G) {
+
         if (((JoglWindow3D.JoglGL) gl).gl == null)
-            ((JoglWindow3D.JoglGL) gl).init(g.getGL().getGL2()); //HACK
+            ((JoglWindow3D.JoglGL) gl).init(G.getGL().getGL2()); //HACK
 
         float[] light_ambient = {0.2f, 0.2f, 0.2f, 1.0f};
         float[] light_diffuse = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -229,41 +223,52 @@ public abstract class SpaceGraph3D implements GLEventListener {
         float[] light_position0 = {1.0f, 10.0f, 1.0f, 0.0f};
         float[] light_position1 = {-1.0f, -10.0f, -1.0f, 0.0f};
 
-        gl.glLight(GL_LIGHT0, GL_AMBIENT, light_ambient);
-        gl.glLight(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-        gl.glLight(GL_LIGHT0, GL_SPECULAR, light_specular);
-        gl.glLight(GL_LIGHT0, GL_POSITION, light_position0);
+        gl.glLight(GL2.GL_LIGHT0, GL2.GL_AMBIENT, light_ambient);
+        gl.glLight(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, light_diffuse);
+        gl.glLight(GL2.GL_LIGHT0, GL2.GL_SPECULAR, light_specular);
+        gl.glLight(GL2.GL_LIGHT0, GL2.GL_POSITION, light_position0);
 
-        gl.glLight(GL_LIGHT1, GL_AMBIENT, light_ambient);
-        gl.glLight(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
-        gl.glLight(GL_LIGHT1, GL_SPECULAR, light_specular);
-        gl.glLight(GL_LIGHT1, GL_POSITION, light_position1);
+        gl.glLight(GL2.GL_LIGHT1, GL2.GL_AMBIENT, light_ambient);
+        gl.glLight(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, light_diffuse);
+        gl.glLight(GL2.GL_LIGHT1, GL2.GL_SPECULAR, light_specular);
+        gl.glLight(GL2.GL_LIGHT1, GL2.GL_POSITION, light_position1);
 
-        GL2 gl = g.getGL().getGL2();
-        gl.glEnable(GL_LIGHTING);
-        gl.glEnable(GL_LIGHT0);
-        gl.glEnable(GL_LIGHT1);
+        GL2 g = G.getGL().getGL2();
+        g.glEnable(GL2.GL_LIGHTING);
+        g.glEnable(GL2.GL_LIGHT0);
+//        g.glEnable(GL2.GL_LIGHT1);
+
+        g.glEnable(GL_STENCIL);
 
         //Set blending
-        gl.glEnable(GL_BLEND);
-        gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        g.glEnable(GL_BLEND);
+        g.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         /* Set antialiasing/multisampling */
-        gl.glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-        gl.glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-        gl.glDisable(GL_LINE_SMOOTH);
-        gl.glDisable(GL_POLYGON_SMOOTH);
-        gl.glDisable(GL_MULTISAMPLE);
+        g.glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+        g.glEnable(GL_LINE_SMOOTH);
+        g.glEnable(GL_MULTISAMPLE);
 
-        gl.glShadeModel(GL_SMOOTH);
+        //BAD:
+//        gl.glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+        //gl.glEnable(GL_POLYGON_SMOOTH);
 
-        gl.glEnable(GL_DEPTH_TEST);
-        gl.glDepthFunc(GL_LESS);
+        g.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        g.glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+        g.glEnable(GL2.GL_COLOR_MATERIAL);
+        g.glEnable(GL_NORMALIZE);
 
-        gl.glEnable(GL_CULL_FACE);
-        gl.glCullFace(GL_BACK);
+        g.glShadeModel(GL2.GL_SMOOTH);
+
+        g.glEnable(GL2.GL_DEPTH_TEST);
+        g.glDepthFunc(GL2.GL_LESS);
+        //gl.glDepthFunc(GL_LEQUAL);
+
+        g.glClearColor(0,0,0,0);
+
+        //gl.glEnable(GL_CULL_FACE);
+        //gl.glCullFace(GL_BACK);
     }
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -310,12 +315,12 @@ public abstract class SpaceGraph3D implements GLEventListener {
     }
 
     private void render(GLAutoDrawable drawable) {
-        gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 
         {
-            gl.glEnable(GL_LIGHTING);
+            gl.glEnable(GL2.GL_LIGHTING);
             renderVolume(drawable);
-            gl.glDisable(GL_LIGHTING);
+            gl.glDisable(GL2.GL_LIGHTING);
         }
 
         {
@@ -335,7 +340,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
 
         int numObjects = world.getNumCollisionObjects();
 
-        ObjectArrayList<CollisionObject> xx = world.getCollisionObjectArray();
+        List<CollisionObject> xx = world.getCollisionObjectArray();
 
         final Transform t = new Transform();
         final Vector3f color = new Vector3f();
@@ -347,7 +352,7 @@ public abstract class SpaceGraph3D implements GLEventListener {
             transform(x, t);
             color(x, color);
 
-            GLShapeDrawer.draw(x.getCollisionShape(), t, color, debugMode, gl);
+            GLShapeDrawer.draw(x, null, t, color, debugMode, gl);
         }
 
     }
@@ -366,9 +371,9 @@ public abstract class SpaceGraph3D implements GLEventListener {
 
     /** color function */
     private void color(CollisionObject x, Vector3f color) {
-        if (x instanceof RigidBody B) {
+        if (x instanceof RigidBody B)
             color.set(B.color);
-        } else
+        else
             color.set(0.5f, 0.5f, 0.5f); //HACK
     }
 

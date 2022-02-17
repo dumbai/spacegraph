@@ -47,6 +47,7 @@ import com.jogamp.opengl.GLAutoDrawable;
 
 import javax.vecmath.Vector3f;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 
@@ -282,7 +283,7 @@ public class CharacterDemo extends DemoApplication {
 		}
 
 		@Override
-		public void addConvexVerticesCollider(ObjectArrayList<Vector3f> vertices) {
+		public void addConvexVerticesCollider(List<Vector3f> vertices) {
 			if (!vertices.isEmpty()) {
 				float mass = 0;
 				Transform startTransform = new Transform();

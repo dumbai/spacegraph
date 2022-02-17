@@ -42,6 +42,8 @@ import javax.vecmath.Matrix3f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
+import java.util.List;
+
 import static com.bulletphysics.BulletGlobals.FLT_EPSILON;
 
 /**
@@ -599,7 +601,7 @@ public class CollisionWorld {
 		}
 	}
 
-	public ObjectArrayList<CollisionObject> getCollisionObjectArray() {
+	public List<CollisionObject> getCollisionObjectArray() {
 		return collisionObjects;
 	}
 	

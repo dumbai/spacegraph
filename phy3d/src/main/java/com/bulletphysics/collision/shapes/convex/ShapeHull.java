@@ -34,6 +34,7 @@ import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 
 import javax.vecmath.Vector3f;
+import java.util.List;
 
 /**
  * ShapeHull takes a {@link ConvexShape}, builds the convex hull using {@link HullLibrary}
@@ -180,7 +181,7 @@ public class ShapeHull {
         return numIndices;
     }
 
-    public ObjectArrayList<Vector3f> getVertexPointer() {
+    public List<Vector3f> getVertexPointer() {
         return vertices;
     }
 

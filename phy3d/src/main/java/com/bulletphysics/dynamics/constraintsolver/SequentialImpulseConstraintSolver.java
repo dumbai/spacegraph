@@ -41,6 +41,7 @@ import com.bulletphysics.util.ObjectPool;
 
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Vector3f;
+import java.util.List;
 
 /**
  * SequentialImpulseConstraintSolver uses a Propagation Method and Sequentially applies impulses.
@@ -442,7 +443,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
         solverConstraint.jacDiagABInv = relaxation / (denom0 + denom1);
     }
 
-    private float solveGroupCacheFriendlySetup(ObjectArrayList<CollisionObject> bodies, int numBodies, ObjectArrayList<PersistentManifold> manifoldPtr, int manifold_offset, int numManifolds, ObjectArrayList<TypedConstraint> constraints, int constraints_offset, int numConstraints, ContactSolverInfo infoGlobal, IDebugDraw debugDrawer/*,btStackAlloc* stackAlloc*/) {
+    private float solveGroupCacheFriendlySetup(List<CollisionObject> bodies, int numBodies, List<PersistentManifold> manifoldPtr, int manifold_offset, int numManifolds, List<TypedConstraint> constraints, int constraints_offset, int numConstraints, ContactSolverInfo infoGlobal, IDebugDraw debugDrawer/*,btStackAlloc* stackAlloc*/) {
         BulletStats.pushProfile("solveGroupCacheFriendlySetup");
         try {
 
@@ -803,7 +804,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
         }
     }
 
-    private float solveGroupCacheFriendlyIterations(ObjectArrayList<CollisionObject> bodies, int numBodies, ObjectArrayList<PersistentManifold> manifoldPtr, int manifold_offset, int numManifolds, ObjectArrayList<TypedConstraint> constraints, int constraints_offset, int numConstraints, ContactSolverInfo infoGlobal, IDebugDraw debugDrawer/*,btStackAlloc* stackAlloc*/) {
+    private float solveGroupCacheFriendlyIterations(List<CollisionObject> bodies, int numBodies, List<PersistentManifold> manifoldPtr, int manifold_offset, int numManifolds, List<TypedConstraint> constraints, int constraints_offset, int numConstraints, ContactSolverInfo infoGlobal, IDebugDraw debugDrawer/*,btStackAlloc* stackAlloc*/) {
         BulletStats.pushProfile("solveGroupCacheFriendlyIterations");
         try {
             int numConstraintPool = tmpSolverConstraintPool.size();
@@ -902,7 +903,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
         }
     }
 
-    private float solveGroupCacheFriendly(ObjectArrayList<CollisionObject> bodies, int numBodies, ObjectArrayList<PersistentManifold> manifoldPtr, int manifold_offset, int numManifolds, ObjectArrayList<TypedConstraint> constraints, int constraints_offset, int numConstraints, ContactSolverInfo infoGlobal, IDebugDraw debugDrawer/*,btStackAlloc* stackAlloc*/) {
+    private float solveGroupCacheFriendly(List<CollisionObject> bodies, int numBodies, List<PersistentManifold> manifoldPtr, int manifold_offset, int numManifolds, List<TypedConstraint> constraints, int constraints_offset, int numConstraints, ContactSolverInfo infoGlobal, IDebugDraw debugDrawer/*,btStackAlloc* stackAlloc*/) {
         solveGroupCacheFriendlySetup(bodies, numBodies, manifoldPtr, manifold_offset, numManifolds, constraints, constraints_offset, numConstraints, infoGlobal, debugDrawer/*, stackAlloc*/);
         solveGroupCacheFriendlyIterations(bodies, numBodies, manifoldPtr, manifold_offset, numManifolds, constraints, constraints_offset, numConstraints, infoGlobal, debugDrawer/*, stackAlloc*/);
 
@@ -961,7 +962,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
      * Sequentially applies impulses.
      */
     @Override
-    public float solveGroup(ObjectArrayList<CollisionObject> bodies, int numBodies, ObjectArrayList<PersistentManifold> manifoldPtr, int manifold_offset, int numManifolds, ObjectArrayList<TypedConstraint> constraints, int constraints_offset, int numConstraints, ContactSolverInfo infoGlobal, IDebugDraw debugDrawer, Dispatcher dispatcher) {
+    public float solveGroup(List<CollisionObject> bodies, int numBodies, List<PersistentManifold> manifoldPtr, int manifold_offset, int numManifolds, List<TypedConstraint> constraints, int constraints_offset, int numConstraints, ContactSolverInfo infoGlobal, IDebugDraw debugDrawer, Dispatcher dispatcher) {
         BulletStats.pushProfile("solveGroup");
         try {
             // TODO: solver cache friendly

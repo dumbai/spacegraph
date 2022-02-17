@@ -25,9 +25,8 @@
 
 package com.bulletphysics.collision.broadphase;
 
-import com.bulletphysics.util.ObjectArrayList;
-
 import javax.vecmath.Vector3f;
+import java.util.List;
 
 /**
  * @author jezek2
@@ -142,7 +141,7 @@ public class DbvtBroadphase extends BroadphaseInterface {
         // clean up:
         {
             //SPC(m_profiling.m_cleanup);
-            ObjectArrayList<BroadphasePair> pairs = paircache.getOverlappingPairArray();
+            List<BroadphasePair> pairs = paircache.getOverlappingPairArray();
             if (!pairs.isEmpty()) {
                 for (int i = 0, ni = pairs.size(); i < ni; i++) {
                     BroadphasePair p = pairs.get(i);

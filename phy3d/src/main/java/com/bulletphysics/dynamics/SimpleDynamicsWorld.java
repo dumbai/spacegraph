@@ -32,9 +32,9 @@ import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.ContactSolverInfo;
 import com.bulletphysics.linearmath.Transform;
-import com.bulletphysics.util.ObjectArrayList;
 
 import javax.vecmath.Vector3f;
+import java.util.List;
 
 /**
  * SimpleDynamicsWorld serves as unit-test and to verify more complicated and
@@ -107,7 +107,7 @@ public class SimpleDynamicsWorld extends DynamicsWorld {
         // solve contact constraints
         int numManifolds = dispatcher.getNumManifolds();
         if (numManifolds != 0) {
-            ObjectArrayList<PersistentManifold> manifoldPtr = dispatcher.getInternalManifoldPointer();
+            List<PersistentManifold> manifoldPtr = dispatcher.getInternalManifoldPointer();
 
             ContactSolverInfo infoGlobal = new ContactSolverInfo();
             infoGlobal.timeStep = timeStep;

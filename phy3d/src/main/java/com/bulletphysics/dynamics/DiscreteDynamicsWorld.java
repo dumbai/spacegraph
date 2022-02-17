@@ -40,6 +40,7 @@ import com.bulletphysics.util.ObjectArrayList;
 
 import javax.vecmath.Vector3f;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * DiscreteDynamicsWorld provides discrete rigid body simulation.
@@ -48,12 +49,10 @@ import java.util.Comparator;
  */
 public class DiscreteDynamicsWorld extends DynamicsWorld {
 
-    private static final Comparator<TypedConstraint> sortConstraintOnIslandPredicate = (lhs, rhs) -> {
-        int rIslandId0, lIslandId0;
-        rIslandId0 = getConstraintIslandId(rhs);
-        lIslandId0 = getConstraintIslandId(lhs);
-        return lIslandId0 < rIslandId0 ? -1 : +1;
-    };
+    /** TODO use IntComparator... */
+    private static final Comparator<TypedConstraint> sortConstraintOnIslandPredicate = (lhs, rhs) ->
+        getConstraintIslandId(lhs) < getConstraintIslandId(rhs) ? -1 : +1;
+
     private final SimulationIslandManager islandManager;
     private final ObjectArrayList<TypedConstraint> constraints = new ObjectArrayList<>();
     private final Vector3f gravity = new Vector3f(0.0f, -10.0f, 0.0f);
@@ -68,10 +67,6 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
     private float localTime = 1.0f / 60.0f;
     private boolean ownsConstraintSolver;
     protected int profileTimings = 0;
-
-    public DiscreteDynamicsWorld(BroadphaseInterface pairCache) {
-        this(pairCache, new DefaultCollisionConfiguration());
-    }
 
     private DiscreteDynamicsWorld(BroadphaseInterface pairCache, CollisionConfiguration collisionConfiguration) {
         this(pairCache, new SequentialImpulseConstraintSolver(), collisionConfiguration);
@@ -96,9 +91,7 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
             ownsConstraintSolver = false;
         }
 
-        {
-            islandManager = new SimulationIslandManager();
-        }
+        islandManager = new SimulationIslandManager();
 
         ownsIslandManager = true;
     }
@@ -569,7 +562,7 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
             //Collections.sort(sortedConstraints, sortConstraintOnIslandPredicate);
             MiscUtil.quickSort(sortedConstraints, sortConstraintOnIslandPredicate);
 
-            ObjectArrayList<TypedConstraint> constraintsPtr = getNumConstraints() != 0 ? sortedConstraints : null;
+            List<TypedConstraint> constraintsPtr = getNumConstraints() != 0 ? sortedConstraints : null;
 
             solverCallback.init(solverInfo, constraintSolver, constraintsPtr, sortedConstraints.size(), debugDrawer/*,m_stackAlloc*/, dispatcher);
 
@@ -997,13 +990,13 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
     private static class InplaceSolverIslandCallback extends SimulationIslandManager.IslandCallback {
         ContactSolverInfo solverInfo;
         ConstraintSolver solver;
-        ObjectArrayList<TypedConstraint> sortedConstraints;
+        List<TypedConstraint> sortedConstraints;
         int numConstraints;
         IDebugDraw debugDrawer;
         //public StackAlloc* m_stackAlloc;
         Dispatcher dispatcher;
 
-        void init(ContactSolverInfo solverInfo, ConstraintSolver solver, ObjectArrayList<TypedConstraint> sortedConstraints, int numConstraints, IDebugDraw debugDrawer, Dispatcher dispatcher) {
+        void init(ContactSolverInfo solverInfo, ConstraintSolver solver, List<TypedConstraint> sortedConstraints, int numConstraints, IDebugDraw debugDrawer, Dispatcher dispatcher) {
             this.solverInfo = solverInfo;
             this.solver = solver;
             this.sortedConstraints = sortedConstraints;
@@ -1012,7 +1005,7 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
             this.dispatcher = dispatcher;
         }
 
-        public void processIsland(ObjectArrayList<CollisionObject> bodies, int numBodies, ObjectArrayList<PersistentManifold> manifolds, int manifolds_offset, int numManifolds, int islandId) {
+        public void processIsland(List<CollisionObject> bodies, int numBodies, List<PersistentManifold> manifolds, int manifolds_offset, int numManifolds, int islandId) {
             if (islandId < 0) {
                 // we don't split islands, so all constraints/contact manifolds/bodies are passed into the solver regardless the island id
                 solver.solveGroup(bodies, numBodies, manifolds, manifolds_offset, numManifolds, sortedConstraints, 0, numConstraints, solverInfo, debugDrawer/*,m_stackAlloc*/, dispatcher);

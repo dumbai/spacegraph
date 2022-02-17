@@ -110,7 +110,7 @@ public class JoglWindow3D implements WindowListener {
     public void windowMoved(WindowEvent e) {
     }
 
-    protected static class JoglGL implements IGL {
+    public static class JoglGL implements IGL {
 
         private final FloatBuffer floatBuf = Buffers.newDirectFloatBuffer(16);
         private static final GLU glu = new GLU();

@@ -49,7 +49,7 @@ public class QuantizedBvhNodes implements Serializable {
 	private int[] buf;
 	private int size = 0;
 
-	public QuantizedBvhNodes() {
+	QuantizedBvhNodes() {
 		resize(16);
 	}
 	
@@ -81,7 +81,7 @@ public class QuantizedBvhNodes implements Serializable {
 		}
 	}
 	
-	public static int getNodeSize() {
+	static int getNodeSize() {
 		return STRIDE*4;
 	}
 	
@@ -130,21 +130,21 @@ public class QuantizedBvhNodes implements Serializable {
 		};
 	}
 
-	public long getQuantizedAabbMin(int nodeId) {
+	long getQuantizedAabbMin(int nodeId) {
 		return (buf[nodeId*STRIDE+0] & 0xFFFFFFFFL) | ((buf[nodeId*STRIDE+1] & 0xFFFFL) << 32);
 	}
 
-	public void setQuantizedAabbMin(int nodeId, long value) {
+	void setQuantizedAabbMin(int nodeId, long value) {
 		buf[nodeId*STRIDE+0] = (int)value;
 		setQuantizedAabbMin(nodeId, 2, (short)((value & 0xFFFF00000000L) >>> 32));
 	}
 
-	public void setQuantizedAabbMax(int nodeId, long value) {
+	void setQuantizedAabbMax(int nodeId, long value) {
 		setQuantizedAabbMax(nodeId, 0, (short)value);
 		buf[nodeId*STRIDE+2] = (int)(value >>> 16);
 	}
 
-	public void setQuantizedAabbMin(int nodeId, int index, int value) {
+	void setQuantizedAabbMin(int nodeId, int index, int value) {
 		switch (index) {
 			case 0 -> buf[nodeId * STRIDE + 0] = (buf[nodeId * STRIDE + 0] & 0xFFFF0000) | (value & 0xFFFF);
 			case 1 -> buf[nodeId * STRIDE + 0] = (buf[nodeId * STRIDE + 0] & 0x0000FFFF) | ((value & 0xFFFF) << 16);
@@ -161,11 +161,11 @@ public class QuantizedBvhNodes implements Serializable {
 		};
 	}
 
-	public long getQuantizedAabbMax(int nodeId) {
+	long getQuantizedAabbMax(int nodeId) {
 		return ((buf[nodeId*STRIDE+1] & 0xFFFF0000L) >>> 16) | ((buf[nodeId*STRIDE+2] & 0xFFFFFFFFL) << 16);
 	}
 
-	public void setQuantizedAabbMax(int nodeId, int index, int value) {
+	void setQuantizedAabbMax(int nodeId, int index, int value) {
 		switch (index) {
 			case 0 -> buf[nodeId * STRIDE + 1] = (buf[nodeId * STRIDE + 1] & 0x0000FFFF) | ((value & 0xFFFF) << 16);
 			case 1 -> buf[nodeId * STRIDE + 2] = (buf[nodeId * STRIDE + 2] & 0xFFFF0000) | (value & 0xFFFF);
@@ -177,7 +177,7 @@ public class QuantizedBvhNodes implements Serializable {
 		return buf[nodeId*STRIDE+3];
 	}
 	
-	public void escapeIndexOrTriangleIndex(int nodeId, int value) {
+	void escapeIndexOrTriangleIndex(int nodeId, int value) {
 		buf[nodeId*STRIDE+3] = value;
 	}
 	

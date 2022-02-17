@@ -27,6 +27,7 @@ import com.bulletphysics.util.ObjectArrayList;
 
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
+import java.util.List;
 
 /**
  * GeometryUtil helper class provides a few methods to convert between plane
@@ -36,7 +37,7 @@ import javax.vecmath.Vector4f;
  */
 class GeometryUtil {
 
-	private static boolean isPointInsidePlanes(ObjectArrayList<Vector4f> planeEquations, Vector3f point, float margin) {
+	private static boolean isPointInsidePlanes(List<Vector4f> planeEquations, Vector3f point, float margin) {
 		int numbrushes = planeEquations.size();
 		for (int i = 0; i < numbrushes; i++) {
 			Vector4f N1 = planeEquations.get(i);
@@ -48,7 +49,7 @@ class GeometryUtil {
 		return true;
 	}
 	
-	private static boolean areVerticesBehindPlane(Vector4f planeNormal, ObjectArrayList<Vector3f> vertices, float margin) {
+	private static boolean areVerticesBehindPlane(Vector4f planeNormal, List<Vector3f> vertices, float margin) {
 		int numvertices = vertices.size();
 		for (int i = 0; i < numvertices; i++) {
 			Vector3f N1 = vertices.get(i);
@@ -60,7 +61,7 @@ class GeometryUtil {
 		return true;
 	}
 	
-	private static boolean notExist(Vector4f planeEquation, ObjectArrayList<Vector4f> planeEquations) {
+	private static boolean notExist(Vector4f planeEquation, List<Vector4f> planeEquations) {
 		int numbrushes = planeEquations.size();
 		for (int i = 0; i < numbrushes; i++) {
 			Vector4f N1 = planeEquations.get(i);
@@ -71,7 +72,7 @@ class GeometryUtil {
 		return true;
 	}
 
-	public static void getPlaneEquationsFromVertices(ObjectArrayList<Vector3f> vertices, ObjectArrayList<Vector4f> planeEquationsOut) {
+	public static void getPlaneEquationsFromVertices(List<Vector3f> vertices, ObjectArrayList<Vector4f> planeEquationsOut) {
 		Vector4f planeEquation = new Vector4f();
 		Vector3f edge0 = new Vector3f(), edge1 = new Vector3f();
 		Vector3f tmp = new Vector3f();
@@ -114,7 +115,7 @@ class GeometryUtil {
 		}
 	}
 	
-	public static void getVerticesFromPlaneEquations(ObjectArrayList<Vector4f> planeEquations, ObjectArrayList<Vector3f> verticesOut) {
+	public static void getVerticesFromPlaneEquations(List<Vector4f> planeEquations, ObjectArrayList<Vector3f> verticesOut) {
 		Vector3f n2n3 = new Vector3f();
 		Vector3f n3n1 = new Vector3f();
 		Vector3f n1n2 = new Vector3f();

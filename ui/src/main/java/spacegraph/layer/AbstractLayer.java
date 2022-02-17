@@ -87,10 +87,10 @@ public abstract class AbstractLayer extends SpaceGraph implements Layer {
 
     public static void initDepth(GL2 gl) {
         gl.glEnable(GL_DEPTH_TEST);
-        gl.glDepthFunc(GL_LEQUAL);
+        gl.glDepthFunc(GL_LESS);
 
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        gl.glClearDepth(1.0f); //TODO may not be necessary
+        gl.glClearColor(0, 0, 0, 0);
+        gl.glClearDepth(1); //TODO may not be necessary
     }
 
     public static void initBlend(GL gl) {
@@ -211,13 +211,11 @@ public abstract class AbstractLayer extends SpaceGraph implements Layer {
         g.glEnable(GL_LINE_SMOOTH);
         g.glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
-        g.glEnable(GL_POLYGON_SMOOTH);
-        g.glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+//        g.glEnable(GL_POLYGON_SMOOTH);
+//        g.glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
         g.glEnable(GL_MULTISAMPLE);
 
-        g.glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-        g.glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
         g.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
         g.glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);

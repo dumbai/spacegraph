@@ -33,6 +33,7 @@ import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 
 import javax.vecmath.Vector3f;
+import java.util.List;
 
 /**
  * HullLibrary class can create a convex hull from a collection of vertices, using
@@ -184,7 +185,7 @@ public class HullLibrary {
 		return true;
 	}
 
-	private boolean computeHull(int vcount, ObjectArrayList<Vector3f> vertices, PHullResult result, int vlimit) {
+	private boolean computeHull(int vcount, List<Vector3f> vertices, PHullResult result, int vlimit) {
 		int[] tris_count = new int[1];
 		int ret = calchull(vertices, vcount, result.indices, tris_count, vlimit);
 		if (ret == 0) return false;
@@ -251,7 +252,7 @@ public class HullLibrary {
 		return (t.rise > epsilon) ? t : null;
 	}
 
-	private int calchull(ObjectArrayList<Vector3f> verts, int verts_count, IntArrayList tris_out, int[] tris_count, int vlimit) {
+	private int calchull(List<Vector3f> verts, int verts_count, IntArrayList tris_out, int[] tris_count, int vlimit) {
 		int rc = calchullgen(verts, verts_count, vlimit);
 		if (rc == 0) return 0;
 		
@@ -276,7 +277,7 @@ public class HullLibrary {
 		return 1;
 	}
 
-	private int calchullgen(ObjectArrayList<Vector3f> verts, int verts_count, int vlimit) {
+	private int calchullgen(List<Vector3f> verts, int verts_count, int vlimit) {
 		if (verts_count < 4) return 0;
 		
 		Vector3f tmp = new Vector3f();
@@ -406,7 +407,7 @@ public class HullLibrary {
 		return 1;
 	}
 
-	private static Int4 findSimplex(ObjectArrayList<Vector3f> verts, int verts_count, IntArrayList allow, Int4 out) {
+	private static Int4 findSimplex(List<Vector3f> verts, int verts_count, IntArrayList allow, Int4 out) {
 		Vector3f tmp = new Vector3f();
 		Vector3f tmp1 = new Vector3f();
 		Vector3f tmp2 = new Vector3f();
@@ -504,7 +505,7 @@ public class HullLibrary {
 	//After the hull is generated it give you back a set of polygon faces which index the *original* point cloud.
 	//The thing is, often times, there are many 'dead vertices' in the point cloud that are on longer referenced by the hull.
 	//The routine 'BringOutYourDead' find only the referenced vertices, copies them to an new buffer, and re-indexes the hull so that it is a minimal representation.
-	private void bringOutYourDead(ObjectArrayList<Vector3f> verts, int vcount, ObjectArrayList<Vector3f> overts, int[] ocount, IntArrayList indices, int indexcount) {
+	private void bringOutYourDead(List<Vector3f> verts, int vcount, List<Vector3f> overts, int[] ocount, IntArrayList indices, int indexcount) {
 		IntArrayList tmpIndices = new IntArrayList();
 		for (int i=0; i<vertexIndexMapping.size(); i++) {
 			tmpIndices.add(vertexIndexMapping.size());
@@ -552,12 +553,12 @@ public class HullLibrary {
 	private static final float EPSILON = 0.000001f; /* close enough to consider two btScalaring point numbers to be 'the same'. */
 	
 	private boolean cleanupVertices(int svcount,
-			ObjectArrayList<Vector3f> svertices,
-			int stride,
-			int[] vcount, // output number of vertices
-			ObjectArrayList<Vector3f> vertices, // location to store the results.
-			float normalepsilon,
-			Vector3f scale) {
+                                    List<Vector3f> svertices,
+                                    int stride,
+                                    int[] vcount, // output number of vertices
+                                    List<Vector3f> vertices, // location to store the results.
+                                    float normalepsilon,
+                                    Vector3f scale) {
 		
 		if (svcount == 0) {
 			return false;
@@ -576,7 +577,7 @@ public class HullLibrary {
 		float[] bmin = { Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE };
 		float[] bmax = { -Float.MAX_VALUE, -Float.MAX_VALUE, -Float.MAX_VALUE };
 
-		ObjectArrayList<Vector3f> vtx_ptr = svertices;
+		List<Vector3f> vtx_ptr = svertices;
 		int vtx_idx = 0;
 
 		//	if ( 1 )
@@ -817,7 +818,7 @@ public class HullLibrary {
 		}
 	}
 	
-	private static int maxdirfiltered(ObjectArrayList<Vector3f> p, int count, Vector3f dir, IntArrayList allow) {
+	private static int maxdirfiltered(List<Vector3f> p, int count, Vector3f dir, IntArrayList allow) {
 		assert (count != 0);
 		int m = -1;
 		for (int i=0; i<count; i++) {
@@ -831,7 +832,7 @@ public class HullLibrary {
 		return m;
 	}
 	
-	private static int maxdirsterid(ObjectArrayList<Vector3f> p, int count, Vector3f dir, IntArrayList allow) {
+	private static int maxdirsterid(List<Vector3f> p, int count, Vector3f dir, IntArrayList allow) {
 		Vector3f tmp = new Vector3f();
 		Vector3f tmp1 = new Vector3f();
 		Vector3f tmp2 = new Vector3f();
@@ -909,7 +910,7 @@ public class HullLibrary {
 		return out;
 	}
 	
-	private static boolean above(ObjectArrayList<Vector3f> vertices, Int3 t, Vector3f p, float epsilon) {
+	private static boolean above(List<Vector3f> vertices, Int3 t, Vector3f p, float epsilon) {
 		Vector3f n = triNormal(vertices.get(t.getCoord(0)), vertices.get(t.getCoord(1)), vertices.get(t.getCoord(2)), new Vector3f());
 		Vector3f tmp = new Vector3f();
 		tmp.sub(p, vertices.get(t.getCoord(0)));
@@ -926,7 +927,7 @@ public class HullLibrary {
 		result.vertices = null;
 	}
 	
-	private static void addPoint(int[] vcount, ObjectArrayList<Vector3f> p, float x, float y, float z) {
+	private static void addPoint(int[] vcount, List<Vector3f> p, float x, float y, float z) {
 		// XXX, might be broken
 		Vector3f dest = p.get(vcount[0]);
 		dest.x = x;

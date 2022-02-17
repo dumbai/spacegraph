@@ -31,6 +31,11 @@ import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
+import com.bulletphysics.render.IGL;
+import com.bulletphysics.render.JoglWindow3D;
+import com.jogamp.opengl.GL2;
+import jcog.TODO;
+import spacegraph.video.Draw;
 
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
@@ -330,5 +335,34 @@ public class BoxShape extends PolyhedralConvexShape {
                 assert (false);
         }
     }
+
+
+    /** TODO parameter to switch box face
+     *  TODO parameter for sizing relative to absolute size, or unit
+     * */
+    abstract public static class BoxSurface extends RigidBody.BodySurface {
+        @Override public void render(RigidBody b, IGL gl) {
+            Vector3f ss = ((BoxShape) (b.getCollisionShape())).localScaling;
+            size.set(ss.x, ss.y);
+
+            GL2 gl2 = ((JoglWindow3D.JoglGL) gl).gl;
+
+            gl.glPushMatrix();
+            gl2.glDepthMask(false);
+
+            if (t!=null)
+                throw new TODO();
+            float zMargin = 0.05f;
+            gl.glTranslatef(-0.5f, -0.5f, 0.5f + zMargin);
+
+            renderSurface(gl2);
+
+            gl2.glDepthMask(true);
+            gl.glPopMatrix();
+        }
+
+        abstract protected void renderSurface(GL2 gl2);
+    }
+
 
 }

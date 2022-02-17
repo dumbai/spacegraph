@@ -28,6 +28,7 @@ import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 
 import javax.vecmath.Vector3f;
+import java.util.List;
 
 /**
  * ConvexHullShape implements an implicit convex hull of an array of vertices.
@@ -46,7 +47,7 @@ public class ConvexHullShape extends PolyhedralConvexShape {
      * ConvexHullShape make an internal copy of the points.
      */
     // TODO: make better constuctors (ByteBuffer, etc.)
-    public ConvexHullShape(ObjectArrayList<Vector3f> points) {
+    public ConvexHullShape(List<Vector3f> points) {
         // JAVA NOTE: rewritten
 
         int n = points.size();
@@ -68,7 +69,7 @@ public class ConvexHullShape extends PolyhedralConvexShape {
         recalcLocalAabb();
     }
 
-    public ObjectArrayList<Vector3f> getPoints() {
+    public List<Vector3f> getPoints() {
         return points;
     }
 

@@ -29,6 +29,7 @@ import com.bulletphysics.util.ObjectArrayList;
 
 import javax.vecmath.Tuple3f;
 import java.nio.ByteBuffer;
+import java.util.List;
 
 /**
  * TriangleIndexVertexArray allows to use multiple meshes, by indexing into existing
@@ -125,7 +126,7 @@ public class TriangleIndexVertexArray extends StridingMeshInterface {
 		return indexedMeshes.size();
 	}
 
-	public ObjectArrayList<IndexedMesh> getIndexedMeshArray() {
+	public List<IndexedMesh> getIndexedMeshArray() {
 		return indexedMeshes;
 	}
 	

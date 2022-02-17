@@ -37,7 +37,7 @@ import javax.vecmath.Vector3f;
  */
 public class TriangleShape extends PolyhedralConvexShape {
 
-    public final Vector3f[] vertices1/*[3]*/ = {new Vector3f(), new Vector3f(), new Vector3f()};
+    public final Vector3f[] vertices1 = {new Vector3f(), new Vector3f(), new Vector3f()};
 
     // JAVA NOTE: added
     public TriangleShape() {
@@ -123,9 +123,9 @@ public class TriangleShape extends PolyhedralConvexShape {
 
     private void calcNormal(Vector3f normal) {
         Vector3f tmp1 = new Vector3f();
-        Vector3f tmp2 = new Vector3f();
-
         tmp1.sub(vertices1[1], vertices1[0]);
+
+        Vector3f tmp2 = new Vector3f();
         tmp2.sub(vertices1[2], vertices1[0]);
 
         normal.cross(tmp1, tmp2);
@@ -166,9 +166,9 @@ public class TriangleShape extends PolyhedralConvexShape {
                 dist = pt.dot(edgeNormal);
                 float edgeConst = pa.dot(edgeNormal);
                 dist -= edgeConst;
-                if (dist < -tolerance) {
+                if (dist < -tolerance)
                     return false;
-                }
+
             }
 
             return true;
@@ -190,9 +190,8 @@ public class TriangleShape extends PolyhedralConvexShape {
     @Override
     public void getPreferredPenetrationDirection(int index, Vector3f penetrationVector) {
         calcNormal(penetrationVector);
-        if (index != 0) {
-            penetrationVector.scale(-1.0f);
-        }
+        if (index != 0)
+            penetrationVector.scale(-1);
     }
 
 }

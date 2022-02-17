@@ -33,6 +33,7 @@ import com.bulletphysics.util.ObjectArrayList;
 
 import javax.vecmath.Vector3f;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.bulletphysics.collision.broadphase.DbvtAabbMm.proximity;
@@ -380,7 +381,7 @@ public class Dbvt<X> {
         }
     }
 
-    private static int nearest(IntArrayList i, ObjectArrayList<sStkNPS> a, float v, int l, int h) {
+    private static int nearest(IntArrayList i, List<sStkNPS> a, float v, int l, int h) {
         int m;
         while (l < h) {
             m = (l + h) >> 1;
@@ -536,7 +537,7 @@ public class Dbvt<X> {
         }
     }
 
-    private static void split(ObjectArrayList<Node> leaves, ObjectArrayList<Node> left, ObjectArrayList<Node> right, Vector3f org, Vector3f axis) {
+    private static void split(List<Node> leaves, ObjectArrayList<Node> left, ObjectArrayList<Node> right, Vector3f org, Vector3f axis) {
         Vector3f tmp = new Vector3f();
         MiscUtil.resize(left, 0, Node.class);
         MiscUtil.resize(right, 0, Node.class);
@@ -551,7 +552,7 @@ public class Dbvt<X> {
         }
     }
 
-    private static DbvtAabbMm bounds(ObjectArrayList<Node> leaves) {
+    private static DbvtAabbMm bounds(List<Node> leaves) {
         DbvtAabbMm volume = new DbvtAabbMm(leaves.get(0).volume);
         for (int i = 1, ni = leaves.size(); i < ni; i++) {
             merge(volume, leaves.get(i).volume, volume);

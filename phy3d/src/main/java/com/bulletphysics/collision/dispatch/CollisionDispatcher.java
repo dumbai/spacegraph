@@ -29,6 +29,7 @@ import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * CollisionDispatcher supports algorithms that handle ConvexConvex and ConvexConcave collision pairs.
@@ -253,7 +254,7 @@ public class CollisionDispatcher extends Dispatcher {
 	}
 
 	@Override
-	public ObjectArrayList<PersistentManifold> getInternalManifoldPointer() {
+	public List<PersistentManifold> getInternalManifoldPointer() {
 		return manifoldsPtr;
 	}
 	
