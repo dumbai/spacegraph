@@ -87,7 +87,7 @@ public abstract class AbstractLayer extends SpaceGraph implements Layer {
 
     public static void initDepth(GL2 gl) {
         gl.glEnable(GL_DEPTH_TEST);
-        gl.glDepthFunc(GL_LESS);
+        gl.glDepthFunc(GL_LEQUAL);
 
         gl.glClearColor(0, 0, 0, 0);
         gl.glClearDepth(1); //TODO may not be necessary
