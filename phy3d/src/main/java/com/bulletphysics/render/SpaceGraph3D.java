@@ -32,10 +32,12 @@ import java.util.List;
 
 import static com.bulletphysics.linearmath.QuaternionUtil.setRotation;
 import static com.bulletphysics.linearmath.VectorUtil.coord;
-import static com.bulletphysics.render.IGL.*;
+import static com.bulletphysics.render.IGL.GL_MODELVIEW;
+import static com.bulletphysics.render.IGL.GL_PROJECTION;
 import static com.jogamp.opengl.GL.*;
 import static com.jogamp.opengl.GL2ES3.GL_STENCIL;
-import static com.jogamp.opengl.fixedfunc.GLLightingFunc.*;
+import static com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT_AND_DIFFUSE;
+import static com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_NORMALIZE;
 
 /**
  * see: https://github.com/automenta/spacegraphc2/tree/master/bullet-gl

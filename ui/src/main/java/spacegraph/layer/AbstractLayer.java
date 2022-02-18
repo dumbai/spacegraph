@@ -20,8 +20,6 @@ import java.util.function.Consumer;
 import static com.jogamp.opengl.GL.*;
 import static com.jogamp.opengl.GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT;
 import static com.jogamp.opengl.GL2ES3.GL_STENCIL;
-import static com.jogamp.opengl.GL2GL3.GL_POLYGON_SMOOTH;
-import static com.jogamp.opengl.GL2GL3.GL_POLYGON_SMOOTH_HINT;
 import static com.jogamp.opengl.GLES2.GL_MAX;
 import static com.jogamp.opengl.fixedfunc.GLLightingFunc.*;
 import static com.jogamp.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;

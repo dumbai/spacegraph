@@ -23,27 +23,16 @@
 
 package com.bulletphysics.basic;
 
-import com.bulletphysics.SpaceGraphCDemo;
-import com.bulletphysics.collision.broadphase.BroadphaseInterface;
-import com.bulletphysics.collision.broadphase.DbvtBroadphase;
-import com.bulletphysics.collision.dispatch.CollisionDispatcher;
-import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
-import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.simple.BoxShape;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
-import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
-import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
-import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
-import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.render.DemoApplication;
 import com.bulletphysics.render.JoglWindow3D;
 import jcog.random.XoRoShiRo128PlusRandom;
 
 import javax.vecmath.Vector3f;
-import java.util.Random;
 
 /**
  * BasicDemo is good starting point for learning the code base and porting.

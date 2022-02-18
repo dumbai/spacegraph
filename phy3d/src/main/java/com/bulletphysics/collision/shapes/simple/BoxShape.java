@@ -35,7 +35,6 @@ import com.bulletphysics.render.IGL;
 import com.bulletphysics.render.JoglWindow3D;
 import com.jogamp.opengl.GL2;
 import jcog.TODO;
-import spacegraph.video.Draw;
 
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;

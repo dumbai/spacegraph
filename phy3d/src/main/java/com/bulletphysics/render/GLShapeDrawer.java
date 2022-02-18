@@ -47,7 +47,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import javax.vecmath.Vector3f;
-
 import java.util.List;
 
 /**
