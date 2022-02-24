@@ -27,7 +27,7 @@ public class SimpleTSne implements TSne {
      */
     public final FloatRange perplexity = new FloatRange(10, 0.5f, 50.0f);
 
-    public final FloatRange momentum = new FloatRange(0.5f, 0.0f, 1.0f);
+    public final FloatRange alpha = new FloatRange(0.01f, 0, 1);
 
     private double[][] P;
     protected double[][] X;
@@ -125,9 +125,17 @@ public class SimpleTSne implements TSne {
         assignAllLessThan(gains, min_gain, min_gain);
         //0.1f;
         double eta = 0.5;
-        iY = minus(iY, scalarMult(scalarMultiply(gains, dY), eta *n));
-        iY = scalarMult(iY,  (1-momentum.getAsDouble()));
-        Y = plus(Y, iY);
+        double pri = alpha.getAsDouble();
+        iY = minus(iY, scalarMult(scalarMultiply(gains, dY), pri * eta * n));
+
+//        iY = scalarMult(iY,  (1-momentum.getAsDouble()));
+//        Y = plus(Y, iY);
+        ///float m = momentum.asFloat();
+        for (int j = 0, yLength = Y.length; j < yLength; j++) {
+            for (int i = 0; i < Y[j].length; i++)
+                Y[j][i] += iY[j][i];
+                //yy[i] = Util.lerpSafe(m,
+        }
 
         //Y = minus(Y, tile(mean(Y, 0), n, 1));
 
