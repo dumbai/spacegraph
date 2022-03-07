@@ -3,6 +3,7 @@ package spacegraph.space2d.widget.button;
 import org.eclipse.collections.api.block.procedure.primitive.BooleanProcedure;
 import org.eclipse.collections.api.block.procedure.primitive.ObjectBooleanProcedure;
 import spacegraph.space2d.ReSurface;
+import spacegraph.space2d.Surface;
 import spacegraph.space2d.container.Bordering;
 import spacegraph.space2d.widget.text.AbstractLabel;
 import spacegraph.space2d.widget.text.BitmapLabel;
@@ -18,7 +19,6 @@ public class CheckBox extends ToggleButton {
     public CheckBox(String text) {
         this(text, false);
     }
-
     public CheckBox(String text, boolean value) {
         set(new Bordering(new BitmapLabel(text)).west(new VectorLabel()));
         text(text);
@@ -29,7 +29,6 @@ public class CheckBox extends ToggleButton {
     public CheckBox(String text, Runnable r) {
         this(text, b -> { if (b) r.run(); } );
     }
-
     public CheckBox(String text, BooleanProcedure b) {
         this(text);
         on((a, e) -> b.value(e));
@@ -39,12 +38,10 @@ public class CheckBox extends ToggleButton {
         this(text);
         on(on);
     }
-
     public CheckBox(String text, AtomicBoolean b) {
         this(text, b.get());
         on((button, value) -> b.set(value));
     }
-
 
     @Override
     protected boolean canRender(ReSurface r) {
@@ -56,7 +53,9 @@ public class CheckBox extends ToggleButton {
 
     @Override
     protected void valueChanged() {
-        ((AbstractLabel)(((Bordering)the()).west())).text(get() ? "[+]" : "[ ]");
+        Surface w = ((Bordering) the()).west();
+        if (w!=null)
+            ((AbstractLabel) w).text(get() ? "[+]" : "[ ]");
     }
 
     @Override
@@ -67,7 +66,6 @@ public class CheckBox extends ToggleButton {
         int sl = s.length();
         b.borderSize(Bordering.W, sl > 0 ? 4f/(sl + 3) : 1); //HACK maintain equivalent text size of label and checkbox icon
 
-        //return super.text(label(this.text = s, on()));
         return this;
     }
 }
