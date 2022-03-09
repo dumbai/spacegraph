@@ -458,12 +458,13 @@ public class Zoomed<S extends Surface> extends MutableUnitContainer<S> implement
 //            return new v3(target.x, target.y, target.z);
 //        }
 
+        private transient final v3 before = new v3(), after = new v3();
         @Override
         public boolean animate(float dt) {
             //System.out.println(this);
-            v3 before = clone();
+            before.set(this);
             if (super.animate(dt)) {
-                v3 after = clone();
+                after.set(this);
                 change = !before.equals(after, CHANGE_EPSILON);
                 update();
                 return true;
