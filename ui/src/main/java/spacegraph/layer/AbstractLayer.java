@@ -189,7 +189,7 @@ public abstract class AbstractLayer extends SpaceGraph implements Layer {
 
     public void renderVolumeEmbedded(RectF bounds, float dtS, GL2 gl) {
         window.dtS = dtS;
-        window.onUpdate.emit(window); //HACK
+        window.onUpdate.accept(window); //HACK
         renderVolume(dtS, gl, bounds.w/bounds.h);
     }
 

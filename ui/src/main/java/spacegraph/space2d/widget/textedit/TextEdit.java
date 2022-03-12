@@ -219,7 +219,7 @@ public class TextEdit extends ScrollXY<TextEditModel> implements KeyPressed {
                 }
 
                 viewMax(new v2(Math.max(viewMax.x, buffer.width()), Math.max(viewMax.y, buffer.height())));
-                onChange.emit(TextEdit.this);
+                onChange.accept(TextEdit.this);
             }
 
             if (backgroundColor.hasOpacity()) {
@@ -287,7 +287,7 @@ public class TextEdit extends ScrollXY<TextEditModel> implements KeyPressed {
         boolean b = keys.key(e, pressedOrReleased, text);
         if (b) {
             if (pressedOrReleased)
-                keyPress.emit(e);
+                keyPress.accept(e);
             return true;
         }
         return false;

@@ -117,7 +117,7 @@ public class JoglWindow implements GLEventListener, WindowListener {
 
         dtS = (float) animator.loop.cycleTimeS; //HACK
 
-        onUpdate.emit(JoglWindow.this);
+        onUpdate.accept(JoglWindow.this);
 
         GLWindow w = window;
 
@@ -194,7 +194,7 @@ public class JoglWindow implements GLEventListener, WindowListener {
     @Override
     public void windowDestroyNotify(WindowEvent windowEvent) {
         animator.stop();
-        eventClosed.emit(this);
+        eventClosed.accept(this);
 
         layers.forEach(SafeAutoCloseable::close);
         layers.clear();

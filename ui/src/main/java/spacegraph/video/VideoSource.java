@@ -19,7 +19,7 @@ public abstract class VideoSource implements AutoCloseable {
         } else {
             this.width = image.getWidth();
             this.height = image.getHeight();
-            tensor.emit(new RGBBufImgBitmap2D(this.image = image));
+            tensor.accept(new RGBBufImgBitmap2D(this.image = image));
             return image;
         }
     }

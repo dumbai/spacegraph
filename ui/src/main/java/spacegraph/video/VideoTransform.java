@@ -16,7 +16,7 @@ public abstract class VideoTransform<T extends VideoSource> extends VideoSource 
     }
 
     protected void update() {
-        tensor.emit(this::next);
+        tensor.accept(this::next);
     }
 
     /** TODO collect iteration perf metrics */
