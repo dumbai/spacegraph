@@ -68,7 +68,7 @@ public class ImmediateMatrixView extends BitmapMatrixView {
                 System.arraycopy(x, 0, xx, (end-start), over);
 
             if(normalize)
-                Util.normalize(xx);
+                Util.normalizeUnit(xx);
             return toFloat(xx) /* HACK */;
         }, window, step);
     }
