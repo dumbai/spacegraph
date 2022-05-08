@@ -50,17 +50,15 @@ public class ImageTexture extends Tex {
                             if (u.startsWith(fa_prefix)) {
                                 String icon = u.substring(fa_prefix.length());
                                 byte[] b = fontAwesomeIcons.get("x128/" + icon + "-fs8.png");
-                                if (b != null) {
-                                    InputStream in = new ByteArrayInputStream(b);
-                                    return TextureIO.newTextureData(profile, in, true, "png");
-                                } else {
+                                if (b == null)
                                     throw new UnsupportedOperationException("unrecognized FontAwesome icon: " + u);
+
+                                try (InputStream in = new ByteArrayInputStream(b)) {
+                                    return TextureIO.newTextureData(profile, in, true, "png");
                                 }
                             } else {
-                                //return TextureIO.newTexture(new URL(u), true, null);
                                 return TextureIO.newTextureData(profile, new URL(u), true, null);
                             }
-
                         } catch (IOException e) {
                             return null;
                         }
