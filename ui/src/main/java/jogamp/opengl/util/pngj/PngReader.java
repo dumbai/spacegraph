@@ -1,5 +1,8 @@
 package jogamp.opengl.util.pngj;
 
+import jogamp.opengl.util.pngj.ImageLine.SampleType;
+import jogamp.opengl.util.pngj.chunks.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -7,17 +10,6 @@ import java.util.HashSet;
 import java.util.zip.CRC32;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
-
-import jogamp.opengl.util.pngj.ImageLine.SampleType;
-import jogamp.opengl.util.pngj.chunks.ChunkHelper;
-import jogamp.opengl.util.pngj.chunks.ChunkLoadBehaviour;
-import jogamp.opengl.util.pngj.chunks.ChunkRaw;
-import jogamp.opengl.util.pngj.chunks.ChunksList;
-import jogamp.opengl.util.pngj.chunks.PngChunk;
-import jogamp.opengl.util.pngj.chunks.PngChunkIDAT;
-import jogamp.opengl.util.pngj.chunks.PngChunkIHDR;
-import jogamp.opengl.util.pngj.chunks.PngChunkSkipped;
-import jogamp.opengl.util.pngj.chunks.PngMetadata;
 
 /**
  * Monkeypatched to disable CRC check which spuriously failed for unknown reason, but otherwise worked if just disabled.
