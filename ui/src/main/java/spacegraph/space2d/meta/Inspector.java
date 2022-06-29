@@ -28,9 +28,7 @@ public class Inspector extends Bordering {
 
                 .update(new Force2D())
 
-                .render(new NodeGraphRenderer<>() {
-
-                })
+                .render(new NodeGraphRenderer<>())
 
                 .set(graph.nodes());
 

@@ -10,10 +10,10 @@ public class EdgeVis<X> {
 
     public volatile boolean invalid;
 
-    float r;
-    float g;
-    float b;
-    float a;
+    public float r;
+    public float g;
+    public float b;
+    public float a;
     public float weight;
     private int renderer;
 
