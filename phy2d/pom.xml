@@ -20,7 +20,7 @@
         <groupId>dumb</groupId>
         <artifactId>spacegraph</artifactId>
         <version>1.0</version>
-        <relativePath>../pom.xml</relativePath>
+        <!--<relativePath>../pom.xml</relativePath>-->
     </parent>
 
     <artifactId>phy2d</artifactId>

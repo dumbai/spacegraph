@@ -20,7 +20,7 @@
         <groupId>dumb</groupId>
         <artifactId>spacegraph</artifactId>
         <version>1.0</version>
-        <relativePath>../pom.xml</relativePath>
+        <!--<relativePath>../pom.xml</relativePath>-->
     </parent>
 
     <artifactId>ui</artifactId>
@@ -129,22 +129,22 @@
             <version>${boofcv.version}</version>
 
         </dependency>
-        <dependency>
-            <groupId>org.boofcv</groupId>
-            <artifactId>boofcv-io</artifactId>
-            <version>${boofcv.version}</version>
+<!--        <dependency>-->
+<!--            <groupId>org.boofcv</groupId>-->
+<!--            <artifactId>boofcv-io</artifactId>-->
+<!--            <version>${boofcv.version}</version>-->
 
-            <exclusions>
-                <exclusion>
-                    <artifactId>xstream</artifactId>
-                    <groupId>*</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>snakeyaml</artifactId>
-                    <groupId>*</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>xstream</artifactId>-->
+<!--                    <groupId>*</groupId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>snakeyaml</artifactId>-->
+<!--                    <groupId>*</groupId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.boofcv</groupId>
             <artifactId>boofcv-WebcamCapture</artifactId>
