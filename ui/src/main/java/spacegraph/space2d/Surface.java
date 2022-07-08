@@ -2,6 +2,7 @@ package spacegraph.space2d;
 
 import jcog.Str;
 import jcog.Util;
+import jcog.WTF;
 import jcog.math.v2;
 import jcog.sort.FloatRank;
 import jcog.sort.RankedN;
