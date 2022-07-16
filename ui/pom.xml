@@ -123,12 +123,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.boofcv</groupId>
-            <artifactId>boofcv-sfm</artifactId>
-            <version>${boofcv.version}</version>
 
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.boofcv</groupId>-->
+<!--            <artifactId>boofcv-sfm</artifactId>-->
+<!--            <version>${boofcv.version}</version>-->
+<!--        </dependency>-->
+
 <!--        <dependency>-->
 <!--            <groupId>org.boofcv</groupId>-->
 <!--            <artifactId>boofcv-io</artifactId>-->
